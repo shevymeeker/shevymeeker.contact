@@ -7,6 +7,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1"
     />
+    <link rel="manifest" href="manifest.webmanifest" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -24,6 +25,7 @@
           <nav class="nav-links">
             <a href="#apps">Apps</a>
             <a href="#about">About</a>
+            <a href="#blog">Essays</a>
             <a href="#contact">Contact</a>
             <a href="#apps" class="nav-cta">Browse the tools</a>
           </nav>
@@ -243,6 +245,46 @@
             </div>
           </section>
 
+          <!-- BLOG / ESSAYS SECTION -->
+          <section id="blog" class="app-section">
+            <div class="section-title-row">
+              <div>
+                <h2 class="section-title">Essays & build notes</h2>
+                <p class="section-subtitle">
+                  Long-form writeups on the reasoning behind each app, release
+                  notes, and workflow experiments.
+                </p>
+              </div>
+              <div>
+                <a class="btn btn-outline" href="blog/index.html">
+                  View essay index
+                </a>
+              </div>
+            </div>
+            <div class="app-columns-2">
+              <div class="form-card" style="background: var(--bg-card)">
+                <div class="app-section-title">Offline-first playbook</div>
+                <p class="section-subtitle" style="margin-top: 0.4rem">
+                  How each PWA is structured: cache the app shell, store data in
+                  Dexie.js, and keep a service worker watching for updates.
+                </p>
+                <a class="app-card-link" href="blog/index.html#offline-first">
+                  Read the outline →
+                </a>
+              </div>
+              <div class="form-card" style="background: var(--bg-card)">
+                <div class="app-section-title">Release log</div>
+                <p class="section-subtitle" style="margin-top: 0.4rem">
+                  Quick changelog for each tool so buyers can see how often it
+                  improves and what is coming next.
+                </p>
+                <a class="app-card-link" href="blog/index.html#release-log">
+                  Jump to updates →
+                </a>
+              </div>
+            </div>
+          </section>
+
           <!-- CONTACT / LEAD FORM -->
           <section id="contact" class="app-section">
             <div class="app-section-header">
@@ -347,6 +389,14 @@
     <script>
       document.getElementById("year").textContent =
         new Date().getFullYear();
+
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("./service-worker.js")
+            .catch((err) => console.error("SW registration failed", err));
+        });
+      }
     </script>
   </body>
 </html>

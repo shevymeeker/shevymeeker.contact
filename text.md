@@ -1,8 +1,12 @@
 /
   index.html                <-- main hub
   styles.css                <-- shared styles
+  manifest.webmanifest      <-- install metadata for GH Pages
+  service-worker.js         <-- cache-first app shell, shared across pages
   /apps
-    app-template.html       <-- copy this per app
-    my-first-app.html
+    app-template.html       <-- duplicate per app
+    estimate-calculator.html
     contractor-estimator.html
-    notary-intake-tool.html
+    notary-intake.html
+  /blog
+    index.html              <-- essays + release log hub

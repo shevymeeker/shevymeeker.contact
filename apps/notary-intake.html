@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Notary Intake Tool - App Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="nav">
+        <div class="nav-inner">
+          <div class="brand">
+            <div class="brand-mark"></div>
+            <div class="brand-text">
+              <div class="brand-title">Your Name</div>
+              <div class="brand-sub">Offline-first app studio</div>
+            </div>
+          </div>
+          <nav class="nav-links">
+            <a href="../index.html#apps">All apps</a>
+            <a href="../index.html#blog">Essays</a>
+            <a href="../index.html" class="nav-cta">Back to hub</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="main">
+        <div class="shell">
+          <div class="breadcrumb">
+            <a href="../index.html#apps">← Back to all apps</a>
+          </div>
+
+          <section class="app-hero">
+            <div>
+              <div class="app-hero-eyebrow">Demo • Intake & tracker</div>
+              <h1 class="app-hero-title">Notary Intake & Document Tracker</h1>
+              <p class="app-hero-sub">
+                Streamlined intake for notary clients with the fields you actually
+                need and nothing else.
+              </p>
+              <div class="app-hero-ctas">
+                <a href="#live-demo" class="btn btn-primary">Open the demo</a>
+                <a href="#app-form" class="btn btn-outline">Adapt for your practice</a>
+              </div>
+              <div class="app-hero-meta-row">
+                <span>Dexie.js tables for clients, signings, uploaded docs</span>
+                <span>Offline PWA with cache-first shell</span>
+              </div>
+            </div>
+            <aside class="app-hero-side">
+              <div class="app-hero-side-title">Snapshot</div>
+              <div class="app-hero-side-row">
+                <span class="app-hero-side-key">Best for</span>
+                <span>Mobile notaries and small signing services</span>
+              </div>
+              <div class="app-hero-side-row">
+                <span class="app-hero-side-key">You use it to</span>
+                <span>Capture intake, track status, and export receipts</span>
+              </div>
+              <div class="app-hero-side-row">
+                <span class="app-hero-side-key">Format</span>
+                <span>Browser PWA, installable offline</span>
+              </div>
+            </aside>
+          </section>
+
+          <section id="live-demo" class="app-section">
+            <div class="app-section-header">
+              <div>
+                <h2 class="app-section-title">Live demo</h2>
+                <p class="app-section-subtitle">
+                  Embed your GitHub Pages deployment below; keep the explanation and CTA
+                  native to this page.
+                </p>
+              </div>
+              <div style="font-size: 0.78rem; color: var(--text-muted)">
+                Or open in a new tab:
+                <a
+                  href="https://username.github.io/notary-intake"
+                  target="_blank"
+                  rel="noopener"
+                  style="color: var(--accent-strong); text-decoration: none"
+                  >launch full-screen</a
+                >
+              </div>
+            </div>
+            <div class="demo-shell">
+              <div class="demo-header">
+                <div class="demo-controls">
+                  <span class="demo-dot"></span>
+                  <span class="demo-dot"></span>
+                  <span class="demo-dot"></span>
+                </div>
+                <span style="font-size: 0.78rem">Notary intake - demo</span>
+              </div>
+              <div class="demo-iframe-wrap">
+                <iframe
+                  class="demo-iframe"
+                  src="https://username.github.io/notary-intake"
+                  loading="lazy"
+                  title="Notary intake demo"
+                ></iframe>
+              </div>
+            </div>
+          </section>
+
+          <section class="app-section">
+            <div class="app-section-header">
+              <div>
+                <h2 class="app-section-title">Offline-first structure</h2>
+                <p class="app-section-subtitle">
+                  Normalized Dexie.js schema with indexed lookups for client name and
+                  status; cache-first service worker keeps the intake shell working
+                  without signal.
+                </p>
+              </div>
+            </div>
+            <div class="app-columns-2">
+              <ul class="bullet-list">
+                <li>
+                  <span class="bullet-dot"></span>
+                  <span>Tables: clients, signings (clientId), documents (signingId, tags).</span>
+                </li>
+                <li>
+                  <span class="bullet-dot"></span>
+                  <span>Multi-entry index on document tags for quick filtering.</span>
+                </li>
+              </ul>
+              <ul class="bullet-list">
+                <li>
+                  <span class="bullet-dot"></span>
+                  <span>Dexie queries: where("status").equalsIgnoreCase("scheduled").</span>
+                </li>
+                <li>
+                  <span class="bullet-dot"></span>
+                  <span>jsPDF exports a receipt once a signing is marked complete.</span>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="app-section" id="app-form">
+            <div class="app-section-header">
+              <div>
+                <h2 class="app-section-title">Customize for your workflow</h2>
+                <p class="app-section-subtitle">
+                  Drop a form or booking link here. Mention the data you collect and how
+                  you handle secure storage if you add encryption.
+                </p>
+              </div>
+            </div>
+            <div class="form-card">
+              <p style="color: var(--text-muted); margin: 0">
+                The intake shell stays cached after first load; Dexie.js retains entries
+                offline until you sync or export a PDF receipt.
+              </p>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <footer class="footer">
+        <div class="footer-inner">
+          <span>© <span id="year"></span> Your Name.</span>
+          <span>All tools follow the same offline-first playbook.</span>
+        </div>
+      </footer>
+    </div>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("../service-worker.js");
+      }
+    </script>
+  </body>
+</html>
