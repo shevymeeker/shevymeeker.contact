@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shevy Meeker - Web Developer & Process Technician | Owensboro, KY</title>
+    <title>Shevy Meeker - Process Technician & Systems Builder | Owensboro, KY</title>
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Shevy Meeker: Web developer specializing in progressive web apps, offline-first tools, and SEO-optimized websites. Process technician with expertise in DOT/PHMSA/OSHA compliance and hazmat handling. Based in Owensboro, Kentucky.">
-    <meta name="keywords" content="web developer, progressive web apps, PWA, offline tools, SEO, Owensboro Kentucky, process technician, DOT compliance, PHMSA, OSHA, hazmat, web development, freelance developer">
+    <meta name="description" content="Shevy Meeker: Process technician with expertise in DOT/PHMSA/OSHA compliance and hazmat handling. Builder of practical offline tools and progressive web apps for field work. Based in Owensboro, Kentucky.">
+    <meta name="keywords" content="process technician, progressive web apps, PWA, offline tools, systems builder, Owensboro Kentucky, DOT compliance, PHMSA, OSHA, hazmat, practical tools, field tools">
     <meta name="author" content="Shevy Meeker">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://shevymeeker.contact/">
@@ -15,8 +15,8 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://shevymeeker.contact/">
-    <meta property="og:title" content="Shevy Meeker - Web Developer & Process Technician">
-    <meta property="og:description" content="Building progressive web apps that work offline. No subscriptions, no passwords, no ads. Process technician with federal compliance expertise. Based in Owensboro, KY.">
+    <meta property="og:title" content="Shevy Meeker - Process Technician & Systems Builder">
+    <meta property="og:description" content="Process technician with federal compliance expertise. Builder of practical offline tools and progressive web apps. No subscriptions, no passwords, no ads. Based in Owensboro, KY.">
     <meta property="og:image" content="https://shevymeeker.contact/og-image.jpg">
     <meta property="og:site_name" content="Shevy Meeker Portfolio">
     <meta property="og:locale" content="en_US">
@@ -24,8 +24,8 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://shevymeeker.contact/">
-    <meta name="twitter:title" content="Shevy Meeker - Web Developer & Process Technician">
-    <meta name="twitter:description" content="Building progressive web apps that work offline. No subscriptions, no passwords, no ads. Process technician with federal compliance expertise.">
+    <meta name="twitter:title" content="Shevy Meeker - Process Technician & Systems Builder">
+    <meta name="twitter:description" content="Process technician with federal compliance expertise. Builder of practical offline tools and progressive web apps. No subscriptions, no passwords, no ads.">
     <meta name="twitter:image" content="https://shevymeeker.contact/og-image.jpg">
 
     <!-- Additional SEO -->
@@ -519,6 +519,18 @@
             display: block;
         }
 
+        /* Iframe preview styling */
+        .project-thumbnail iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            transform: scale(0.85);
+            transform-origin: top left;
+            pointer-events: none;
+            display: block;
+            background: white;
+        }
+
         /* Placeholder for projects without screenshots */
         .project-thumbnail-placeholder {
             width: 100%;
@@ -542,6 +554,8 @@
             right: 0;
             bottom: 0;
             background: transparent;
+            z-index: 10;
+            cursor: pointer;
         }
 
         .project-number {
@@ -968,7 +982,7 @@
         "@context": "https://schema.org",
         "@type": "Person",
         "name": "Shevy Meeker",
-        "jobTitle": "Web Developer & Process Technician",
+        "jobTitle": "Process Technician & Systems Builder",
         "url": "https://shevymeeker.contact",
         "email": "askshevy@outlook.com",
         "telephone": "+1-270-499-7758",
@@ -1029,9 +1043,9 @@
     {
         "@context": "https://schema.org",
         "@type": "ProfessionalService",
-        "name": "Shevy Meeker Web Development",
+        "name": "Shevy Meeker - Practical Tools & Systems",
         "image": "https://shevymeeker.contact/og-image.jpg",
-        "description": "Custom web development, progressive web apps, and SEO optimization services",
+        "description": "Practical offline tools, progressive web apps, and custom solutions for real-world problems",
         "address": {
             "@type": "PostalAddress",
             "addressLocality": "Owensboro",
@@ -1068,7 +1082,7 @@
                 <span>Meeker</span>
             </h1>
             <p class="hero-tagline fade-in delay-2">
-                .
+                Process Technician · Systems Builder · Problem Solver
             </p>
             <div class="hero-links fade-in delay-3">
                 <a href="#experience" class="hero-link" aria-label="Jump to experience section">Experience</a>
@@ -1113,8 +1127,8 @@
                         Oct 2025 – Present
                     </div>
                     <div class="experience-content">
-                        <h3>Web Development</h3>
-                        <p>Develop and deploy web applications addressing workflow gaps in business operations, legal education, and contractor management. Build progressive web apps optimized for offline functionality and field use without consistent connectivity. Design financial calculators, estimation tools, and document generation systems requiring complex logic and data handling. Create SEO-optimized educational resources translating technical subject matter into accessible guidance.</p>
+                        <h3>Systems Builder & Tool Developer</h3>
+                        <p>Build practical applications addressing workflow gaps in business operations, legal education, and contractor management. Create progressive web apps optimized for offline functionality and field use without consistent connectivity. Design financial calculators, estimation tools, and document generation systems requiring complex logic and data handling. Develop educational resources translating technical subject matter into accessible guidance.</p>
                     </div>
                 </article>
 
@@ -1221,14 +1235,12 @@
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <!-- To add screenshot: Replace placeholder with:
-                        <picture>
-                            <source srcset="images/mortgage-visualizer.webp" type="image/webp">
-                            <source srcset="images/mortgage-visualizer.jpg" type="image/jpeg">
-                            <img src="images/mortgage-visualizer.jpg" alt="Mortgage Visualizer screenshot" loading="lazy">
-                        </picture>
-                        -->
-                        <div class="project-thumbnail-placeholder">Screenshot</div>
+                        <iframe src="https://wildmanmortgage.netlify.app/"
+                                title="Mortgage Visualizer preview"
+                                loading="lazy"
+                                sandbox="allow-scripts allow-same-origin"
+                                scrolling="no"></iframe>
+                        <div class="project-thumbnail-overlay"></div>
                     </div>
 
                     <h3 class="project-title">Mortgage Visualizer</h3>
@@ -1246,7 +1258,12 @@
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <div class="project-thumbnail-placeholder">Screenshot</div>
+                        <iframe src="https://wildmanbusinessplan.netlify.app/"
+                                title="Business Plan Genie preview"
+                                loading="lazy"
+                                sandbox="allow-scripts allow-same-origin"
+                                scrolling="no"></iframe>
+                        <div class="project-thumbnail-overlay"></div>
                     </div>
 
                     <h3 class="project-title">Business Plan Genie</h3>
@@ -1264,7 +1281,12 @@
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <div class="project-thumbnail-placeholder">Screenshot</div>
+                        <iframe src="https://wildmantoday.netlify.app/"
+                                title="Task Tracker preview"
+                                loading="lazy"
+                                sandbox="allow-scripts allow-same-origin"
+                                scrolling="no"></iframe>
+                        <div class="project-thumbnail-overlay"></div>
                     </div>
 
                     <h3 class="project-title">Task Tracker</h3>
@@ -1282,7 +1304,12 @@
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <div class="project-thumbnail-placeholder">Screenshot</div>
+                        <iframe src="https://wildmantrafficstop.netlify.app/"
+                                title="The Stop preview"
+                                loading="lazy"
+                                sandbox="allow-scripts allow-same-origin"
+                                scrolling="no"></iframe>
+                        <div class="project-thumbnail-overlay"></div>
                     </div>
 
                     <h3 class="project-title">The Stop</h3>
@@ -1300,7 +1327,12 @@
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <div class="project-thumbnail-placeholder">Screenshot</div>
+                        <iframe src="https://shevymeeker.github.io/painterpro/painters.html"
+                                title="Painter Pro Calculator preview"
+                                loading="lazy"
+                                sandbox="allow-scripts allow-same-origin"
+                                scrolling="no"></iframe>
+                        <div class="project-thumbnail-overlay"></div>
                     </div>
 
                     <h3 class="project-title">Painter Pro Calculator</h3>
@@ -1318,7 +1350,12 @@
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <div class="project-thumbnail-placeholder">Screenshot</div>
+                        <iframe src="https://shevymeeker.github.io/courtexplain/"
+                                title="Court Explainer preview"
+                                loading="lazy"
+                                sandbox="allow-scripts allow-same-origin"
+                                scrolling="no"></iframe>
+                        <div class="project-thumbnail-overlay"></div>
                     </div>
 
                     <h3 class="project-title">Court Explainer</h3>
@@ -1336,7 +1373,12 @@
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <div class="project-thumbnail-placeholder">Screenshot</div>
+                        <iframe src="https://shevymeeker.github.io/legalnav/"
+                                title="Legal Navigator preview"
+                                loading="lazy"
+                                sandbox="allow-scripts allow-same-origin"
+                                scrolling="no"></iframe>
+                        <div class="project-thumbnail-overlay"></div>
                     </div>
 
                     <h3 class="project-title">Legal Navigator</h3>
@@ -1354,7 +1396,12 @@
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <div class="project-thumbnail-placeholder">Screenshot</div>
+                        <iframe src="https://shevymeeker.github.io/clientintake/"
+                                title="Client Intake Form preview"
+                                loading="lazy"
+                                sandbox="allow-scripts allow-same-origin"
+                                scrolling="no"></iframe>
+                        <div class="project-thumbnail-overlay"></div>
                     </div>
 
                     <h3 class="project-title">Client Intake Form</h3>
@@ -1372,7 +1419,12 @@
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <div class="project-thumbnail-placeholder">Screenshot</div>
+                        <iframe src="https://newestimating.netlify.app/"
+                                title="Dynamic Construction Estimator preview"
+                                loading="lazy"
+                                sandbox="allow-scripts allow-same-origin"
+                                scrolling="no"></iframe>
+                        <div class="project-thumbnail-overlay"></div>
                     </div>
                     <span class="project-number">Tool 09</span>
                     <h3 class="project-title">Dynamic Construction Estimator</h3>
@@ -1397,14 +1449,19 @@
         </div>
 
         <div class="projects-intro">
-            <p>Front-end work isn't just PWAs. It's websites too. With me you theres no monthly fees or generic templates like you get from Squarespace and the other site-builder apps. You pay me once, the site is yours forever. And my SEO actually works.</p>
+            <p>I also build websites. No monthly fees or generic templates like you get from Squarespace and the other site-builder apps. You pay once, the site is yours forever. And the SEO actually works.</p>
         </div>
 
         <div class="projects-grid">
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <div class="project-thumbnail-placeholder">Screenshot</div>
+                        <iframe src="https://nottatrace.com"
+                                title="Nott A Trace preview"
+                                loading="lazy"
+                                sandbox="allow-scripts allow-same-origin"
+                                scrolling="no"></iframe>
+                        <div class="project-thumbnail-overlay"></div>
                     </div>
 
                     <h3 class="project-title">Nott A Trace</h3>
@@ -1422,7 +1479,12 @@
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <div class="project-thumbnail-placeholder">Screenshot</div>
+                        <iframe src="https://owensboromowingcompany.com"
+                                title="Owensboro Mowing Company preview"
+                                loading="lazy"
+                                sandbox="allow-scripts allow-same-origin"
+                                scrolling="no"></iframe>
+                        <div class="project-thumbnail-overlay"></div>
                     </div>
 
                     <h3 class="project-title">Owensboro Mowing Company</h3>
