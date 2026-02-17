@@ -3,7 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shevy Meeker</title>
+    <title>Shevy Meeker - Web Developer & Process Technician | Owensboro, KY</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Shevy Meeker: Web developer specializing in progressive web apps, offline-first tools, and SEO-optimized websites. Process technician with expertise in DOT/PHMSA/OSHA compliance and hazmat handling. Based in Owensboro, Kentucky.">
+    <meta name="keywords" content="web developer, progressive web apps, PWA, offline tools, SEO, Owensboro Kentucky, process technician, DOT compliance, PHMSA, OSHA, hazmat, web development, freelance developer">
+    <meta name="author" content="Shevy Meeker">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://shevymeeker.contact/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://shevymeeker.contact/">
+    <meta property="og:title" content="Shevy Meeker - Web Developer & Process Technician">
+    <meta property="og:description" content="Building progressive web apps that work offline. No subscriptions, no passwords, no ads. Process technician with federal compliance expertise. Based in Owensboro, KY.">
+    <meta property="og:image" content="https://shevymeeker.contact/og-image.jpg">
+    <meta property="og:site_name" content="Shevy Meeker Portfolio">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://shevymeeker.contact/">
+    <meta name="twitter:title" content="Shevy Meeker - Web Developer & Process Technician">
+    <meta name="twitter:description" content="Building progressive web apps that work offline. No subscriptions, no passwords, no ads. Process technician with federal compliance expertise.">
+    <meta name="twitter:image" content="https://shevymeeker.contact/og-image.jpg">
+
+    <!-- Additional SEO -->
+    <meta name="geo.region" content="US-KY">
+    <meta name="geo.placename" content="Owensboro">
+    <meta name="geo.position" content="37.7742;-87.1117">
+    <meta name="ICBM" content="37.7742, -87.1117">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
@@ -471,15 +501,38 @@
             overflow: hidden;
             background: var(--ink);
             position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .project-thumbnail iframe {
-            width: 400%;
-            height: 400%;
-            transform: scale(0.25);
-            transform-origin: top left;
-            border: none;
-            pointer-events: none;
+        /* Optimized image loading with WebP support */
+        .project-thumbnail picture {
+            width: 100%;
+            height: 100%;
+        }
+
+        .project-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Placeholder for projects without screenshots */
+        .project-thumbnail-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--ink) 0%, var(--mid-gray) 100%);
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--cream);
+            opacity: 0.6;
         }
 
         .project-thumbnail-overlay {
@@ -821,14 +874,194 @@
         .delay-2 { animation-delay: 0.2s; }
         .delay-3 { animation-delay: 0.3s; }
         .delay-4 { animation-delay: 0.4s; }
+
+        /* Accessibility: Respect motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+
+            .fade-in {
+                opacity: 1;
+                transform: none;
+                animation: none;
+            }
+
+            .scroll-line {
+                animation: none;
+            }
+
+            .skills-track {
+                animation: none;
+            }
+        }
+
+        /* Enhanced focus states for keyboard navigation */
+        a:focus,
+        button:focus,
+        .project-card:focus {
+            outline: 3px solid var(--accent);
+            outline-offset: 4px;
+        }
+
+        a:focus:not(:focus-visible),
+        button:focus:not(:focus-visible),
+        .project-card:focus:not(:focus-visible) {
+            outline: none;
+        }
+
+        a:focus-visible,
+        button:focus-visible,
+        .project-card:focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 4px;
+        }
+
+        .hero-link:focus-visible,
+        .hero-link-btn:focus-visible {
+            outline-color: var(--accent);
+            outline-width: 3px;
+        }
+
+        .project-card:focus-visible {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(13, 13, 13, 0.15);
+        }
+
+        .project-link:focus-visible {
+            background: var(--accent);
+            color: var(--ink);
+        }
+
+        .cta-button:focus-visible {
+            background: var(--cream);
+            transform: translateY(-2px);
+        }
+
+        /* Skip to main content link (for screen readers) */
+        .skip-to-main {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--accent);
+            color: var(--cream);
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            z-index: 1000;
+        }
+
+        .skip-to-main:focus {
+            top: 0;
+        }
     </style>
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Shevy Meeker",
+        "jobTitle": "Web Developer & Process Technician",
+        "url": "https://shevymeeker.contact",
+        "email": "askshevy@outlook.com",
+        "telephone": "+1-270-499-7758",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Owensboro",
+            "addressRegion": "KY",
+            "addressCountry": "US"
+        },
+        "worksFor": [
+            {
+                "@type": "Organization",
+                "name": "Self-Employed",
+                "startDate": "2025-10"
+            },
+            {
+                "@type": "Organization",
+                "name": "Owensboro Mowing Company",
+                "jobTitle": "Co-Owner",
+                "startDate": "2023-07"
+            }
+        ],
+        "alumniOf": {
+            "@type": "EducationalOrganization",
+            "name": "Owensboro Community & Technical College"
+        },
+        "knowsAbout": [
+            "Web Development",
+            "Progressive Web Apps",
+            "SEO Optimization",
+            "DOT/PHMSA/OSHA Compliance",
+            "Hazmat Handling",
+            "ISO Standards",
+            "Process Engineering"
+        ],
+        "sameAs": [
+            "https://shevymeeker.contact"
+        ]
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Shevy Meeker Portfolio",
+        "url": "https://shevymeeker.contact",
+        "description": "Web developer specializing in progressive web apps and offline-first tools. Process technician with federal compliance expertise.",
+        "author": {
+            "@type": "Person",
+            "name": "Shevy Meeker"
+        },
+        "inLanguage": "en-US"
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "Shevy Meeker Web Development",
+        "image": "https://shevymeeker.contact/og-image.jpg",
+        "description": "Custom web development, progressive web apps, and SEO optimization services",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Owensboro",
+            "addressRegion": "KY",
+            "addressCountry": "US"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "37.7742",
+            "longitude": "-87.1117"
+        },
+        "url": "https://shevymeeker.contact",
+        "telephone": "+1-270-499-7758",
+        "email": "askshevy@outlook.com",
+        "priceRange": "$$",
+        "areaServed": {
+            "@type": "State",
+            "name": "Kentucky"
+        }
+    }
+    </script>
 </head>
 <body>
-    <nav class="nav">
+    <a href="#experience" class="skip-to-main">Skip to main content</a>
+
+    <nav class="nav" role="navigation" aria-label="Main navigation">
         <div class="nav-logo">Shevy Meeker</div>
     </nav>
 
-    <section class="hero">
+    <section class="hero" role="banner" aria-label="Introduction">
         <div class="hero-left">
             <h1 class="hero-name fade-in">
                 Shevy
@@ -838,12 +1071,12 @@
                 .
             </p>
             <div class="hero-links fade-in delay-3">
-                <a href="#experience" class="hero-link">Experience</a>
-                <a href="#projects" class="hero-link">Projects</a>
-                <a href="#client-work" class="hero-link">Client Sites</a>
-                <a href="https://shevymeeker.contact" class="hero-link" target="_blank" rel="noopener">Website</a>
-                <a href="mailto:askshevy@outlook.com" class="hero-link-btn">Email</a>
-                <a href="tel:+12704997758" class="hero-link-btn">Call</a>
+                <a href="#experience" class="hero-link" aria-label="Jump to experience section">Experience</a>
+                <a href="#projects" class="hero-link" aria-label="Jump to projects section">Projects</a>
+                <a href="#client-work" class="hero-link" aria-label="Jump to client sites section">Client Sites</a>
+                <a href="https://shevymeeker.contact" class="hero-link" target="_blank" rel="noopener" aria-label="Visit main website (opens in new tab)">Website</a>
+                <a href="mailto:askshevy@outlook.com" class="hero-link-btn" aria-label="Send an email to askshevy@outlook.com">Email</a>
+                <a href="tel:+12704997758" class="hero-link-btn" aria-label="Call (270) 499-7758">Call</a>
             </div>
         </div>
         <div class="hero-right">
@@ -854,17 +1087,17 @@
                 </div>
             </div>
         </div>
-        <div class="scroll-indicator">
+        <div class="scroll-indicator" aria-hidden="true">
             <span>Scroll</span>
             <div class="scroll-line"></div>
         </div>
     </section>
 
-    <section class="experience" id="experience">
+    <section class="experience" id="experience" aria-labelledby="experience-title">
         <div class="section-header">
-            <span class="section-number">01</span>
-            <h2 class="section-title">Experience</h2>
-            <div class="section-line"></div>
+            <span class="section-number" aria-hidden="true">01</span>
+            <h2 class="section-title" id="experience-title">Experience</h2>
+            <div class="section-line" aria-hidden="true"></div>
         </div>
         
         <div class="experience-grid">
@@ -925,7 +1158,7 @@
         </div>
     </section>
 
-    <div class="skills-ribbon">
+    <div class="skills-ribbon" role="complementary" aria-label="Skills and competencies">
         <div class="skills-track">
             <span class="highlight">DOT/PHMSA/OSHA</span>
             <span>Hazmat Handling</span>
@@ -954,7 +1187,7 @@
         </div>
     </div>
 
-    <section class="credentials" id="credentials">
+    <section class="credentials" id="credentials" aria-labelledby="credentials-title">
         <div class="credentials-grid">
             <div class="credential-block">
                 <span class="credential-label">Education</span>
@@ -969,11 +1202,11 @@
         </div>
     </section>
 
-    <section class="projects" id="projects">
+    <section class="projects" id="projects" aria-labelledby="projects-title">
         <div class="section-header">
-            <span class="section-number">02</span>
-            <h2 class="section-title">Projects</h2>
-            <div class="section-line"></div>
+            <span class="section-number" aria-hidden="true">02</span>
+            <h2 class="section-title" id="projects-title">Projects</h2>
+            <div class="section-line" aria-hidden="true"></div>
         </div>
 
         <div class="projects-intro">
@@ -988,10 +1221,16 @@
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <iframe src="https://wildmanmortgage.netlify.app/" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>
-                        <div class="project-thumbnail-overlay"></div>
+                        <!-- To add screenshot: Replace placeholder with:
+                        <picture>
+                            <source srcset="images/mortgage-visualizer.webp" type="image/webp">
+                            <source srcset="images/mortgage-visualizer.jpg" type="image/jpeg">
+                            <img src="images/mortgage-visualizer.jpg" alt="Mortgage Visualizer screenshot" loading="lazy">
+                        </picture>
+                        -->
+                        <div class="project-thumbnail-placeholder">Screenshot</div>
                     </div>
-              
+
                     <h3 class="project-title">Mortgage Visualizer</h3>
                     <span class="project-subtitle">Financial Calculator</span>
                     <div class="project-expand-hint">View Details</div>
@@ -1007,10 +1246,9 @@
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <iframe src="https://wildmanbusinessplan.netlify.app/" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>
-                        <div class="project-thumbnail-overlay"></div>
+                        <div class="project-thumbnail-placeholder">Screenshot</div>
                     </div>
-                  
+
                     <h3 class="project-title">Business Plan Genie</h3>
                     <span class="project-subtitle">Document Generator</span>
                     <div class="project-expand-hint">View Details</div>
@@ -1026,10 +1264,9 @@
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <iframe src="https://wildmantoday.netlify.app/" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>
-                        <div class="project-thumbnail-overlay"></div>
+                        <div class="project-thumbnail-placeholder">Screenshot</div>
                     </div>
-                  
+
                     <h3 class="project-title">Task Tracker</h3>
                     <span class="project-subtitle">Task tracker</span>
                     <div class="project-expand-hint">View Details</div>
@@ -1045,10 +1282,9 @@
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <iframe src="https://wildmantrafficstop.netlify.app/" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>
-                        <div class="project-thumbnail-overlay"></div>
+                        <div class="project-thumbnail-placeholder">Screenshot</div>
                     </div>
-                   
+
                     <h3 class="project-title">The Stop</h3>
                     <span class="project-subtitle">Educational Micro-Course</span>
                     <div class="project-expand-hint">View Details</div>
@@ -1064,10 +1300,9 @@
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <iframe src="https://shevymeeker.github.io/painterpro/painters.html" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>
-                        <div class="project-thumbnail-overlay"></div>
+                        <div class="project-thumbnail-placeholder">Screenshot</div>
                     </div>
-                
+
                     <h3 class="project-title">Painter Pro Calculator</h3>
                     <span class="project-subtitle">Trade Calculator</span>
                     <div class="project-expand-hint">View Details</div>
@@ -1083,10 +1318,9 @@
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <iframe src="https://shevymeeker.github.io/courtexplain/" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>
-                        <div class="project-thumbnail-overlay"></div>
+                        <div class="project-thumbnail-placeholder">Screenshot</div>
                     </div>
-                   
+
                     <h3 class="project-title">Court Explainer</h3>
                     <span class="project-subtitle">Legal Reference · In Progress</span>
                     <div class="project-expand-hint">View Details</div>
@@ -1102,10 +1336,9 @@
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <iframe src="https://shevymeeker.github.io/legalnav/" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>
-                        <div class="project-thumbnail-overlay"></div>
+                        <div class="project-thumbnail-placeholder">Screenshot</div>
                     </div>
-                   
+
                     <h3 class="project-title">Legal Navigator</h3>
                     <span class="project-subtitle">Legal Reference</span>
                     <div class="project-expand-hint">View Details</div>
@@ -1121,10 +1354,9 @@
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <iframe src="https://shevymeeker.github.io/clientintake/" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>
-                        <div class="project-thumbnail-overlay"></div>
+                        <div class="project-thumbnail-placeholder">Screenshot</div>
                     </div>
-                 
+
                     <h3 class="project-title">Client Intake Form</h3>
                     <span class="project-subtitle">Business Template</span>
                     <div class="project-expand-hint">View Details</div>
@@ -1140,8 +1372,7 @@
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <iframe src="https://newestimating.netlify.app/" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>
-                        <div class="project-thumbnail-overlay"></div>
+                        <div class="project-thumbnail-placeholder">Screenshot</div>
                     </div>
                     <span class="project-number">Tool 09</span>
                     <h3 class="project-title">Dynamic Construction Estimator</h3>
@@ -1158,11 +1389,11 @@
         </div>
     </section>
 
-    <section class="projects client-sites" id="client-work">
+    <section class="projects client-sites" id="client-work" aria-labelledby="client-work-title">
         <div class="section-header">
-            
-            <h2 class="section-title">Client Sites</h2>
-            <div class="section-line"></div>
+
+            <h2 class="section-title" id="client-work-title">Client Sites</h2>
+            <div class="section-line" aria-hidden="true"></div>
         </div>
 
         <div class="projects-intro">
@@ -1173,10 +1404,9 @@
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <iframe src="https://nottatrace.com" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>
-                        <div class="project-thumbnail-overlay"></div>
+                        <div class="project-thumbnail-placeholder">Screenshot</div>
                     </div>
-                    
+
                     <h3 class="project-title">Nott A Trace</h3>
                     <span class="project-subtitle">Tree Service</span>
                     <div class="project-expand-hint">View Details</div>
@@ -1192,10 +1422,9 @@
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
-                        <iframe src="https://owensboromowingcompany.com" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>
-                        <div class="project-thumbnail-overlay"></div>
+                        <div class="project-thumbnail-placeholder">Screenshot</div>
                     </div>
-                   
+
                     <h3 class="project-title">Owensboro Mowing Company</h3>
                     <span class="project-subtitle">Lawn Care Service</span>
                     <div class="project-expand-hint">View Details</div>
@@ -1210,9 +1439,9 @@
         </div>
     </section>
 
-    <section class="cta">
+    <section class="cta" aria-labelledby="cta-headline">
         <div class="cta-content">
-            <h2 class="cta-headline">/insert headline</em></h2>
+            <h2 class="cta-headline" id="cta-headline">/insert headline</em></h2>
             <p class="cta-text">If any of that sounds useful, let's talk.</p>
             <a href="mailto:askshevy@outlook.com?subject=Project%20Inquiry&body=Hi%20Shevy%2C%0A%0A" class="cta-button">Get in Touch</a>
         </div>
@@ -1221,16 +1450,16 @@
         </div>
     </section>
 
-    <footer>
+    <footer role="contentinfo" aria-label="Site footer">
         <div class="footer-left">
             <span class="footer-year">© 2025</span>
         </div>
         <div class="footer-center">SM</div>
         <div class="footer-right">
             <div class="footer-links">
-                <a href="mailto:askshevy@outlook.com">Email</a>
-                <a href="tel:+12704997758">Call</a>
-                <a href="https://shevymeeker.contact" target="_blank" rel="noopener">Website</a>
+                <a href="mailto:askshevy@outlook.com" aria-label="Email askshevy@outlook.com">Email</a>
+                <a href="tel:+12704997758" aria-label="Call (270) 499-7758">Call</a>
+                <a href="https://shevymeeker.contact" target="_blank" rel="noopener" aria-label="Visit main website (opens in new tab)">Website</a>
             </div>
         </div>
     </footer>
@@ -1238,35 +1467,70 @@
     <script>
         function toggleProject(card) {
             const wasExpanded = card.classList.contains('expanded');
-            
+
             // Close all cards first
             document.querySelectorAll('.project-card').forEach(c => {
                 c.classList.remove('expanded');
+                c.setAttribute('aria-expanded', 'false');
             });
-            
+
             // If this card wasn't expanded, expand it
             if (!wasExpanded) {
                 card.classList.add('expanded');
+                card.setAttribute('aria-expanded', 'true');
             }
         }
 
-        // Intersection Observer for fade-in animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+        // Keyboard navigation for project cards
+        function handleProjectCardKeydown(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                toggleProject(event.currentTarget);
+            }
+        }
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animationPlayState = 'running';
-                }
+        // Initialize accessibility features
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add keyboard navigation to all project cards
+            const projectCards = document.querySelectorAll('.project-card');
+            projectCards.forEach((card, index) => {
+                card.setAttribute('role', 'button');
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('aria-expanded', 'false');
+                card.setAttribute('aria-label', `Expand project details for ${card.querySelector('.project-title').textContent}`);
+                card.addEventListener('keydown', handleProjectCardKeydown);
             });
-        }, observerOptions);
 
-        document.querySelectorAll('.fade-in').forEach(el => {
-            el.style.animationPlayState = 'paused';
-            observer.observe(el);
+            // Intersection Observer for fade-in animations
+            // Respect prefers-reduced-motion
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            if (!prefersReducedMotion) {
+                const observerOptions = {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.style.animationPlayState = 'running';
+                        }
+                    });
+                }, observerOptions);
+
+                document.querySelectorAll('.fade-in').forEach(el => {
+                    el.style.animationPlayState = 'paused';
+                    observer.observe(el);
+                });
+            } else {
+                // Disable animations for users who prefer reduced motion
+                document.querySelectorAll('.fade-in').forEach(el => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'none';
+                    el.style.animation = 'none';
+                });
+            }
         });
     </script>
 </body>
