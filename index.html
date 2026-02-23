@@ -471,6 +471,95 @@
             line-height: 1.8;
         }
 
+        .proof {
+            background: var(--ink);
+            color: var(--cream);
+        }
+
+        .proof-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .proof-card {
+            border: 1px solid rgba(247, 243, 235, 0.2);
+            padding: 1.5rem;
+        }
+
+        .proof-metric {
+            font-family: var(--serif);
+            font-size: 2rem;
+            line-height: 1;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .proof-label {
+            font-family: var(--mono);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-size: 0.65rem;
+            color: var(--mid-gray);
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .proof-card p {
+            opacity: 0.85;
+        }
+
+        .inline-cta {
+            margin-top: 2.5rem;
+            padding: 1.5rem;
+            border-left: 3px solid var(--accent);
+            background: rgba(13, 13, 13, 0.04);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .inline-cta p {
+            font-size: 1rem;
+            line-height: 1.6;
+            max-width: 700px;
+        }
+
+        .inline-cta a {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--ink);
+            padding: 0.65rem 1rem;
+            border: 1px solid var(--ink);
+        }
+
+        .faq {
+            background: var(--warm-gray);
+        }
+
+        .faq-list {
+            display: grid;
+            gap: 1rem;
+            max-width: 900px;
+        }
+
+        .faq-item {
+            background: var(--cream);
+            padding: 1.25rem;
+            border-left: 2px solid var(--accent);
+        }
+
+        .faq-item h3 {
+            font-family: var(--serif);
+            font-weight: 400;
+            margin-bottom: 0.35rem;
+        }
+
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -1115,20 +1204,18 @@
                 <span>Meeker</span>
             </h1>
             <p class="hero-tagline fade-in delay-2">
-               The difference between a liability and an asset in high-stakes environments is not whether someone takes risks. It’s whether they understand them before they do.
+               For local owners and operators who need dependable systems, websites, and tools that keep working when pressure is high.
             </p>
             <div class="hero-links fade-in delay-3">
-                <a href="#experience" class="hero-link" aria-label="Jump to experience section">Experience</a>
+                <a href="#proof" class="hero-link" aria-label="Jump to proof section">Proof</a>
                 <a href="#projects" class="hero-link" aria-label="Jump to projects section">Projects</a>
-                <a href="#client-work" class="hero-link" aria-label="Jump to client sites section">Client Sites</a>
-                <a href="https://shevymeeker.contact" class="hero-link" target="_blank" rel="noopener" aria-label="Visit main website (opens in new tab)">Website</a>
-                <a href="mailto:askshevy@outlook.com" class="hero-link-btn" aria-label="Send an email to askshevy@outlook.com">Email</a>
-                <a href="tel:+12704997758" class="hero-link-btn" aria-label="Call (270) 499-7758">Call</a>
+                <a href="#experience" class="hero-link" aria-label="Jump to experience section">Experience</a>
+                <a href="mailto:askshevy@outlook.com?subject=Project%20Inquiry&body=Hi%20Shevy%2C%0A%0AI%20need%20help%20with..." class="hero-link-btn" aria-label="Send an email to askshevy@outlook.com">Book a Project Call</a>
             </div>
         </div>
         <div class="hero-right">
             <div class="hero-intro">
-                <p class="fade-in delay-1">Reliably achieves functional competency across unfamiliar systems while excelling at technical and procedural troubleshooting</p>
+                <p class="fade-in delay-1">I build practical, offline-capable operations tools and conversion-focused websites that remove bottlenecks, reduce risk, and drive measurable results for small teams.</p>
                 <div class="location-stamp fade-in delay-3">
                     <strong>Owensboro, Kentucky</strong>
                 </div>
@@ -1140,9 +1227,38 @@
         </div>
     </section>
 
-    <section class="experience" id="experience" aria-labelledby="experience-title">
+    <section class="proof" id="proof" aria-labelledby="proof-title">
         <div class="section-header">
             <span class="section-number" aria-hidden="true">01</span>
+            <h2 class="section-title" id="proof-title">Proof & Results</h2>
+            <div class="section-line" aria-hidden="true"></div>
+        </div>
+        <div class="proof-grid">
+            <article class="proof-card">
+                <span class="proof-label">Local SEO Win</span>
+                <div class="proof-metric">Top Local Visibility</div>
+                <p>Nott A Trace launched with hand-coded local SEO and now acts as a consistent lead source for service calls.</p>
+            </article>
+            <article class="proof-card">
+                <span class="proof-label">Operations Outcome</span>
+                <div class="proof-metric">9+ Production Tools</div>
+                <p>Built and deployed practical calculators, planners, and workflow apps used in real field and office operations.</p>
+            </article>
+            <article class="proof-card">
+                <span class="proof-label">Reliability Promise</span>
+                <div class="proof-metric">Offline-First</div>
+                <p>Project tools are designed to keep working without signal, subscriptions, or account lockouts.</p>
+            </article>
+        </div>
+        <div class="inline-cta">
+            <p>Need this same kind of practical result in your business operations?</p>
+            <a href="mailto:askshevy@outlook.com?subject=Results%20Inquiry&body=Hi%20Shevy%2C%0A%0AI%27d%20like%20to%20improve...">Need this for your team?</a>
+        </div>
+    </section>
+
+    <section class="experience" id="experience" aria-labelledby="experience-title">
+        <div class="section-header">
+            <span class="section-number" aria-hidden="true">02</span>
             <h2 class="section-title" id="experience-title">Experience</h2>
             <div class="section-line" aria-hidden="true"></div>
         </div>
@@ -1217,6 +1333,13 @@
         </div>
     </section>
 
+    <section>
+        <div class="inline-cta">
+            <p>If your workflows depend on people remembering fragile steps, I can help build a system your team can trust.</p>
+            <a href="mailto:askshevy@outlook.com?subject=Operations%20Workflow%20Help&body=Hi%20Shevy%2C%0A%0AWe%20need%20help%20with...">Need this for your team?</a>
+        </div>
+    </section>
+
     <section class="skills" role="complementary" aria-labelledby="skills-title">
         <div class="skills-categories">
             <div class="skills-category">
@@ -1273,240 +1396,19 @@
 
     <section class="projects" id="projects" aria-labelledby="projects-title">
         <div class="section-header">
-            <span class="section-number" aria-hidden="true">02</span>
-            <h2 class="section-title" id="projects-title">Projects</h2>
+            <span class="section-number" aria-hidden="true">03</span>
+            <h2 class="section-title" id="projects-title">Projects by Intent</h2>
             <div class="section-line" aria-hidden="true"></div>
         </div>
 
         <div class="projects-intro">
-            <p>Over the last several years, everything has turned into SaaS. Every tool is a subscription or an ad funnel. Everything needs a password. Everything has to load. Updates break things. Servers go down. You think you saved, but you didn't. You get to a job site and the one tool you need is useless because there's no signal.</p>
-            <p>There had to be a better way.</p>
-            <p>That's when I started building progressive web apps. They install on your device and work offline. No subscriptions. No passwords. No ads. No signal required. It works whether you're camping, on a road trip, in an oil field, in a client's crawl space. Even in outer space.</p>
-            <p>I solved my problems, let's see if I can solve yours.</p>
-            <p>Below are some of my favorite projects, free to use forever.</p>
+            <p>Everything here is grouped by the business outcome it supports so you can quickly find what matches your goal.</p>
         </div>
 
-        <div class="projects-grid">
-            <div class="project-card" onclick="toggleProject(this)">
-                <div class="project-preview">
-                    <div class="project-thumbnail">
-                        <iframe src="https://wildmanmortgage.netlify.app/"
-                                title="Mortgage Visualizer preview"
-                                loading="lazy"
-                                sandbox="allow-scripts allow-same-origin"
-                                scrolling="no"></iframe>
-                        <div class="project-thumbnail-overlay"></div>
-                    </div>
-
-                    <h3 class="project-title">Mortgage Visualizer</h3>
-                    <span class="project-subtitle">Financial Calculator</span>
-                    <div class="project-expand-hint">View Details</div>
-                </div>
-                <div class="project-details">
-                    <div class="project-details-inner">
-                        <p class="project-description">For anyone considering buying a home. Shows you what you're actually signing up for. Principal, interest, total cost over time. No sales pitch.</p>
-                        <a href="https://wildmanmortgage.netlify.app/" class="project-link" target="_blank" rel="noopener">View Project →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card" onclick="toggleProject(this)">
-                <div class="project-preview">
-                    <div class="project-thumbnail">
-                        <iframe src="https://wildmanbusinessplan.netlify.app/"
-                                title="Business Plan Genie preview"
-                                loading="lazy"
-                                sandbox="allow-scripts allow-same-origin"
-                                scrolling="no"></iframe>
-                        <div class="project-thumbnail-overlay"></div>
-                    </div>
-
-                    <h3 class="project-title">Business Plan</h3>
-                    <span class="project-subtitle">Document Generator</span>
-                    <div class="project-expand-hint">View Details</div>
-                </div>
-                <div class="project-details">
-                    <div class="project-details-inner">
-                        <p class="project-description">Investor-ready business plan builder. Answer the questions, get a document you can actually hand to someone. No consultant fees, no subscription.</p>
-                        <a href="https://wildmanbusinessplan.netlify.app/" class="project-link" target="_blank" rel="noopener">View Project →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card" onclick="toggleProject(this)">
-                <div class="project-preview">
-                    <div class="project-thumbnail">
-                        <iframe src="https://wildmantoday.netlify.app/"
-                                title="Task Tracker preview"
-                                loading="lazy"
-                                sandbox="allow-scripts allow-same-origin"
-                                scrolling="no"></iframe>
-                        <div class="project-thumbnail-overlay"></div>
-                    </div>
-
-                    <h3 class="project-title">Task Tracker</h3>
-                    <span class="project-subtitle">Task tracker</span>
-                    <div class="project-expand-hint">View Details</div>
-                </div>
-                <div class="project-details">
-                    <div class="project-details-inner">
-                        <p class="project-description">A task list for real people. No gamification, no streaks, no guilt mechanics. Just the lists, a list of things you need to do, a list of interuptions, and a list of silver linings/ accomplistments that exist outside of your 'list' becuase they are important too.</p>
-                        <a href="https://wildmantoday.netlify.app/" class="project-link" target="_blank" rel="noopener">View Project →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card" onclick="toggleProject(this)">
-                <div class="project-preview">
-                    <div class="project-thumbnail">
-                        <iframe src="https://wildmantrafficstop.netlify.app/"
-                                title="The Stop preview"
-                                loading="lazy"
-                                sandbox="allow-scripts allow-same-origin"
-                                scrolling="no"></iframe>
-                        <div class="project-thumbnail-overlay"></div>
-                    </div>
-
-                    <h3 class="project-title">The Traffic Stop</h3>
-                    <span class="project-subtitle">Educational Micro-Course</span>
-                    <div class="project-expand-hint">View Details</div>
-                </div>
-                <div class="project-details">
-                    <div class="project-details-inner">
-                        <p class="project-description">What you should know if you're driving on Kentucky roadways. Traffic stops, your rights, the procedures. Information that matters.</p>
-                        <a href="https://wildmantrafficstop.netlify.app/" class="project-link" target="_blank" rel="noopener">View Project →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card" onclick="toggleProject(this)">
-                <div class="project-preview">
-                    <div class="project-thumbnail">
-                        <iframe src="https://shevymeeker.github.io/painterpro/painters.html"
-                                title="Painter Pro Calculator preview"
-                                loading="lazy"
-                                sandbox="allow-scripts allow-same-origin"
-                                scrolling="no"></iframe>
-                        <div class="project-thumbnail-overlay"></div>
-                    </div>
-
-                    <h3 class="project-title">Painter Pro Calculator</h3>
-                    <span class="project-subtitle">Trade Calculator</span>
-                    <div class="project-expand-hint">View Details</div>
-                </div>
-                <div class="project-details">
-                    <div class="project-details-inner">
-                        <p class="project-description">All-in-one calculator for painting jobs. Input your dimensions, get materials, supplies, labor estimates. Everything. Built for contractors who quote on-site.</p>
-                        <a href="https://shevymeeker.github.io/painterpro/painters.html" class="project-link" target="_blank" rel="noopener">View Project →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card" onclick="toggleProject(this)">
-                <div class="project-preview">
-                    <div class="project-thumbnail">
-                        <iframe src="https://shevymeeker.github.io/courtexplain/"
-                                title="Court Explainer preview"
-                                loading="lazy"
-                                sandbox="allow-scripts allow-same-origin"
-                                scrolling="no"></iframe>
-                        <div class="project-thumbnail-overlay"></div>
-                    </div>
-
-                    <h3 class="project-title">Court Explainer</h3>
-                    <span class="project-subtitle">Legal Reference · In Progress</span>
-                    <div class="project-expand-hint">View Details</div>
-                </div>
-                <div class="project-details">
-                    <div class="project-details-inner">
-                        <p class="project-description">Court terminology in actual English. For people who need to understand what's happening in their case without a law degree. Still being built, but operational.</p>
-                        <a href="https://shevymeeker.github.io/courtexplain/" class="project-link" target="_blank" rel="noopener">View Project →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card" onclick="toggleProject(this)">
-                <div class="project-preview">
-                    <div class="project-thumbnail">
-                        <iframe src="https://wildmanlegal.netlify.app/"
-                                title="Legal Navigator preview"
-                                loading="lazy"
-                                sandbox="allow-scripts allow-same-origin"
-                                scrolling="no"></iframe>
-                        <div class="project-thumbnail-overlay"></div>
-                    </div>
-
-                    <h3 class="project-title">Legal Navigator</h3>
-                    <span class="project-subtitle">Legal Reference</span>
-                    <div class="project-expand-hint">View Details</div>
-                </div>
-                <div class="project-details">
-                    <div class="project-details-inner">
-                        <p class="project-description">Wayfinding for the those interested in learning the basic legal system</p>
-                        <a href="https://wildmanlegal.netlify.app/" class="project-link" target="_blank" rel="noopener">View Project →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card" onclick="toggleProject(this)">
-                <div class="project-preview">
-                    <div class="project-thumbnail">
-                        <iframe src="https://shevymeeker.github.io/clientintake/"
-                                title="Client Intake Form preview"
-                                loading="lazy"
-                                sandbox="allow-scripts allow-same-origin"
-                                scrolling="no"></iframe>
-                        <div class="project-thumbnail-overlay"></div>
-                    </div>
-
-                    <h3 class="project-title">Client Intake Form</h3>
-                    <span class="project-subtitle">Business Template</span>
-                    <div class="project-expand-hint">View Details</div>
-                </div>
-                <div class="project-details">
-                    <div class="project-details-inner">
-                        <p class="project-description">Example client intake system. Clean, functional, collects what you need without the enterprise bloat.</p>
-                        <a href="https://shevymeeker.github.io/clientintake/" class="project-link" target="_blank" rel="noopener">View Project →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card" onclick="toggleProject(this)">
-                <div class="project-preview">
-                    <div class="project-thumbnail">
-                        <iframe src="https://newestimating.netlify.app/"
-                                title="Dynamic Construction Estimator preview"
-                                loading="lazy"
-                                sandbox="allow-scripts allow-same-origin"
-                                scrolling="no"></iframe>
-                        <div class="project-thumbnail-overlay"></div>
-                    </div>
-                    <span class="project-number">Tool 09</span>
-                    <h3 class="project-title">Dynamic Construction Estimator</h3>
-                    <span class="project-subtitle">Trade Calculator</span>
-                    <div class="project-expand-hint">View Details</div>
-                </div>
-                <div class="project-details">
-                    <div class="project-details-inner">
-                        <p class="project-description">Completely dynamic construction estimating app with varying rates of pay per project, per task, per item. As simple or intricate as you need it to be.</p>
-                        <a href="https://newestimating.netlify.app/" class="project-link" target="_blank" rel="noopener">View Project →</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="projects client-sites" id="client-work" aria-labelledby="client-work-title">
         <div class="section-header">
-
-            <h2 class="section-title" id="client-work-title">Client Sites</h2>
+            <h3 class="section-title">Lead Generation Sites</h3>
             <div class="section-line" aria-hidden="true"></div>
         </div>
-
-        <div class="projects-intro">
-            <p>I also build websites. No monthly fees or generic templates like you get from Squarespace and the other site-builder apps. You pay once, the site is yours forever. And the SEO actually works.</p>
-        </div>
-
         <div class="projects-grid">
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
@@ -1518,19 +1420,12 @@
                                 scrolling="no"></iframe>
                         <div class="project-thumbnail-overlay"></div>
                     </div>
-
                     <h3 class="project-title">Nott A Trace</h3>
-                    <span class="project-subtitle">Tree Service</span>
+                    <span class="project-subtitle">Tree Service · Local Lead Gen</span>
                     <div class="project-expand-hint">View Details</div>
                 </div>
-                <div class="project-details">
-                    <div class="project-details-inner">
-                        <p class="project-description">Full-service tree company. Hand-coded with local SEO.</p>
-                        <a href="https://nottatrace.com" class="project-link" target="_blank" rel="noopener">View Site →</a>
-                    </div>
-                </div>
+                <div class="project-details"><div class="project-details-inner"><p class="project-description">Hand-coded lead generation site built for local search visibility and conversion-focused service inquiries.</p><a href="https://nottatrace.com" class="project-link" target="_blank" rel="noopener">View Site →</a></div></div>
             </div>
-
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
@@ -1541,26 +1436,53 @@
                                 scrolling="no"></iframe>
                         <div class="project-thumbnail-overlay"></div>
                     </div>
-
                     <h3 class="project-title">Owensboro Mowing Company</h3>
-                    <span class="project-subtitle">Lawn Care Service</span>
+                    <span class="project-subtitle">Lawn Care · Local Lead Gen</span>
                     <div class="project-expand-hint">View Details</div>
                 </div>
-                <div class="project-details">
-                    <div class="project-details-inner">
-                        <p class="project-description">Clean design, local SEO, built to convert searches into phone calls.</p>
-                        <a href="https://owensboromowingcompany.com" class="project-link" target="_blank" rel="noopener">View Site →</a>
-                    </div>
-                </div>
+                <div class="project-details"><div class="project-details-inner"><p class="project-description">Service business site designed to turn local search traffic into direct phone calls and quote requests.</p><a href="https://owensboromowingcompany.com" class="project-link" target="_blank" rel="noopener">View Site →</a></div></div>
             </div>
+        </div>
+        <div class="inline-cta">
+            <p>Need a website that actually produces calls and qualified leads?</p>
+            <a href="mailto:askshevy@outlook.com?subject=Lead%20Generation%20Site&body=Hi%20Shevy%2C%0A%0AWe%20need%20a%20lead%20gen%20site...">Need this for your team?</a>
+        </div>
+
+        <div class="section-header" style="margin-top:4rem;">
+            <h3 class="section-title">Operational Tools</h3>
+            <div class="section-line" aria-hidden="true"></div>
+        </div>
+        <div class="projects-grid">
+            <div class="project-card" onclick="toggleProject(this)"><div class="project-preview"><div class="project-thumbnail"><iframe src="https://newestimating.netlify.app/" title="Dynamic Construction Estimator preview" loading="lazy" sandbox="allow-scripts allow-same-origin" scrolling="no"></iframe><div class="project-thumbnail-overlay"></div></div><h3 class="project-title">Dynamic Construction Estimator</h3><span class="project-subtitle">Trade Calculator</span><div class="project-expand-hint">View Details</div></div><div class="project-details"><div class="project-details-inner"><p class="project-description">Dynamic estimating app with variable labor, materials, and task rates by project scope.</p><a href="https://newestimating.netlify.app/" class="project-link" target="_blank" rel="noopener">View Project →</a></div></div></div>
+            <div class="project-card" onclick="toggleProject(this)"><div class="project-preview"><div class="project-thumbnail"><iframe src="https://wildmanmortgage.netlify.app/" title="Mortgage Visualizer preview" loading="lazy" sandbox="allow-scripts allow-same-origin" scrolling="no"></iframe><div class="project-thumbnail-overlay"></div></div><h3 class="project-title">Mortgage Visualizer</h3><span class="project-subtitle">Financial Calculator</span><div class="project-expand-hint">View Details</div></div><div class="project-details"><div class="project-details-inner"><p class="project-description">Breaks down principal, interest, and total lifecycle cost to support clearer purchase decisions.</p><a href="https://wildmanmortgage.netlify.app/" class="project-link" target="_blank" rel="noopener">View Project →</a></div></div></div>
+            <div class="project-card" onclick="toggleProject(this)"><div class="project-preview"><div class="project-thumbnail"><iframe src="https://wildmanbusinessplan.netlify.app/" title="Business Plan Genie preview" loading="lazy" sandbox="allow-scripts allow-same-origin" scrolling="no"></iframe><div class="project-thumbnail-overlay"></div></div><h3 class="project-title">Business Plan</h3><span class="project-subtitle">Document Generator</span><div class="project-expand-hint">View Details</div></div><div class="project-details"><div class="project-details-inner"><p class="project-description">Guided builder for producing investor-ready plans without consultant overhead.</p><a href="https://wildmanbusinessplan.netlify.app/" class="project-link" target="_blank" rel="noopener">View Project →</a></div></div></div>
+            <div class="project-card" onclick="toggleProject(this)"><div class="project-preview"><div class="project-thumbnail"><iframe src="https://wildmantoday.netlify.app/" title="Task Tracker preview" loading="lazy" sandbox="allow-scripts allow-same-origin" scrolling="no"></iframe><div class="project-thumbnail-overlay"></div></div><h3 class="project-title">Task Tracker</h3><span class="project-subtitle">Task System</span><div class="project-expand-hint">View Details</div></div><div class="project-details"><div class="project-details-inner"><p class="project-description">Practical task management built for real-world interruptions and accountability.</p><a href="https://wildmantoday.netlify.app/" class="project-link" target="_blank" rel="noopener">View Project →</a></div></div></div>
+        </div>
+        <div class="inline-cta">
+            <p>Need an operational tool tailored to your workflow instead of another monthly subscription?</p>
+            <a href="mailto:askshevy@outlook.com?subject=Operations%20Tool%20Build&body=Hi%20Shevy%2C%0A%0AWe%20need%20a%20tool%20for...">Need this for your team?</a>
         </div>
     </section>
 
-    <section class="cta" aria-labelledby="cta-headline">
+    <section class="faq" id="faq" aria-labelledby="faq-title">
+        <div class="section-header">
+            <span class="section-number" aria-hidden="true">04</span>
+            <h2 class="section-title" id="faq-title">FAQ</h2>
+            <div class="section-line" aria-hidden="true"></div>
+        </div>
+        <div class="faq-list">
+            <article class="faq-item"><h3>How quickly can we start?</h3><p>Most projects begin within 1–2 weeks after discovery, with a clear milestone plan set before build starts.</p></article>
+            <article class="faq-item"><h3>What scope do you take on?</h3><p>I handle focused business systems: lead-generation sites, workflow tools, and operations improvements that solve a defined bottleneck.</p></article>
+            <article class="faq-item"><h3>How do we communicate during a project?</h3><p>You get direct communication, documented decisions, and concise update check-ins at agreed milestones.</p></article>
+            <article class="faq-item"><h3>How is pricing structured?</h3><p>Pricing is scoped by outcome and complexity, with transparent fixed-project ranges instead of indefinite subscription fees.</p></article>
+        </div>
+    </section>
+
+<section class="cta" aria-labelledby="cta-headline">
         <div class="cta-content">
-            <h2 class="cta-headline" id="cta-headline">/insert headline</em></h2>
-            <p class="cta-text">If any of that sounds useful, let's talk.</p>
-            <a href="mailto:askshevy@outlook.com?subject=Project%20Inquiry&body=Hi%20Shevy%2C%0A%0A" class="cta-button">Get in Touch</a>
+            <h2 class="cta-headline" id="cta-headline">Build the system your team can <em>count on.</em></h2>
+            <p class="cta-text">If you want dependable operations tools or a lead-generation site that performs, let's map your next build.</p>
+            <a href="mailto:askshevy@outlook.com?subject=Project%20Inquiry&body=Hi%20Shevy%2C%0A%0AI%27d%20like%20to%20discuss..." class="cta-button">Start the Conversation</a>
         </div>
         <div class="cta-visual">
             <span class="cta-stamp">Owensboro, KY · 2025</span>
