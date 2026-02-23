@@ -703,8 +703,15 @@
             font-size: 1.1rem;
             line-height: 1.8;
             max-width: 500px;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
             opacity: 0.8;
+        }
+
+        .cta-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.75rem;
         }
 
         .cta-button {
@@ -726,6 +733,26 @@
         .cta-button:hover {
             background: var(--cream);
             transform: translateY(-2px);
+        }
+
+        .cta-button-secondary {
+            color: var(--cream);
+            background: transparent;
+            border: 1px solid var(--cream);
+        }
+
+        .cta-button-secondary:hover {
+            background: rgba(247, 243, 235, 0.12);
+        }
+
+        .cta-trust {
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            line-height: 1.9;
+            opacity: 0.85;
+            max-width: 650px;
         }
 
         .cta-visual {
@@ -1558,9 +1585,14 @@
 
     <section class="cta" aria-labelledby="cta-headline">
         <div class="cta-content">
-            <h2 class="cta-headline" id="cta-headline">/insert headline</em></h2>
-            <p class="cta-text">If any of that sounds useful, let's talk.</p>
-            <a href="mailto:askshevy@outlook.com?subject=Project%20Inquiry&body=Hi%20Shevy%2C%0A%0A" class="cta-button">Get in Touch</a>
+            <h2 class="cta-headline" id="cta-headline">Cut compliance risk, tighten operations, and ship improvements faster.</h2>
+            <p class="cta-text">I help teams reduce audit exposure, clean up field-to-office workflows, and launch repeatable processes without slowing production.</p>
+            <div class="cta-actions" aria-label="Primary and secondary calls to action">
+                <a href="mailto:askshevy@outlook.com?subject=Book%20a%20Call&body=Hi%20Shevy%2C%0A%0AI%27d%20like%20to%20book%20a%20call%20about..." class="cta-button" data-track-event="cta_click" data-track-category="cta" data-track-action="book_call" data-track-label="primary_book_call">Book a Call</a>
+                <a href="#client-work-title" class="cta-button cta-button-secondary" data-track-event="cta_click" data-track-category="cta" data-track-action="view_best_work" data-track-label="secondary_view_best_work">View Best Work</a>
+                <a href="Resume.pdf" class="cta-button cta-button-secondary" target="_blank" rel="noopener" data-track-event="cta_click" data-track-category="cta" data-track-action="download_resume_pdf" data-track-label="secondary_download_resume">Download Resume PDF</a>
+            </div>
+            <p class="cta-trust">8+ years in operations and compliance · OSHA/HAZMAT-focused field leadership · delivered a 30% reduction in paperwork turnaround for a regional field crew.</p>
         </div>
         <div class="cta-visual">
             <span class="cta-stamp">Owensboro, KY · 2025</span>
