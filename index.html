@@ -360,12 +360,56 @@
             opacity: 0.85;
         }
 
-        /* Skills ribbon */
-        .skills-ribbon {
+        /* Skills section */
+        .skills {
             background: var(--ink);
             color: var(--cream);
-            padding: 3rem 0;
-            overflow: hidden;
+            padding: 4rem;
+        }
+
+        .skills-categories {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+        }
+
+        .skills-category-title {
+            font-family: var(--mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(247, 243, 235, 0.15);
+        }
+
+        .skills-list {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skills-list li {
+            font-family: var(--mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0.35rem 0.75rem;
+            border: 1px solid rgba(247, 243, 235, 0.2);
+            color: rgba(247, 243, 235, 0.75);
+        }
+
+        @media (max-width: 768px) {
+            .skills-categories {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .skills {
+                padding: 3rem 1.5rem;
+            }
         }
 
         /* Credentials section */
@@ -406,32 +450,6 @@
         .credential-block p {
             font-size: 0.95rem;
             color: var(--mid-gray);
-        }
-
-        .skills-track {
-            display: flex;
-            gap: 4rem;
-            animation: scroll 30s linear infinite;
-            width: fit-content;
-        }
-
-        .skills-track span {
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            white-space: nowrap;
-            opacity: 0.6;
-        }
-
-        .skills-track span.highlight {
-            color: var(--accent);
-            opacity: 1;
-        }
-
-        @keyframes scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
         }
 
         /* Projects section */
@@ -909,10 +927,6 @@
             .scroll-line {
                 animation: none;
             }
-
-            .skills-track {
-                animation: none;
-            }
         }
 
         /* Enhanced focus states for keyboard navigation */
@@ -1146,20 +1160,8 @@
                         Oct 2025 – Present
                     </div>
                     <div class="experience-content">
-                        <h3>Progressive Web Tools</h3>
-                        <p>Build practical applications addressing workflow gaps in business operations, legal education, and contractor management. Create progressive web apps optimized for offline functionality and field use without the need for internet. Design financial calculators, estimation tools, and document generation systems requiring complex logic and data handling. Develop educational resources translating technical subject matter into accessible guidance.</p>
-                    </div>
-                </article>
-
-                <article class="experience-item">
-                    <div class="experience-meta">
-                        <div class="company">Glenmore Distillery</div>
-                        Owensboro, KY<br>
-                        June 2020 – July 2025
-                    </div>
-                    <div class="experience-content">
-                        <h3>Process Technician</h3>
-                        <p>Operated mechanical pumps to offload UN3065 from railcars and tanker trucks to high-capacity storage tanks. Maintained highly regulated transfer documentation and safety protocols under DOT/PHMSA/OSHA. Handled ethanol-based flavor concentrates and milk/egg-based cream products in sanitary production environments under ISO standards.</p>
+                        <h3>Small Business Solutions Consultant</h3>
+                        <p>I find where workflows are failing and fix them — usually that means taking a manual process nobody fully trusts, often a spreadsheet held together with hope, and rebuilding it into something reliable. I've stabilized logic-heavy Excel workbooks that had become more liability than tool, standardized estimation and calculation processes through custom-built technical solutions, and developed web applications tailored to clients' specific localized needs. No subscriptions. No passwords. No signal required. The work holds up whether you're at a desk or out in the field.</p>
                     </div>
                 </article>
 
@@ -1171,7 +1173,31 @@
                     </div>
                     <div class="experience-content">
                         <h3>Co-Owner</h3>
-                        <p>Maintain bookkeeping and financial records. Perform routine servicing and mechanical troubleshooting on commercial mowing equipment, including small gas engine maintenance. Provide technical training to team members when introducing new systems or tools.</p>
+                        <p>I handle the operational side — financial records, regulatory documentation, and the bookkeeping that keeps everything running cleanly. When equipment breaks, I troubleshoot it and handle routine maintenance rather than waiting on a service call. When new equipment or new people come on board, I'm the one doing the training and making sure safety protocols are understood from day one.</p>
+                    </div>
+                </article>
+
+                <article class="experience-item">
+                    <div class="experience-meta">
+                        <div class="company">Glenmore Distillery</div>
+                        Owensboro, KY<br>
+                        Jun 2020 – Jul 2025
+                    </div>
+                    <div class="experience-content">
+                        <h3>Process Technician</h3>
+                        <p>I managed the high-volume transfer of UN3065 Class 3 flammable liquids from railcars and tanker trucks using mechanical pump systems, maintaining transfer documentation and safety records in full compliance with DOT, PHMSA, and OSHA requirements. I followed strict lab-regulated recipes to manually blend consumer-ready batches of liquor at volumes up to 50,000 gallons per batch, and handled ethanol-based flavor concentrates and dairy-based cream products in sanitary production environments governed by ISO standards.</p>
+                    </div>
+                </article>
+
+                <article class="experience-item">
+                    <div class="experience-meta">
+                        <div class="company">Outdoor Galore</div>
+                        Owensboro, KY<br>
+                        May 2018 – May 2020
+                    </div>
+                    <div class="experience-content">
+                        <h3>Crew Leader</h3>
+                        <p>I was the primary point of contact between clients and field operations — tracking job site hours, managing field paperwork, and keeping projects moving on schedule. I conducted hands-on technical training for crew members on heavy equipment operation and held firm on safety protocols at every job site, every time.</p>
                     </div>
                 </article>
 
@@ -1183,7 +1209,7 @@
                     </div>
                     <div class="experience-content">
                         <h3>Package Sort Supervisor</h3>
-                        <p>Supervised union employees in high-volume, time-sensitive logistics operations. Served as trained hazmat responder for package incidents and spill containment. Oversaw daily sorting, scanning, and loading activities to ensure efficiency and accuracy.</p>
+                        <p>I supervised a team of 5 to 10 union employees in a high-volume regional package sorting operation, keeping things running accurately and on time in a logistics environment where delays compound fast. I maintained operational safety and monthly training compliance, and served as a certified hazmat responder — managing package incidents and spill containment according to federal safety standards when they arose.</p>
                     </div>
                 </article>
 
@@ -1191,34 +1217,44 @@
         </div>
     </section>
 
-    <div class="skills-ribbon" role="complementary" aria-label="Skills and competencies">
-        <div class="skills-track">
-            <span class="highlight">DOT/PHMSA/OSHA</span>
-            <span>Hazmat Handling</span>
-            <span>ISO Compliance</span>
-            <span class="highlight">Transfer Documentation</span>
-            <span>Spill Containment</span>
-            <span>CIP Systems</span>
-            <span class="highlight">Small Engine Repair</span>
-            <span>Mechanical Troubleshooting</span>
-            <span>Union Supervision</span>
-            <span class="highlight">High-Volume Logistics</span>
-            <span>Technical Training</span>
-            <span>Preventive Systems</span>
-            <span class="highlight">DOT/PHMSA/OSHA</span>
-            <span>Hazmat Handling</span>
-            <span>ISO Compliance</span>
-            <span class="highlight">Transfer Documentation</span>
-            <span>Spill Containment</span>
-            <span>CIP Systems</span>
-            <span class="highlight">Small Engine Repair</span>
-            <span>Mechanical Troubleshooting</span>
-            <span>Union Supervision</span>
-            <span class="highlight">High-Volume Logistics</span>
-            <span>Technical Training</span>
-            <span>Preventive Systems</span>
+    <section class="skills" role="complementary" aria-labelledby="skills-title">
+        <div class="skills-categories">
+            <div class="skills-category">
+                <h3 class="skills-category-title">Operations &amp; Compliance</h3>
+                <ul class="skills-list">
+                    <li>Bulk Liquid Transfer</li>
+                    <li>Hazmat Handling (Class 3)</li>
+                    <li>High-Volume Production</li>
+                    <li>Regulatory Compliance</li>
+                    <li>DOT · PHMSA · OSHA · ISO</li>
+                    <li>Safety Protocol Enforcement</li>
+                    <li>Documentation</li>
+                </ul>
+            </div>
+            <div class="skills-category">
+                <h3 class="skills-category-title">Leadership &amp; Training</h3>
+                <ul class="skills-list">
+                    <li>Team Supervision</li>
+                    <li>Workforce Development</li>
+                    <li>Financial Bookkeeping</li>
+                    <li>Process Improvement</li>
+                    <li>Inventory Management</li>
+                    <li>Operational Readiness</li>
+                </ul>
+            </div>
+            <div class="skills-category">
+                <h3 class="skills-category-title">Operational Utility</h3>
+                <ul class="skills-list">
+                    <li>System Modernization</li>
+                    <li>Excel Workbook Stabilization</li>
+                    <li>Offline-Capable Field Tools</li>
+                    <li>Local SEO</li>
+                    <li>Technical Problem Solving</li>
+                    <li>Process Efficiency</li>
+                </ul>
+            </div>
         </div>
-    </div>
+    </section>
 
     <section class="credentials" id="credentials" aria-labelledby="credentials-title">
         <div class="credentials-grid">
