@@ -360,12 +360,56 @@
             opacity: 0.85;
         }
 
-        /* Skills ribbon */
-        .skills-ribbon {
+        /* Skills section */
+        .skills {
             background: var(--ink);
             color: var(--cream);
-            padding: 3rem 0;
-            overflow: hidden;
+            padding: 4rem;
+        }
+
+        .skills-categories {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+        }
+
+        .skills-category-title {
+            font-family: var(--mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(247, 243, 235, 0.15);
+        }
+
+        .skills-list {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skills-list li {
+            font-family: var(--mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0.35rem 0.75rem;
+            border: 1px solid rgba(247, 243, 235, 0.2);
+            color: rgba(247, 243, 235, 0.75);
+        }
+
+        @media (max-width: 768px) {
+            .skills-categories {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .skills {
+                padding: 3rem 1.5rem;
+            }
         }
 
         /* Credentials section */
@@ -408,32 +452,6 @@
             color: var(--mid-gray);
         }
 
-        .skills-track {
-            display: flex;
-            gap: 4rem;
-            animation: scroll 30s linear infinite;
-            width: fit-content;
-        }
-
-        .skills-track span {
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            white-space: nowrap;
-            opacity: 0.6;
-        }
-
-        .skills-track span.highlight {
-            color: var(--accent);
-            opacity: 1;
-        }
-
-        @keyframes scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
         /* Projects section */
         .projects {
             background: var(--cream);
@@ -451,6 +469,95 @@
         .projects-intro p {
             font-size: 1.1rem;
             line-height: 1.8;
+        }
+
+        .proof {
+            background: var(--ink);
+            color: var(--cream);
+        }
+
+        .proof-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .proof-card {
+            border: 1px solid rgba(247, 243, 235, 0.2);
+            padding: 1.5rem;
+        }
+
+        .proof-metric {
+            font-family: var(--serif);
+            font-size: 2rem;
+            line-height: 1;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .proof-label {
+            font-family: var(--mono);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-size: 0.65rem;
+            color: var(--mid-gray);
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .proof-card p {
+            opacity: 0.85;
+        }
+
+        .inline-cta {
+            margin-top: 2.5rem;
+            padding: 1.5rem;
+            border-left: 3px solid var(--accent);
+            background: rgba(13, 13, 13, 0.04);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .inline-cta p {
+            font-size: 1rem;
+            line-height: 1.6;
+            max-width: 700px;
+        }
+
+        .inline-cta a {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--ink);
+            padding: 0.65rem 1rem;
+            border: 1px solid var(--ink);
+        }
+
+        .faq {
+            background: var(--warm-gray);
+        }
+
+        .faq-list {
+            display: grid;
+            gap: 1rem;
+            max-width: 900px;
+        }
+
+        .faq-item {
+            background: var(--cream);
+            padding: 1.25rem;
+            border-left: 2px solid var(--accent);
+        }
+
+        .faq-item h3 {
+            font-family: var(--serif);
+            font-weight: 400;
+            margin-bottom: 0.35rem;
         }
 
         .projects-grid {
@@ -693,8 +800,15 @@
             font-size: 1.1rem;
             line-height: 1.8;
             max-width: 500px;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
             opacity: 0.8;
+        }
+
+        .cta-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.75rem;
         }
 
         .cta-button {
@@ -716,6 +830,26 @@
         .cta-button:hover {
             background: var(--cream);
             transform: translateY(-2px);
+        }
+
+        .cta-button-secondary {
+            color: var(--cream);
+            background: transparent;
+            border: 1px solid var(--cream);
+        }
+
+        .cta-button-secondary:hover {
+            background: rgba(247, 243, 235, 0.12);
+        }
+
+        .cta-trust {
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            line-height: 1.9;
+            opacity: 0.85;
+            max-width: 650px;
         }
 
         .cta-visual {
@@ -917,10 +1051,6 @@
             .scroll-line {
                 animation: none;
             }
-
-            .skills-track {
-                animation: none;
-            }
         }
 
         /* Enhanced focus states for keyboard navigation */
@@ -1017,13 +1147,20 @@
             "name": "Owensboro Community & Technical College"
         },
         "knowsAbout": [
-            "Web Development",
-            "Progressive Web Apps",
-            "SEO Optimization",
+            "Operations Management",
+            "Regulatory Compliance",
+            "Process Improvement",
+            "Quality Assurance",
+            "Risk Analysis",
+            "Technical Operations",
+            "Documentation & Recordkeeping",
             "DOT/PHMSA/OSHA Compliance",
             "Hazmat Handling",
             "ISO Standards",
-            "Process Engineering"
+            "Mechanical Systems",
+            "Technical Training",
+            "Bookkeeping",
+            "Notary Public Services"
         ],
         "sameAs": [
             "https://shevymeeker.contact"
@@ -1037,7 +1174,7 @@
         "@type": "WebSite",
         "name": "Shevy Meeker Portfolio",
         "url": "https://shevymeeker.contact",
-        "description": "Web developer specializing in progressive web apps and offline-first tools. Process technician with federal compliance expertise.",
+        "description": "Portfolio of Shevy Meeker — operations and compliance specialist based in Owensboro, Kentucky.",
         "author": {
             "@type": "Person",
             "name": "Shevy Meeker"
@@ -1091,10 +1228,8 @@
             <div class="hero-links fade-in delay-2">
                 <a href="#experience" class="hero-link" aria-label="Jump to experience section">Experience</a>
                 <a href="#projects" class="hero-link" aria-label="Jump to projects section">Projects</a>
-                <a href="#client-work" class="hero-link" aria-label="Jump to client sites section">Client Sites</a>
-                <a href="https://shevymeeker.contact" class="hero-link" target="_blank" rel="noopener" aria-label="Visit main website (opens in new tab)">Website</a>
-                <a href="mailto:askshevy@outlook.com" class="hero-link-btn" aria-label="Send an email to askshevy@outlook.com">Email</a>
-                <a href="tel:+12704997758" class="hero-link-btn" aria-label="Call (270) 499-7758">Call</a>
+                <a href="#experience" class="hero-link" aria-label="Jump to experience section">Experience</a>
+                <a href="mailto:askshevy@outlook.com?subject=Project%20Inquiry&body=Hi%20Shevy%2C%0A%0AI%20need%20help%20with..." class="hero-link-btn" aria-label="Send an email to askshevy@outlook.com">Book a Project Call</a>
             </div>
         </div>
         <div class="hero-right">
@@ -1111,9 +1246,38 @@
         </div>
     </section>
 
-    <section class="experience" id="experience" aria-labelledby="experience-title">
+    <section class="proof" id="proof" aria-labelledby="proof-title">
         <div class="section-header">
             <span class="section-number" aria-hidden="true">01</span>
+            <h2 class="section-title" id="proof-title">Proof & Results</h2>
+            <div class="section-line" aria-hidden="true"></div>
+        </div>
+        <div class="proof-grid">
+            <article class="proof-card">
+                <span class="proof-label">Local SEO Win</span>
+                <div class="proof-metric">Top Local Visibility</div>
+                <p>Nott A Trace launched with hand-coded local SEO and now acts as a consistent lead source for service calls.</p>
+            </article>
+            <article class="proof-card">
+                <span class="proof-label">Operations Outcome</span>
+                <div class="proof-metric">9+ Production Tools</div>
+                <p>Built and deployed practical calculators, planners, and workflow apps used in real field and office operations.</p>
+            </article>
+            <article class="proof-card">
+                <span class="proof-label">Reliability Promise</span>
+                <div class="proof-metric">Offline-First</div>
+                <p>Project tools are designed to keep working without signal, subscriptions, or account lockouts.</p>
+            </article>
+        </div>
+        <div class="inline-cta">
+            <p>Need this same kind of practical result in your business operations?</p>
+            <a href="mailto:askshevy@outlook.com?subject=Results%20Inquiry&body=Hi%20Shevy%2C%0A%0AI%27d%20like%20to%20improve...">Need this for your team?</a>
+        </div>
+    </section>
+
+    <section class="experience" id="experience" aria-labelledby="experience-title">
+        <div class="section-header">
+            <span class="section-number" aria-hidden="true">02</span>
             <h2 class="section-title" id="experience-title">Experience</h2>
             <div class="section-line" aria-hidden="true"></div>
         </div>
@@ -1140,23 +1304,23 @@
                     <div class="experience-meta">
                         <div class="company">Glenmore Distillery</div>
                         Owensboro, KY<br>
-                        June 2020 – July 2025
+                        Jun 2020 – Jul 2025
                     </div>
                     <div class="experience-content">
                         <h3>Process Technician</h3>
-                        <p>Operated mechanical pumps to offload UN3065 from railcars and tanker trucks to high-capacity storage tanks. Maintained highly regulated transfer documentation and safety protocols under DOT/PHMSA/OSHA. Handled ethanol-based flavor concentrates and milk/egg-based cream products in sanitary production environments under ISO standards.</p>
+                        <p>I managed the high-volume transfer of UN3065 Class 3 flammable liquids from railcars and tanker trucks using mechanical pump systems, maintaining transfer documentation and safety records in full compliance with DOT, PHMSA, and OSHA requirements. I followed strict lab-regulated recipes to manually blend consumer-ready batches of liquor at volumes up to 50,000 gallons per batch, and handled ethanol-based flavor concentrates and dairy-based cream products in sanitary production environments governed by ISO standards.</p>
                     </div>
                 </article>
 
                 <article class="experience-item">
                     <div class="experience-meta">
-                        <div class="company">Owensboro Mowing Company</div>
+                        <div class="company">Outdoor Galore</div>
                         Owensboro, KY<br>
-                        Jul 2023 – Present
+                        May 2018 – May 2020
                     </div>
                     <div class="experience-content">
-                        <h3>Co-Owner</h3>
-                        <p>Maintain bookkeeping and financial records. Perform routine servicing and mechanical troubleshooting on commercial mowing equipment, including small gas engine maintenance. Provide technical training to team members when introducing new systems or tools.</p>
+                        <h3>Crew Leader</h3>
+                        <p>I was the primary point of contact between clients and field operations — tracking job site hours, managing field paperwork, and keeping projects moving on schedule. I conducted hands-on technical training for crew members on heavy equipment operation and held firm on safety protocols at every job site, every time.</p>
                     </div>
                 </article>
 
@@ -1168,7 +1332,7 @@
                     </div>
                     <div class="experience-content">
                         <h3>Package Sort Supervisor</h3>
-                        <p>Supervised union employees in high-volume, time-sensitive logistics operations. Served as trained hazmat responder for package incidents and spill containment. Oversaw daily sorting, scanning, and loading activities to ensure efficiency and accuracy.</p>
+                        <p>I supervised a team of 5 to 10 union employees in a high-volume regional package sorting operation, keeping things running accurately and on time in a logistics environment where delays compound fast. I maintained operational safety and monthly training compliance, and served as a certified hazmat responder — managing package incidents and spill containment according to federal safety standards when they arose.</p>
                     </div>
                 </article>
 
@@ -1176,34 +1340,51 @@
         </div>
     </section>
 
-    <div class="skills-ribbon" role="complementary" aria-label="Skills and competencies">
-        <div class="skills-track">
-            <span class="highlight">DOT/PHMSA/OSHA</span>
-            <span>Hazmat Handling</span>
-            <span>ISO Compliance</span>
-            <span class="highlight">Transfer Documentation</span>
-            <span>Spill Containment</span>
-            <span>CIP Systems</span>
-            <span class="highlight">Small Engine Repair</span>
-            <span>Mechanical Troubleshooting</span>
-            <span>Union Supervision</span>
-            <span class="highlight">High-Volume Logistics</span>
-            <span>Technical Training</span>
-            <span>Preventive Systems</span>
-            <span class="highlight">DOT/PHMSA/OSHA</span>
-            <span>Hazmat Handling</span>
-            <span>ISO Compliance</span>
-            <span class="highlight">Transfer Documentation</span>
-            <span>Spill Containment</span>
-            <span>CIP Systems</span>
-            <span class="highlight">Small Engine Repair</span>
-            <span>Mechanical Troubleshooting</span>
-            <span>Union Supervision</span>
-            <span class="highlight">High-Volume Logistics</span>
-            <span>Technical Training</span>
-            <span>Preventive Systems</span>
+    <section>
+        <div class="inline-cta">
+            <p>If your workflows depend on people remembering fragile steps, I can help build a system your team can trust.</p>
+            <a href="mailto:askshevy@outlook.com?subject=Operations%20Workflow%20Help&body=Hi%20Shevy%2C%0A%0AWe%20need%20help%20with...">Need this for your team?</a>
         </div>
-    </div>
+    </section>
+
+    <section class="skills" role="complementary" aria-labelledby="skills-title">
+        <div class="skills-categories">
+            <div class="skills-category">
+                <h3 class="skills-category-title">Operations &amp; Compliance</h3>
+                <ul class="skills-list">
+                    <li>Bulk Liquid Transfer</li>
+                    <li>Hazmat Handling (Class 3)</li>
+                    <li>High-Volume Production</li>
+                    <li>Regulatory Compliance</li>
+                    <li>DOT · PHMSA · OSHA · ISO</li>
+                    <li>Safety Protocol Enforcement</li>
+                    <li>Documentation</li>
+                </ul>
+            </div>
+            <div class="skills-category">
+                <h3 class="skills-category-title">Leadership &amp; Training</h3>
+                <ul class="skills-list">
+                    <li>Team Supervision</li>
+                    <li>Workforce Development</li>
+                    <li>Financial Bookkeeping</li>
+                    <li>Process Improvement</li>
+                    <li>Inventory Management</li>
+                    <li>Operational Readiness</li>
+                </ul>
+            </div>
+            <div class="skills-category">
+                <h3 class="skills-category-title">Operational Utility</h3>
+                <ul class="skills-list">
+                    <li>System Modernization</li>
+                    <li>Excel Workbook Stabilization</li>
+                    <li>Offline-Capable Field Tools</li>
+                    <li>Local SEO</li>
+                    <li>Technical Problem Solving</li>
+                    <li>Process Efficiency</li>
+                </ul>
+            </div>
+        </div>
+    </section>
 
     <section class="credentials" id="credentials" aria-labelledby="credentials-title">
         <div class="credentials-grid">
@@ -1222,8 +1403,8 @@
 
     <section class="projects" id="projects" aria-labelledby="projects-title">
         <div class="section-header">
-            <span class="section-number" aria-hidden="true">02</span>
-            <h2 class="section-title" id="projects-title">Projects</h2>
+            <span class="section-number" aria-hidden="true">03</span>
+            <h2 class="section-title" id="projects-title">Projects by Intent</h2>
             <div class="section-line" aria-hidden="true"></div>
         </div>
 
@@ -1439,12 +1620,9 @@
                 </div>
             </div>
         </div>
-    </section>
 
-    <section class="projects client-sites" id="client-work" aria-labelledby="client-work-title">
         <div class="section-header">
-
-            <h2 class="section-title" id="client-work-title">Client Sites</h2>
+            <h3 class="section-title">Lead Generation Sites</h3>
             <div class="section-line" aria-hidden="true"></div>
         </div>
 
@@ -1463,19 +1641,12 @@
                                 scrolling="no"></iframe>
                         <div class="project-thumbnail-overlay"></div>
                     </div>
-
                     <h3 class="project-title">Nott A Trace</h3>
-                    <span class="project-subtitle">Tree Service</span>
+                    <span class="project-subtitle">Tree Service · Local Lead Gen</span>
                     <div class="project-expand-hint">View Details</div>
                 </div>
-                <div class="project-details">
-                    <div class="project-details-inner">
-                        <p class="project-description">Full-service tree company. Hand-coded with local SEO.</p>
-                        <a href="https://nottatrace.com" class="project-link" target="_blank" rel="noopener">View Site →</a>
-                    </div>
-                </div>
+                <div class="project-details"><div class="project-details-inner"><p class="project-description">Hand-coded lead generation site built for local search visibility and conversion-focused service inquiries.</p><a href="https://nottatrace.com" class="project-link" target="_blank" rel="noopener">View Site →</a></div></div>
             </div>
-
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
                     <div class="project-thumbnail">
@@ -1486,22 +1657,49 @@
                                 scrolling="no"></iframe>
                         <div class="project-thumbnail-overlay"></div>
                     </div>
-
                     <h3 class="project-title">Owensboro Mowing Company</h3>
-                    <span class="project-subtitle">Lawn Care Service</span>
+                    <span class="project-subtitle">Lawn Care · Local Lead Gen</span>
                     <div class="project-expand-hint">View Details</div>
                 </div>
-                <div class="project-details">
-                    <div class="project-details-inner">
-                        <p class="project-description">Clean design, local SEO, built to convert searches into phone calls.</p>
-                        <a href="https://owensboromowingcompany.com" class="project-link" target="_blank" rel="noopener">View Site →</a>
-                    </div>
-                </div>
+                <div class="project-details"><div class="project-details-inner"><p class="project-description">Service business site designed to turn local search traffic into direct phone calls and quote requests.</p><a href="https://owensboromowingcompany.com" class="project-link" target="_blank" rel="noopener">View Site →</a></div></div>
             </div>
+        </div>
+        <div class="inline-cta">
+            <p>Need a website that actually produces calls and qualified leads?</p>
+            <a href="mailto:askshevy@outlook.com?subject=Lead%20Generation%20Site&body=Hi%20Shevy%2C%0A%0AWe%20need%20a%20lead%20gen%20site...">Need this for your team?</a>
+        </div>
+
+        <div class="section-header" style="margin-top:4rem;">
+            <h3 class="section-title">Operational Tools</h3>
+            <div class="section-line" aria-hidden="true"></div>
+        </div>
+        <div class="projects-grid">
+            <div class="project-card" onclick="toggleProject(this)"><div class="project-preview"><div class="project-thumbnail"><iframe src="https://newestimating.netlify.app/" title="Dynamic Construction Estimator preview" loading="lazy" sandbox="allow-scripts allow-same-origin" scrolling="no"></iframe><div class="project-thumbnail-overlay"></div></div><h3 class="project-title">Dynamic Construction Estimator</h3><span class="project-subtitle">Trade Calculator</span><div class="project-expand-hint">View Details</div></div><div class="project-details"><div class="project-details-inner"><p class="project-description">Dynamic estimating app with variable labor, materials, and task rates by project scope.</p><a href="https://newestimating.netlify.app/" class="project-link" target="_blank" rel="noopener">View Project →</a></div></div></div>
+            <div class="project-card" onclick="toggleProject(this)"><div class="project-preview"><div class="project-thumbnail"><iframe src="https://wildmanmortgage.netlify.app/" title="Mortgage Visualizer preview" loading="lazy" sandbox="allow-scripts allow-same-origin" scrolling="no"></iframe><div class="project-thumbnail-overlay"></div></div><h3 class="project-title">Mortgage Visualizer</h3><span class="project-subtitle">Financial Calculator</span><div class="project-expand-hint">View Details</div></div><div class="project-details"><div class="project-details-inner"><p class="project-description">Breaks down principal, interest, and total lifecycle cost to support clearer purchase decisions.</p><a href="https://wildmanmortgage.netlify.app/" class="project-link" target="_blank" rel="noopener">View Project →</a></div></div></div>
+            <div class="project-card" onclick="toggleProject(this)"><div class="project-preview"><div class="project-thumbnail"><iframe src="https://wildmanbusinessplan.netlify.app/" title="Business Plan Genie preview" loading="lazy" sandbox="allow-scripts allow-same-origin" scrolling="no"></iframe><div class="project-thumbnail-overlay"></div></div><h3 class="project-title">Business Plan</h3><span class="project-subtitle">Document Generator</span><div class="project-expand-hint">View Details</div></div><div class="project-details"><div class="project-details-inner"><p class="project-description">Guided builder for producing investor-ready plans without consultant overhead.</p><a href="https://wildmanbusinessplan.netlify.app/" class="project-link" target="_blank" rel="noopener">View Project →</a></div></div></div>
+            <div class="project-card" onclick="toggleProject(this)"><div class="project-preview"><div class="project-thumbnail"><iframe src="https://wildmantoday.netlify.app/" title="Task Tracker preview" loading="lazy" sandbox="allow-scripts allow-same-origin" scrolling="no"></iframe><div class="project-thumbnail-overlay"></div></div><h3 class="project-title">Task Tracker</h3><span class="project-subtitle">Task System</span><div class="project-expand-hint">View Details</div></div><div class="project-details"><div class="project-details-inner"><p class="project-description">Practical task management built for real-world interruptions and accountability.</p><a href="https://wildmantoday.netlify.app/" class="project-link" target="_blank" rel="noopener">View Project →</a></div></div></div>
+        </div>
+        <div class="inline-cta">
+            <p>Need an operational tool tailored to your workflow instead of another monthly subscription?</p>
+            <a href="mailto:askshevy@outlook.com?subject=Operations%20Tool%20Build&body=Hi%20Shevy%2C%0A%0AWe%20need%20a%20tool%20for...">Need this for your team?</a>
         </div>
     </section>
 
-    <section class="cta" aria-labelledby="cta-headline">
+    <section class="faq" id="faq" aria-labelledby="faq-title">
+        <div class="section-header">
+            <span class="section-number" aria-hidden="true">04</span>
+            <h2 class="section-title" id="faq-title">FAQ</h2>
+            <div class="section-line" aria-hidden="true"></div>
+        </div>
+        <div class="faq-list">
+            <article class="faq-item"><h3>How quickly can we start?</h3><p>Most projects begin within 1–2 weeks after discovery, with a clear milestone plan set before build starts.</p></article>
+            <article class="faq-item"><h3>What scope do you take on?</h3><p>I handle focused business systems: lead-generation sites, workflow tools, and operations improvements that solve a defined bottleneck.</p></article>
+            <article class="faq-item"><h3>How do we communicate during a project?</h3><p>You get direct communication, documented decisions, and concise update check-ins at agreed milestones.</p></article>
+            <article class="faq-item"><h3>How is pricing structured?</h3><p>Pricing is scoped by outcome and complexity, with transparent fixed-project ranges instead of indefinite subscription fees.</p></article>
+        </div>
+    </section>
+
+<section class="cta" aria-labelledby="cta-headline">
         <div class="cta-content">
             <h2 class="cta-headline" id="cta-headline">Contact</h2>
             <p class="cta-text">Available for process technician positions and contract work building offline tools.</p>
