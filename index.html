@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shevy Meeker — Operations & Compliance Specialist | Owensboro, KY</title>
+    <title>Shevy Meeker | Owensboro, KY</title>
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Shevy Meeker is an operations and compliance specialist with a background in regulatory compliance, process improvement, risk analysis, quality assurance, and technical operations. Based in Owensboro, Kentucky.">
-    <meta name="keywords" content="operations specialist, compliance specialist, regulatory compliance, analyst, process improvement specialist, quality assurance specialist, risk and compliance analyst, technical operations specialist, documentation specialist, operational risk analyst, mechanical systems technician, Owensboro Kentucky, DOT compliance, PHMSA, OSHA, hazmat, ISO compliance, technical training, notary public">
+    <meta name="description" content="Shevy Meeker. Owensboro, Kentucky. Process technician with DOT/PHMSA/OSHA compliance experience. Built offline-capable tools and progressive web apps.">
+    <meta name="keywords" content="Shevy Meeker, Owensboro Kentucky, DOT compliance, PHMSA, OSHA, hazmat, progressive web apps, PWA, offline tools">
     <meta name="author" content="Shevy Meeker">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://shevymeeker.contact/">
@@ -15,17 +15,17 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://shevymeeker.contact/">
-    <meta property="og:title" content="Shevy Meeker — Operations & Compliance Specialist">
-    <meta property="og:description" content="Operations and compliance specialist with expertise in regulatory compliance, process improvement, risk analysis, quality assurance, and technical operations. Based in Owensboro, KY.">
+    <meta property="og:title" content="Shevy Meeker | Owensboro, KY">
+    <meta property="og:description" content="Work history and projects. Process technician at Glenmore Distillery. Built offline tools and progressive web apps.">
     <meta property="og:image" content="https://shevymeeker.contact/og-image.jpg">
-    <meta property="og:site_name" content="Shevy Meeker Portfolio">
+    <meta property="og:site_name" content="Shevy Meeker">
     <meta property="og:locale" content="en_US">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://shevymeeker.contact/">
-    <meta name="twitter:title" content="Shevy Meeker — Operations & Compliance Specialist">
-    <meta name="twitter:description" content="Operations and compliance specialist with expertise in regulatory compliance, process improvement, risk analysis, quality assurance, and technical operations. Based in Owensboro, KY.">
+    <meta name="twitter:title" content="Shevy Meeker | Owensboro, KY">
+    <meta name="twitter:description" content="Work history and projects. Process technician at Glenmore Distillery. Built offline tools and progressive web apps.">
     <meta name="twitter:image" content="https://shevymeeker.contact/og-image.jpg">
 
     <!-- Additional SEO -->
@@ -563,7 +563,7 @@
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
+            gap: 2.5rem;
         }
 
         .project-card {
@@ -572,6 +572,7 @@
             cursor: pointer;
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(13, 13, 13, 0.05);
         }
 
         .project-card::before {
@@ -583,6 +584,7 @@
             height: 0;
             background: var(--accent);
             transition: height 0.3s ease;
+            z-index: 20;
         }
 
         .project-card:hover::before {
@@ -590,8 +592,9 @@
         }
 
         .project-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(13, 13, 13, 0.1);
+            transform: translateY(-6px);
+            box-shadow: 0 24px 48px rgba(13, 13, 13, 0.15);
+            border-color: rgba(13, 13, 13, 0.1);
         }
 
         .project-preview {
@@ -603,14 +606,16 @@
 
         .project-thumbnail {
             width: 100%;
-            height: 180px;
+            height: 200px;
             margin-bottom: 1.5rem;
             overflow: hidden;
-            background: var(--ink);
+            background: white;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 1px solid rgba(13, 13, 13, 0.08);
+            box-shadow: inset 0 1px 3px rgba(13, 13, 13, 0.05);
         }
 
         /* Optimized image loading with WebP support */
@@ -628,14 +633,17 @@
 
         /* Iframe preview styling */
         .project-thumbnail iframe {
-            width: 100%;
-            height: 100%;
+            width: 120%;
+            height: 120%;
             border: none;
-            transform: scale(0.85);
+            transform: scale(0.75);
             transform-origin: top left;
             pointer-events: none;
             display: block;
             background: white;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
         /* Placeholder for projects without screenshots */
@@ -1112,19 +1120,6 @@
         "@context": "https://schema.org",
         "@type": "Person",
         "name": "Shevy Meeker",
-        "jobTitle": [
-            "Operations Specialist",
-            "Compliance Specialist",
-            "Regulatory Compliance",
-            "Analyst",
-            "Process Improvement Specialist",
-            "Quality Assurance Specialist",
-            "Risk & Compliance Analyst",
-            "Technical Operations Specialist",
-            "Documentation Specialist",
-            "Operational Risk Analyst",
-            "Mechanical Systems Technician"
-        ],
         "url": "https://shevymeeker.contact",
         "email": "askshevy@outlook.com",
         "telephone": "+1-270-499-7758",
@@ -1192,9 +1187,9 @@
     {
         "@context": "https://schema.org",
         "@type": "ProfessionalService",
-        "name": "Shevy Meeker - Practical Tools & Systems",
+        "name": "Shevy Meeker",
         "image": "https://shevymeeker.contact/og-image.jpg",
-        "description": "Operations and compliance specialist with expertise in regulatory compliance, process improvement, risk analysis, quality assurance, technical operations, and documentation. Based in Owensboro, Kentucky.",
+        "description": "Portfolio and work history",
         "address": {
             "@type": "PostalAddress",
             "addressLocality": "Owensboro",
@@ -1230,11 +1225,8 @@
                 Shevy
                 <span>Meeker</span>
             </h1>
-            <p class="hero-tagline fade-in delay-2">
-               For local owners and operators who need dependable systems, websites, and tools that keep working when pressure is high.
-            </p>
-            <div class="hero-links fade-in delay-3">
-                <a href="#proof" class="hero-link" aria-label="Jump to proof section">Proof</a>
+            <div class="hero-links fade-in delay-2">
+                <a href="#experience" class="hero-link" aria-label="Jump to experience section">Experience</a>
                 <a href="#projects" class="hero-link" aria-label="Jump to projects section">Projects</a>
                 <a href="#experience" class="hero-link" aria-label="Jump to experience section">Experience</a>
                 <a href="mailto:askshevy@outlook.com?subject=Project%20Inquiry&body=Hi%20Shevy%2C%0A%0AI%20need%20help%20with..." class="hero-link-btn" aria-label="Send an email to askshevy@outlook.com">Book a Project Call</a>
@@ -1242,7 +1234,7 @@
         </div>
         <div class="hero-right">
             <div class="hero-intro">
-                <p class="fade-in delay-1">I build practical, offline-capable operations tools and conversion-focused websites that remove bottlenecks, reduce risk, and drive measurable results for small teams.</p>
+                <p class="fade-in delay-1">Worked in federally regulated industrial environments for 5 years. Built tools that run offline. This is what I've done.</p>
                 <div class="location-stamp fade-in delay-3">
                     <strong>Owensboro, Kentucky</strong>
                 </div>
@@ -1292,7 +1284,7 @@
         
         <div class="experience-grid">
             <div class="experience-sidebar">
-                <p>I don't fit neatly into categories. I don't try to. What I bring isn't flashy, It's reliable. Intentional. Built to hold under pressure. The kind of work you don't think about when it's running, but you're grateful for when something breaks and it still works anyway.</p>
+                <p>Work history in reverse chronological order.</p>
             </div>
             
             <div class="experience-list">
@@ -1303,20 +1295,8 @@
                         Oct 2025 – Present
                     </div>
                     <div class="experience-content">
-                        <h3>Small Business Solutions Consultant</h3>
-                        <p>I find where workflows are failing and fix them — usually that means taking a manual process nobody fully trusts, often a spreadsheet held together with hope, and rebuilding it into something reliable. I've stabilized logic-heavy Excel workbooks that had become more liability than tool, standardized estimation and calculation processes through custom-built technical solutions, and developed web applications tailored to clients' specific localized needs. No subscriptions. No passwords. No signal required. The work holds up whether you're at a desk or out in the field.</p>
-                    </div>
-                </article>
-
-                <article class="experience-item">
-                    <div class="experience-meta">
-                        <div class="company">Owensboro Mowing Company</div>
-                        Owensboro, KY<br>
-                        Jul 2023 – Present
-                    </div>
-                    <div class="experience-content">
-                        <h3>Co-Owner</h3>
-                        <p>I handle the operational side — financial records, regulatory documentation, and the bookkeeping that keeps everything running cleanly. When equipment breaks, I troubleshoot it and handle routine maintenance rather than waiting on a service call. When new equipment or new people come on board, I'm the one doing the training and making sure safety protocols are understood from day one.</p>
+                        <h3>Independent Work</h3>
+                        <p>Built progressive web apps for offline use: financial calculators, business plan generators, task trackers, contractor estimation tools, and legal education resources. Developed websites for local businesses. All tools function without internet connectivity and require no subscriptions or accounts.</p>
                     </div>
                 </article>
 
@@ -1429,13 +1409,227 @@
         </div>
 
         <div class="projects-intro">
-            <p>Everything here is grouped by the business outcome it supports so you can quickly find what matches your goal.</p>
+            <p>Progressive web apps that work offline. No subscriptions, passwords, or ads. Free to use.</p>
+        </div>
+
+        <div class="projects-grid">
+            <div class="project-card" onclick="toggleProject(this)">
+                <div class="project-preview">
+                    <div class="project-thumbnail">
+                        <iframe src="https://wildmanmortgage.netlify.app/"
+                                title="Mortgage Visualizer preview"
+                                loading="lazy"
+                                sandbox="allow-scripts allow-same-origin"
+                                scrolling="no"></iframe>
+                        <div class="project-thumbnail-overlay"></div>
+                    </div>
+
+                    <h3 class="project-title">Mortgage Visualizer</h3>
+                    <span class="project-subtitle">Financial Calculator</span>
+                    <div class="project-expand-hint">View Details</div>
+                </div>
+                <div class="project-details">
+                    <div class="project-details-inner">
+                        <p class="project-description">For anyone considering buying a home. Shows you what you're actually signing up for. Principal, interest, total cost over time. No sales pitch.</p>
+                        <a href="https://wildmanmortgage.netlify.app/" class="project-link" target="_blank" rel="noopener">View Project →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" onclick="toggleProject(this)">
+                <div class="project-preview">
+                    <div class="project-thumbnail">
+                        <iframe src="https://wildmanbusinessplan.netlify.app/"
+                                title="Business Plan Genie preview"
+                                loading="lazy"
+                                sandbox="allow-scripts allow-same-origin"
+                                scrolling="no"></iframe>
+                        <div class="project-thumbnail-overlay"></div>
+                    </div>
+
+                    <h3 class="project-title">Business Plan Genie</h3>
+                    <span class="project-subtitle">Document Generator</span>
+                    <div class="project-expand-hint">View Details</div>
+                </div>
+                <div class="project-details">
+                    <div class="project-details-inner">
+                        <p class="project-description">Investor-ready business plan builder. Answer the questions, get a document you can actually hand to someone. No consultant fees, no subscription.</p>
+                        <a href="https://wildmanbusinessplan.netlify.app/" class="project-link" target="_blank" rel="noopener">View Project →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" onclick="toggleProject(this)">
+                <div class="project-preview">
+                    <div class="project-thumbnail">
+                        <iframe src="https://wildmantoday.netlify.app/"
+                                title="Task Tracker preview"
+                                loading="lazy"
+                                sandbox="allow-scripts allow-same-origin"
+                                scrolling="no"></iframe>
+                        <div class="project-thumbnail-overlay"></div>
+                    </div>
+
+                    <h3 class="project-title">Task Tracker</h3>
+                    <span class="project-subtitle">Task tracker</span>
+                    <div class="project-expand-hint">View Details</div>
+                </div>
+                <div class="project-details">
+                    <div class="project-details-inner">
+                        <p class="project-description">A task list for real people. No gamification, no streaks, no guilt mechanics. Just the lists, a list of things you need to do, a list of interuptions, and a list of silver linings/ accomplistments that exist outside of your 'list' becuase they are important too.</p>
+                        <a href="https://wildmantoday.netlify.app/" class="project-link" target="_blank" rel="noopener">View Project →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" onclick="toggleProject(this)">
+                <div class="project-preview">
+                    <div class="project-thumbnail">
+                        <iframe src="https://wildmantrafficstop.netlify.app/"
+                                title="The Stop preview"
+                                loading="lazy"
+                                sandbox="allow-scripts allow-same-origin"
+                                scrolling="no"></iframe>
+                        <div class="project-thumbnail-overlay"></div>
+                    </div>
+
+                    <h3 class="project-title">The Stop</h3>
+                    <span class="project-subtitle">Educational Micro-Course</span>
+                    <div class="project-expand-hint">View Details</div>
+                </div>
+                <div class="project-details">
+                    <div class="project-details-inner">
+                        <p class="project-description">What you should know if you're driving on Kentucky roadways. Traffic stops, your rights, the procedures. Information that matters.</p>
+                        <a href="https://wildmantrafficstop.netlify.app/" class="project-link" target="_blank" rel="noopener">View Project →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" onclick="toggleProject(this)">
+                <div class="project-preview">
+                    <div class="project-thumbnail">
+                        <iframe src="https://shevymeeker.github.io/painterpro/painters.html"
+                                title="Painter Pro Calculator preview"
+                                loading="lazy"
+                                sandbox="allow-scripts allow-same-origin"
+                                scrolling="no"></iframe>
+                        <div class="project-thumbnail-overlay"></div>
+                    </div>
+
+                    <h3 class="project-title">Painter Pro Calculator</h3>
+                    <span class="project-subtitle">Trade Calculator</span>
+                    <div class="project-expand-hint">View Details</div>
+                </div>
+                <div class="project-details">
+                    <div class="project-details-inner">
+                        <p class="project-description">All-in-one calculator for painting jobs. Input your dimensions, get materials, supplies, labor estimates. Everything. Built for contractors who quote on-site.</p>
+                        <a href="https://shevymeeker.github.io/painterpro/painters.html" class="project-link" target="_blank" rel="noopener">View Project →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" onclick="toggleProject(this)">
+                <div class="project-preview">
+                    <div class="project-thumbnail">
+                        <iframe src="https://shevymeeker.github.io/courtexplain/"
+                                title="Court Explainer preview"
+                                loading="lazy"
+                                sandbox="allow-scripts allow-same-origin"
+                                scrolling="no"></iframe>
+                        <div class="project-thumbnail-overlay"></div>
+                    </div>
+
+                    <h3 class="project-title">Court Explainer</h3>
+                    <span class="project-subtitle">Legal Reference · In Progress</span>
+                    <div class="project-expand-hint">View Details</div>
+                </div>
+                <div class="project-details">
+                    <div class="project-details-inner">
+                        <p class="project-description">Court terminology in actual English. For people who need to understand what's happening in their case without a law degree. Still being built, but operational.</p>
+                        <a href="https://shevymeeker.github.io/courtexplain/" class="project-link" target="_blank" rel="noopener">View Project →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" onclick="toggleProject(this)">
+                <div class="project-preview">
+                    <div class="project-thumbnail">
+                        <iframe src="https://shevymeeker.github.io/legalnav/"
+                                title="Legal Navigator preview"
+                                loading="lazy"
+                                sandbox="allow-scripts allow-same-origin"
+                                scrolling="no"></iframe>
+                        <div class="project-thumbnail-overlay"></div>
+                    </div>
+
+                    <h3 class="project-title">Legal Navigator</h3>
+                    <span class="project-subtitle">Legal Reference</span>
+                    <div class="project-expand-hint">View Details</div>
+                </div>
+                <div class="project-details">
+                    <div class="project-details-inner">
+                        <p class="project-description">Wayfinding for the court system. For people interested in the court system but dont have a law degree</p>
+                        <a href="https://shevymeeker.github.io/legalnav/" class="project-link" target="_blank" rel="noopener">View Project →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" onclick="toggleProject(this)">
+                <div class="project-preview">
+                    <div class="project-thumbnail">
+                        <iframe src="https://shevymeeker.github.io/clientintake/"
+                                title="Client Intake Form preview"
+                                loading="lazy"
+                                sandbox="allow-scripts allow-same-origin"
+                                scrolling="no"></iframe>
+                        <div class="project-thumbnail-overlay"></div>
+                    </div>
+
+                    <h3 class="project-title">Client Intake Form</h3>
+                    <span class="project-subtitle">Business Template</span>
+                    <div class="project-expand-hint">View Details</div>
+                </div>
+                <div class="project-details">
+                    <div class="project-details-inner">
+                        <p class="project-description">Example client intake system. Clean, functional, collects what you need without the enterprise bloat.</p>
+                        <a href="https://shevymeeker.github.io/clientintake/" class="project-link" target="_blank" rel="noopener">View Project →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" onclick="toggleProject(this)">
+                <div class="project-preview">
+                    <div class="project-thumbnail">
+                        <iframe src="https://newestimating.netlify.app/"
+                                title="Dynamic Construction Estimator preview"
+                                loading="lazy"
+                                sandbox="allow-scripts allow-same-origin"
+                                scrolling="no"></iframe>
+                        <div class="project-thumbnail-overlay"></div>
+                    </div>
+                    <span class="project-number">Tool 09</span>
+                    <h3 class="project-title">Dynamic Construction Estimator</h3>
+                    <span class="project-subtitle">Trade Calculator</span>
+                    <div class="project-expand-hint">View Details</div>
+                </div>
+                <div class="project-details">
+                    <div class="project-details-inner">
+                        <p class="project-description">Completely dynamic construction estimating app with varying rates of pay per project, per task, per item. As simple or intricate as you need it to be.</p>
+                        <a href="https://newestimating.netlify.app/" class="project-link" target="_blank" rel="noopener">View Project →</a>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="section-header">
             <h3 class="section-title">Lead Generation Sites</h3>
             <div class="section-line" aria-hidden="true"></div>
         </div>
+
+        <div class="projects-intro">
+            <p>Websites for local businesses. Hand-coded with SEO optimization.</p>
+        </div>
+
         <div class="projects-grid">
             <div class="project-card" onclick="toggleProject(this)">
                 <div class="project-preview">
@@ -1507,14 +1701,9 @@
 
 <section class="cta" aria-labelledby="cta-headline">
         <div class="cta-content">
-            <h2 class="cta-headline" id="cta-headline">Cut compliance risk, tighten operations, and ship improvements faster.</h2>
-            <p class="cta-text">I help teams reduce audit exposure, clean up field-to-office workflows, and launch repeatable processes without slowing production.</p>
-            <div class="cta-actions" aria-label="Primary and secondary calls to action">
-                <a href="mailto:askshevy@outlook.com?subject=Book%20a%20Call&body=Hi%20Shevy%2C%0A%0AI%27d%20like%20to%20book%20a%20call%20about..." class="cta-button" data-track-event="cta_click" data-track-category="cta" data-track-action="book_call" data-track-label="primary_book_call">Book a Call</a>
-                <a href="#client-work-title" class="cta-button cta-button-secondary" data-track-event="cta_click" data-track-category="cta" data-track-action="view_best_work" data-track-label="secondary_view_best_work">View Best Work</a>
-                <a href="Resume.pdf" class="cta-button cta-button-secondary" target="_blank" rel="noopener" data-track-event="cta_click" data-track-category="cta" data-track-action="download_resume_pdf" data-track-label="secondary_download_resume">Download Resume PDF</a>
-            </div>
-            <p class="cta-trust">8+ years in operations and compliance · OSHA/HAZMAT-focused field leadership · delivered a 30% reduction in paperwork turnaround for a regional field crew.</p>
+            <h2 class="cta-headline" id="cta-headline">Contact</h2>
+            <p class="cta-text">Available for process technician positions and contract work building offline tools.</p>
+            <a href="mailto:askshevy@outlook.com?subject=Project%20Inquiry&body=Hi%20Shevy%2C%0A%0A" class="cta-button">Get in Touch</a>
         </div>
         <div class="cta-visual">
             <span class="cta-stamp">Owensboro, KY · 2025</span>
