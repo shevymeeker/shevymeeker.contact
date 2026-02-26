@@ -42,3 +42,49 @@ Package Sort Supervisor
 Oct 2013 - April 2018
 UPS · Owensboro, KY
 Ran high-capacity local sort operations: accurate scanning, sorting, tagging, and safe loading using retractable conveyor systems. Roughly half of nightly volume was smalls, packages smaller than a shoebox that had to be sorted separately, scanned into one of 40 specific locations, and bagged. On Saturdays, manually planned driver routes to meet time-sensitive air delivery and pickup windows. Consistently met all KPIs including scan percentage, OTR departure times, and man-hours per package count. Completed weekly and monthly training worksheets within sort time, not as additional hours, without using them as justification for a late trailer. Served as a trained hazmat responder for package incidents and spill containment.
+
+
+Technical projects
+
+Wildman Legal Navigator
+https://wildmanlegal.netlify.app/
+Not legal Advice, and it will always be a work in progress, but its a tool to help the layman, like myself, navigate the legal system
+
+Wildman Mortgage Visualizer
+https://wildmanmortgage.netlify.app/
+Produces a visual aid based on your house price and mortgage terms, compares up to 7 different scenarios.
+
+Wildman Business Plan
+https://wildmanbusinessplan.netlify.app/
+Draft an investor ready business plan
+
+Wildman Traffic School
+https://wildmantrafficstop.netlify.app/
+A high level crash course of Kentucky roadways
+
+Wildman Task Tracker
+https://wildmantoday.netlify.app/
+A simple but revolutionary concept of tracking your tasks alongside your interuptions and your silver linings, hang in there.
+
+Wildman Bill tracker
+https://wildmanmoney.netlify.app/
+Track your income and your outcome, with visuals. not a budgeting app, we solely track income and bills, not every day spending. 
+
+Wildman Estimating
+https://newestimating.netlify.app/
+Civic construction logic heavy estimating 
+
+Wildman interior Painting
+https://paintestimate.netlify.app/
+Never guess on material again, use industry standard formulas to determine the amount of paint, rollers, brushes, tape, plastic, everything.
+
+Wildman; Interupted
+https://shevymeeker.github.io/games2/
+Take a sit, think a thought, and play a game
+
+Wildman Focus Damnit
+https://shevymeeker.github.io/adhd/
+its a work in progress, but its functional, this one will take awhile to get perfect
+
+
+
