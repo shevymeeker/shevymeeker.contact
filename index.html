@@ -67,12 +67,6 @@ nav.on{background:rgba(7,9,26,.9);backdrop-filter:blur(16px);border-bottom-color
 .hero-links a,.hero-links span{color:var(--m);text-decoration:none;font-size:11px;letter-spacing:.05em;transition:color .2s}
 .hero-links a:hover{color:var(--a)}
 
-.ticker-wrap{overflow:hidden;border-top:1px solid var(--b);border-bottom:1px solid var(--b);padding:.7rem 0;background:var(--s1);position:relative;z-index:1}
-.ticker{display:flex;gap:0;white-space:nowrap;animation:tick 50s linear infinite;width:max-content}
-.ticker-wrap:hover .ticker{animation-play-state:paused}
-@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.ti{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--m);padding:0 1.5rem;display:inline-flex;align-items:center}
-.ti::after{content:'·';margin-left:1.5rem;color:var(--b)}
 
 .sec{padding:6rem 2rem;max-width:1320px;margin:0 auto;position:relative;z-index:1}
 .sec+.sec{border-top:1px solid var(--b)}
@@ -170,7 +164,7 @@ footer{border-top:1px solid var(--b);padding:2.5rem 2rem;display:flex;justify-co
   .nav-links{gap:1rem}
 }
 @media(prefers-reduced-motion:reduce){
-  .ticker,.orb{animation:none}
+  .orb{animation:none}
   .fade{opacity:1;transform:none}
 }
 </style>
@@ -210,36 +204,6 @@ footer{border-top:1px solid var(--b);padding:2.5rem 2rem;display:flex;justify-co
   </div>
 </section>
 
-<div class="ticker-wrap">
-  <div class="ticker">
-    <span class="ti">DOT, PHMSA, OSHA, ISO Regulations</span>
-    <span class="ti">HazMat Response and Spill Containment</span>
-    <span class="ti">Inventory Management Systems</span>
-    <span class="ti">Microsoft 365 (including Power Bi)</span>
-    <span class="ti">Google Workspace</span>
-    <span class="ti">cGMP &amp; PPE</span>
-    <span class="ti">Mechanical and Technical Troubleshooting</span>
-    <span class="ti">Electric Forklift</span>
-    <span class="ti">Written &amp; Verbal Communication</span>
-    <span class="ti">Gov't Regulated Documentation</span>
-    <span class="ti">BOL, COA, Packing list, invoices</span>
-    <span class="ti">HTML5 · CSS3 · JavaScript</span>
-    <span class="ti">npm · node · VS Code</span>
-    <span class="ti">DOT, PHMSA, OSHA, ISO Regulations</span>
-    <span class="ti">HazMat Response and Spill Containment</span>
-    <span class="ti">Inventory Management Systems</span>
-    <span class="ti">Microsoft 365 (including Power Bi)</span>
-    <span class="ti">Google Workspace</span>
-    <span class="ti">cGMP &amp; PPE</span>
-    <span class="ti">Mechanical and Technical Troubleshooting</span>
-    <span class="ti">Electric Forklift</span>
-    <span class="ti">Written &amp; Verbal Communication</span>
-    <span class="ti">Gov't Regulated Documentation</span>
-    <span class="ti">BOL, COA, Packing list, invoices</span>
-    <span class="ti">HTML5 · CSS3 · JavaScript</span>
-    <span class="ti">npm · node · VS Code</span>
-  </div>
-</div>
 
 <main>
 
