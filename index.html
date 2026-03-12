@@ -376,6 +376,16 @@ footer{
 .mbody{flex:1;position:relative}
 .mbody iframe{width:100%;height:100%;border:none}
 
+/* Section groups */
+.sec-group{margin-bottom:3.5rem}
+.sec-group:last-child{margin-bottom:0}
+.sub-lbl{
+  font-size:10px;letter-spacing:.4em;text-transform:uppercase;
+  color:var(--m);font-family:var(--mono);
+  margin-bottom:1rem;margin-top:3rem;opacity:.65
+}
+.sec-group:first-child .sub-lbl{margin-top:0}
+
 /* Fade-in */
 .fade{opacity:0;transform:translateY(22px);transition:opacity .55s,transform .55s}
 .fade.in{opacity:1;transform:translateY(0)}
@@ -430,7 +440,7 @@ footer{
 
 <div id="ticker" aria-hidden="true">
   <div class="tick-t">
-    <span class="tick-i">Custom Apps</span><span class="tick-d">·</span><span class="tick-i">Contractor Apps</span><span class="tick-d">·</span><span class="tick-i">Productivity Apps</span><span class="tick-d">·</span><span class="tick-i">No Passwords</span><span class="tick-d">·</span><span class="tick-i">No Subscriptions</span><span class="tick-d">·</span><span class="tick-i">No Signal Required</span><span class="tick-d">·</span><span class="tick-i">Productivity Apps</span><span class="tick-d">·</span><span class="tick-i">Contractor Apps</span><span class="tick-d">·</span><span class="tick-i">Productivity Apps</span><span class="tick-d">·</span><span class="tick-i">No Signal Required</span><span class="tick-d">·</span><span class="tick-i">No Passwords</span><span class="tick-d">·</span><span class="tick-i">No Subscriptions</span><span class="tick-d">·</span>
+    <span class="tick-i">Custom Apps</span><span class="tick-d">·</span><span class="tick-i">Education Apps</span><span class="tick-d">·</span><span class="tick-i">Productivity Apps</span><span class="tick-d">·</span><span class="tick-i">Contractor Apps</span><span class="tick-d">·</span><span class="tick-i">Utility Tools</span><span class="tick-d">·</span><span class="tick-i">No Passwords</span><span class="tick-d">·</span><span class="tick-i">No Subscriptions</span><span class="tick-d">·</span><span class="tick-i">No Signal Required</span><span class="tick-d">·</span><span class="tick-i">Custom Apps</span><span class="tick-d">·</span><span class="tick-i">Education Apps</span><span class="tick-d">·</span><span class="tick-i">Productivity Apps</span><span class="tick-d">·</span><span class="tick-i">Contractor Apps</span><span class="tick-d">·</span><span class="tick-i">Utility Tools</span><span class="tick-d">·</span><span class="tick-i">No Passwords</span><span class="tick-d">·</span><span class="tick-i">No Subscriptions</span><span class="tick-d">·</span><span class="tick-i">No Signal Required</span><span class="tick-d">·</span>
   </div>
 </div>
 
@@ -469,158 +479,306 @@ footer{
   <h2 class="h"></h2>
   <p class="apps-sub"></p>
 
-  <div class="bento">
+  <!-- Education -->
+  <div class="sec-group">
+    <div class="sub-lbl">Education</div>
+    <div class="bento">
 
-    <div class="card w2" data-url="https://wildmanlegal.netlify.app/" data-name="Wildman Legal Navigator">
-      <div class="cc">
-        <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+      <div class="card w2" data-url="https://wildmanlegal.netlify.app/" data-name="Wildman Legal Navigator">
+        <div class="cc">
+          <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+        </div>
+        <div class="cf">
+          <iframe src="https://wildmanlegal.netlify.app/" loading="lazy" title="Wildman Legal Navigator" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+          <div class="fog"></div>
+        </div>
+        <div class="ci">
+          <div class="cn">Wildman Legal Navigator</div>
+          <div class="cd">Not legal Advice, and it will always be a work in progress, but its a tool to help the layman, like myself, navigate the legal system</div>
+          <span class="co">Open app →</span>
+        </div>
       </div>
-      <div class="cf">
-        <iframe src="https://wildmanlegal.netlify.app/" loading="lazy" title="Wildman Legal Navigator" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
-        <div class="fog"></div>
+
+      <div class="card" data-url="https://wildmantrafficstop.netlify.app/" data-name="Wildman Traffic School">
+        <div class="cc">
+          <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+        </div>
+        <div class="cf">
+          <iframe src="https://wildmantrafficstop.netlify.app/" loading="lazy" title="Wildman Traffic School" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+          <div class="fog"></div>
+        </div>
+        <div class="ci">
+          <div class="cn">Wildman Traffic School</div>
+          <div class="cd">A high level crash course of Kentucky roadways</div>
+          <span class="co">Open app →</span>
+        </div>
       </div>
-      <div class="ci">
-        <div class="cn">Wildman Legal Navigator</div>
-        <div class="cd">Not legal Advice, and it will always be a work in progress, but its a tool to help the layman, like myself, navigate the legal system</div>
-        <span class="co">Open app →</span>
+
+      <div class="card w2" data-url="https://shevymeeker.github.io/games2/" data-name="Wildman: Interrupted">
+        <div class="cc">
+          <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+        </div>
+        <div class="cf">
+          <iframe src="https://shevymeeker.github.io/games2/" loading="lazy" title="Wildman: Interrupted" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+          <div class="fog"></div>
+        </div>
+        <div class="ci">
+          <div class="cn">Wildman: Interrupted</div>
+          <div class="cd">Take a sit, think a thought, and play a game</div>
+          <span class="co">Open app →</span>
+        </div>
       </div>
+
     </div>
+  </div>
 
-    <div class="card" data-url="https://wildmanmortgage.netlify.app/" data-name="Wildman Mortgage Visualizer">
-      <div class="cc">
-        <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+  <!-- Productivity -->
+  <div class="sec-group">
+    <div class="sub-lbl">Productivity</div>
+    <div class="bento">
+
+      <div class="card" data-url="https://wildmanscratchpad.netlify.app/" data-name="Wildman Scratchpad">
+        <div class="cc">
+          <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+        </div>
+        <div class="cf">
+          <iframe src="https://wildmanscratchpad.netlify.app/" loading="lazy" title="Wildman Scratchpad" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+          <div class="fog"></div>
+        </div>
+        <div class="ci">
+          <div class="cn">Wildman Scratchpad</div>
+          <div class="cd">Encrypted, offline-first secure notes. Nothing leaves your device.</div>
+          <span class="co">Open app →</span>
+        </div>
       </div>
-      <div class="cf">
-        <iframe src="https://wildmanmortgage.netlify.app/" loading="lazy" title="Wildman Mortgage Visualizer" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
-        <div class="fog"></div>
+
+      <div class="card" data-url="https://wildmantoday.netlify.app/" data-name="Wildman Task Tracker">
+        <div class="cc">
+          <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+        </div>
+        <div class="cf">
+          <iframe src="https://wildmantoday.netlify.app/" loading="lazy" title="Wildman Task Tracker" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+          <div class="fog"></div>
+        </div>
+        <div class="ci">
+          <div class="cn">Wildman Task Tracker</div>
+          <div class="cd">A simple but revolutionary concept of tracking your tasks alongside your interuptions and your silver linings, hang in there.</div>
+          <span class="co">Open app →</span>
+        </div>
       </div>
-      <div class="ci">
-        <div class="cn">Wildman Mortgage Visualizer</div>
-        <div class="cd">Visualize potential amortization schedules before you talk to the bank,compares up to 7 different scenarios.</div>
-        <span class="co">Open app →</span>
+
+      <div class="card" data-url="https://wildmanmoney.netlify.app/" data-name="Wildman Bill Tracker">
+        <div class="cc">
+          <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+        </div>
+        <div class="cf">
+          <iframe src="https://wildmanmoney.netlify.app/" loading="lazy" title="Wildman Bill Tracker" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+          <div class="fog"></div>
+        </div>
+        <div class="ci">
+          <div class="cn">Wildman Bill Tracker</div>
+          <div class="cd">Track your income and your outcome, with visuals. not a budgeting app, we solely track income and bills, not every day spending.</div>
+          <span class="co">Open app →</span>
+        </div>
       </div>
+
+      <div class="card" data-url="https://shevymeeker.github.io/adhd/" data-name="Wildman Focus Damnit">
+        <div class="cc">
+          <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+        </div>
+        <div class="cf">
+          <iframe src="https://shevymeeker.github.io/adhd/" loading="lazy" title="Wildman Focus Damnit" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+          <div class="fog"></div>
+        </div>
+        <div class="ci">
+          <div class="cn">Wildman Focus Damnit</div>
+          <div class="cd">its a work in progress, but its functional, this one will take awhile to get perfect</div>
+          <span class="co">Open app →</span>
+        </div>
+      </div>
+
     </div>
+  </div>
 
-    <div class="card" data-url="https://wildmanbusinessplan.netlify.app/" data-name="Wildman Business Plan">
-      <div class="cc">
-        <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+  <!-- Contractor -->
+  <div class="sec-group">
+    <div class="sub-lbl">Contractor</div>
+    <div class="bento">
+
+      <div class="card" data-url="https://newestimating.netlify.app/" data-name="Wildman Estimating">
+        <div class="cc">
+          <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+        </div>
+        <div class="cf">
+          <iframe src="https://newestimating.netlify.app/" loading="lazy" title="Wildman Estimating" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+          <div class="fog"></div>
+        </div>
+        <div class="ci">
+          <div class="cn">Wildman Estimating</div>
+          <div class="cd">Civic construction logic heavy estimating</div>
+          <span class="co">Open app →</span>
+        </div>
       </div>
-      <div class="cf">
-        <iframe src="https://wildmanbusinessplan.netlify.app/" loading="lazy" title="Wildman Business Plan" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
-        <div class="fog"></div>
+
+      <div class="card" data-url="https://paintestimate.netlify.app/" data-name="Wildman Interior Painting">
+        <div class="cc">
+          <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+        </div>
+        <div class="cf">
+          <iframe src="https://paintestimate.netlify.app/" loading="lazy" title="Wildman Interior Painting" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+          <div class="fog"></div>
+        </div>
+        <div class="ci">
+          <div class="cn">Wildman Interior Painting</div>
+          <div class="cd">Never guess on material again, use industry standard formulas to determine the amount of paint, rollers, brushes, tape, plastic, everything.</div>
+          <span class="co">Open app →</span>
+        </div>
       </div>
-      <div class="ci">
-        <div class="cn">Wildman Business Plan</div>
-        <div class="cd">Draft an investor ready business plan</div>
-        <span class="co">Open app →</span>
+
+      <div class="card" data-url="https://wildmanbusinessplan.netlify.app/" data-name="Wildman Business Plan">
+        <div class="cc">
+          <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+        </div>
+        <div class="cf">
+          <iframe src="https://wildmanbusinessplan.netlify.app/" loading="lazy" title="Wildman Business Plan" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+          <div class="fog"></div>
+        </div>
+        <div class="ci">
+          <div class="cn">Wildman Business Plan</div>
+          <div class="cd">Draft an investor ready business plan</div>
+          <span class="co">Open app →</span>
+        </div>
       </div>
+
     </div>
+  </div>
 
-    <div class="card" data-url="https://wildmantrafficstop.netlify.app/" data-name="Wildman Traffic School">
-      <div class="cc">
-        <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+  <!-- Utility -->
+  <div class="sec-group">
+    <div class="sub-lbl">Utility</div>
+    <div class="bento">
+
+      <div class="card" data-url="https://wildmanmortgage.netlify.app/" data-name="Wildman Mortgage Visualizer">
+        <div class="cc">
+          <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+        </div>
+        <div class="cf">
+          <iframe src="https://wildmanmortgage.netlify.app/" loading="lazy" title="Wildman Mortgage Visualizer" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+          <div class="fog"></div>
+        </div>
+        <div class="ci">
+          <div class="cn">Wildman Mortgage Visualizer</div>
+          <div class="cd">Visualize potential amortization schedules before you talk to the bank, compares up to 7 different scenarios.</div>
+          <span class="co">Open app →</span>
+        </div>
       </div>
-      <div class="cf">
-        <iframe src="https://wildmantrafficstop.netlify.app/" loading="lazy" title="Wildman Traffic School" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
-        <div class="fog"></div>
+
+      <div class="card" data-url="clock.html" data-name="Clock">
+        <div class="cc">
+          <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+        </div>
+        <div class="cf">
+          <iframe src="clock.html" loading="lazy" title="Clock" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+          <div class="fog"></div>
+        </div>
+        <div class="ci">
+          <div class="cn">Clock</div>
+          <div class="cd">Clean, minimal clock. Works offline.</div>
+          <span class="co">Open app →</span>
+        </div>
       </div>
-      <div class="ci">
-        <div class="cn">Wildman Traffic School</div>
-        <div class="cd">A high level crash course of Kentucky roadways</div>
-        <span class="co">Open app →</span>
+
+      <div class="card" data-url="calendar.html" data-name="Calendar">
+        <div class="cc">
+          <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+        </div>
+        <div class="cf">
+          <iframe src="calendar.html" loading="lazy" title="Calendar" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+          <div class="fog"></div>
+        </div>
+        <div class="ci">
+          <div class="cn">Calendar</div>
+          <div class="cd">Month view calendar. No syncing, no account.</div>
+          <span class="co">Open app →</span>
+        </div>
       </div>
+
+      <div class="card" data-url="stopWatch.html" data-name="Stopwatch">
+        <div class="cc">
+          <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+        </div>
+        <div class="cf">
+          <iframe src="stopWatch.html" loading="lazy" title="Stopwatch" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+          <div class="fog"></div>
+        </div>
+        <div class="ci">
+          <div class="cn">Stopwatch</div>
+          <div class="cd">Lap timer and stopwatch. Fast and offline.</div>
+          <span class="co">Open app →</span>
+        </div>
+      </div>
+
+      <div class="card" data-url="Calculator.html" data-name="Calculator">
+        <div class="cc">
+          <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+        </div>
+        <div class="cf">
+          <iframe src="Calculator.html" loading="lazy" title="Calculator" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+          <div class="fog"></div>
+        </div>
+        <div class="ci">
+          <div class="cn">Calculator</div>
+          <div class="cd">Standard calculator. Works without a signal.</div>
+          <span class="co">Open app →</span>
+        </div>
+      </div>
+
+      <div class="card" data-url="countdown.html" data-name="Countdown Timer">
+        <div class="cc">
+          <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+        </div>
+        <div class="cf">
+          <iframe src="countdown.html" loading="lazy" title="Countdown Timer" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+          <div class="fog"></div>
+        </div>
+        <div class="ci">
+          <div class="cn">Countdown Timer</div>
+          <div class="cd">Set a timer, walk away. Simple and offline.</div>
+          <span class="co">Open app →</span>
+        </div>
+      </div>
+
+      <div class="card" data-url="unit-converter.html" data-name="Unit Converter">
+        <div class="cc">
+          <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+        </div>
+        <div class="cf">
+          <iframe src="unit-converter.html" loading="lazy" title="Unit Converter" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+          <div class="fog"></div>
+        </div>
+        <div class="ci">
+          <div class="cn">Unit Converter</div>
+          <div class="cd">Convert length, weight, temp, and more. No internet needed.</div>
+          <span class="co">Open app →</span>
+        </div>
+      </div>
+
+      <div class="card" data-url="percentage.html" data-name="Percentage Calculator">
+        <div class="cc">
+          <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+        </div>
+        <div class="cf">
+          <iframe src="percentage.html" loading="lazy" title="Percentage Calculator" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+          <div class="fog"></div>
+        </div>
+        <div class="ci">
+          <div class="cn">Percentage Calculator</div>
+          <div class="cd">Quick percentage math — tips, discounts, markups.</div>
+          <span class="co">Open app →</span>
+        </div>
+      </div>
+
     </div>
-
-    <div class="card" data-url="https://wildmantoday.netlify.app/" data-name="Wildman Task Tracker">
-      <div class="cc">
-        <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
-      </div>
-      <div class="cf">
-        <iframe src="https://wildmantoday.netlify.app/" loading="lazy" title="Wildman Task Tracker" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
-        <div class="fog"></div>
-      </div>
-      <div class="ci">
-        <div class="cn">Wildman Task Tracker</div>
-        <div class="cd">A simple but revolutionary concept of tracking your tasks alongside your interuptions and your silver linings, hang in there.</div>
-        <span class="co">Open app →</span>
-      </div>
-    </div>
-
-    <div class="card" data-url="https://wildmanmoney.netlify.app/" data-name="Wildman Bill Tracker">
-      <div class="cc">
-        <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
-      </div>
-      <div class="cf">
-        <iframe src="https://wildmanmoney.netlify.app/" loading="lazy" title="Wildman Bill Tracker" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
-        <div class="fog"></div>
-      </div>
-      <div class="ci">
-        <div class="cn">Wildman Bill Tracker</div>
-        <div class="cd">Track your income and your outcome, with visuals. not a budgeting app, we solely track income and bills, not every day spending.</div>
-        <span class="co">Open app →</span>
-      </div>
-    </div>
-
-    <div class="card" data-url="https://newestimating.netlify.app/" data-name="Wildman Estimating">
-      <div class="cc">
-        <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
-      </div>
-      <div class="cf">
-        <iframe src="https://newestimating.netlify.app/" loading="lazy" title="Wildman Estimating" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
-        <div class="fog"></div>
-      </div>
-      <div class="ci">
-        <div class="cn">Wildman Estimating</div>
-        <div class="cd">Civic construction logic heavy estimating</div>
-        <span class="co">Open app →</span>
-      </div>
-    </div>
-
-    <div class="card" data-url="https://paintestimate.netlify.app/" data-name="Wildman Interior Painting">
-      <div class="cc">
-        <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
-      </div>
-      <div class="cf">
-        <iframe src="https://paintestimate.netlify.app/" loading="lazy" title="Wildman Interior Painting" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
-        <div class="fog"></div>
-      </div>
-      <div class="ci">
-        <div class="cn">Wildman Interior Painting</div>
-        <div class="cd">Never guess on material again, use industry standard formulas to determine the amount of paint, rollers, brushes, tape, plastic, everything.</div>
-        <span class="co">Open app →</span>
-      </div>
-    </div>
-
-    <div class="card w2" data-url="https://shevymeeker.github.io/games2/" data-name="Wildman: Interrupted">
-      <div class="cc">
-        <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
-      </div>
-      <div class="cf">
-        <iframe src="https://shevymeeker.github.io/games2/" loading="lazy" title="Wildman: Interrupted" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
-        <div class="fog"></div>
-      </div>
-      <div class="ci">
-        <div class="cn">Wildman; Interrupted</div>
-        <div class="cd">Take a sit, think a thought, and play a game</div>
-        <span class="co">Open app →</span>
-      </div>
-    </div>
-
-    <div class="card" data-url="https://shevymeeker.github.io/adhd/" data-name="Wildman Focus Damnit">
-      <div class="cc">
-        <div class="dots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
-      </div>
-      <div class="cf">
-        <iframe src="https://shevymeeker.github.io/adhd/" loading="lazy" title="Wildman Focus Damnit" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
-        <div class="fog"></div>
-      </div>
-      <div class="ci">
-        <div class="cn">Wildman Focus Damnit</div>
-        <div class="cd">its a work in progress, but its functional, this one will take awhile to get perfect</div>
-        <span class="co">Open app →</span>
-      </div>
-    </div>
-
   </div>
 
   <p class="pwa-cta"></p>
