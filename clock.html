@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta tags added due to entries.js deprecation on July 8th, 2025 -->
+  <meta name="description" content="Analog/digital clock with alarm scheduling linked to calendar events.">
+  
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#091921">
+  <title>Clock & Alarms</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #091921;
+      --surface: #0f2433;
+      --surface2: #132d3f;
+      --border: rgba(255,255,255,0.1);
+      --text: #e6edf3;
+      --text-muted: rgba(255,255,255,0.45);
+      --accent: #FF453A;
+      --blue: #58a6ff;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body.light {
+      --bg: #d1dae3;
+      --surface: #c2cdd8;
+      --surface2: #b8c8d8;
+      --border: rgba(0,0,0,0.1);
+      --text: #111;
+      --text-muted: rgba(0,0,0,0.45);
+    }
+
+    /* ── Top bar ──────────────────────────────── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .home-btn {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .home-btn:hover { background: rgba(255,255,255,0.16); }
+
+    .page-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .topbar-right {
+      display: flex;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .icon-btn:hover { background: rgba(255,255,255,0.16); }
+    .icon-btn.active { background: rgba(88,166,255,0.18); border-color: var(--blue); color: var(--blue); }
+
+    /* ── Layout ────────────────────────────────── */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    @media (min-width: 720px) {
+      .main-content {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 40px;
+        padding: 32px 24px;
+      }
+    }
+
+    /* ── Clock face ──────────────────────────────── */
+    .clock-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 20px 20px;
+      flex-shrink: 0;
+    }
+
+    .clock {
+      width: 280px;
+      height: 280px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--bg);
+      border: 16px solid var(--bg);
+      border-radius: 50%;
+      box-shadow:
+        -6px -6px 12px rgba(255,255,255,0.05),
+        16px 16px 16px rgba(0,0,0,0.3),
+        inset -6px -6px 12px rgba(255,255,255,0.05),
+        inset 16px 16px 16px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    body.light .clock {
+      background: var(--bg);
+      border-color: #cad3dc;
+      box-shadow:
+        -6px -6px 12px rgba(255,255,255,0.5),
+        8px 8px 8px rgba(0,0,0,0.3),
+        inset -6px -6px 12px rgba(255,255,255,0.5),
+        inset 8px 8px 8px rgba(0,0,0,0.3);
+    }
+
+    .clock::before {
+      content: '';
+      position: absolute;
+      height: 12px;
+      width: 12px;
+      background: #fff;
+      border-radius: 50%;
+      z-index: 100000;
+    }
+
+    body.light .clock::before { background: #008eff; }
+
+    .indicators div {
+      position: absolute;
+      width: 2px;
+      height: 12px;
+      background: #404040;
+    }
+
+    body.light .indicators div { background: #808080; }
+
+    .indicators div:nth-child(1)  { transform: rotate(30deg)  translateY(-104px) translateX(-2px); }
+    .indicators div:nth-child(2)  { transform: rotate(60deg)  translateY(-104px) translateX(-4px); }
+    .indicators div:nth-child(3)  { transform: rotate(120deg) translateY(-104px) translateX(-4px); }
+    .indicators div:nth-child(4)  { transform: rotate(150deg) translateY(-104px) translateX(-2px); }
+    .indicators div:nth-child(5)  { transform: rotate(210deg) translateY(-104px) translateX(3px); }
+    .indicators div:nth-child(6)  { transform: rotate(240deg) translateY(-104px) translateX(5px); }
+    .indicators div:nth-child(7)  { transform: rotate(300deg) translateY(-104px) translateX(4px); }
+    .indicators div:nth-child(8)  { transform: rotate(330deg) translateY(-104px) translateX(2px); }
+
+    .nums { position: absolute; font-size: 22px; font-weight: bold; color: #808080; }
+
+    #three  { position: absolute; left: 95px;  top: -12px; }
+    #six    { position: absolute; top: 87px;   left: -6px; }
+    #nine   { position: absolute; right: 95px; top: -12px; }
+    #twelve { position: absolute; bottom: 87px; left: -12px; }
+
+    .clock .hour, .clock .min, .clock .sec {
+      position: absolute;
+      z-index: 10;
+    }
+
+    .hour, .hr { height: 128px; width: 128px; }
+    .min,  .mn { height: 152px; width: 152px; }
+    .sec,  .sc { height: 184px; width: 184px; }
+
+    .hr, .mn, .sc {
+      display: flex;
+      justify-content: center;
+      position: absolute;
+      border-radius: 50%;
+    }
+
+    .hr::before {
+      content: '';
+      position: absolute;
+      width: 7px;
+      height: 64px;
+      background: #ff105e;
+      z-index: 10;
+      border-radius: 5px 5px 0 0;
+    }
+
+    .mn::before {
+      content: '';
+      position: absolute;
+      width: 4px;
+      height: 72px;
+      background: #ffffff;
+      z-index: 11;
+      border-radius: 5px 5px 0 0;
+    }
+
+    body.light .mn::before { background: #091921; }
+
+    .sc::before {
+      content: '';
+      position: absolute;
+      width: 2px;
+      height: 120px;
+      background: #008eff;
+      z-index: 12;
+      border-radius: 5px 5px 0 0;
+    }
+
+    .time {
+      margin-top: 20px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Alarm panel ──────────────────────────── */
+    .alarm-panel {
+      width: 100%;
+      max-width: 420px;
+      border-top: 1px solid var(--border);
+      padding: 0 0 16px;
+      display: none;
+    }
+
+    @media (min-width: 720px) {
+      .alarm-panel {
+        border-top: none;
+        border-left: 1px solid var(--border);
+        padding: 0 0 0 32px;
+        max-width: 340px;
+        display: flex !important;
+        flex-direction: column;
+        height: auto;
+        overflow-y: auto;
+      }
+    }
+
+    .alarm-panel.open { display: flex; flex-direction: column; }
+
+    .panel-section-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      padding: 16px 16px 8px;
+    }
+
+    /* Add alarm form */
+    .add-alarm-form {
+      padding: 0 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .form-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .alarm-input {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.85rem;
+      padding: 8px 10px;
+      outline: none;
+      transition: border-color 0.15s;
+      color-scheme: dark;
+    }
+
+    body.light .alarm-input { color-scheme: light; }
+
+    .alarm-input:focus { border-color: var(--blue); }
+    .alarm-input::placeholder { color: var(--text-muted); }
+
+    #alarm-label { flex: 1; min-width: 120px; }
+    #alarm-date  { flex: 1; min-width: 130px; }
+    #alarm-time  { flex-shrink: 0; }
+
+    .add-alarm-btn {
+      background: var(--blue);
+      color: #0d1117;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      align-self: flex-end;
+      transition: opacity 0.15s;
+    }
+    .add-alarm-btn:hover { opacity: 0.85; }
+
+    /* Alarms list */
+    .alarms-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 16px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .no-alarms {
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      text-align: center;
+      padding: 16px 0;
+    }
+
+    .alarm-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .alarm-item.fired {
+      opacity: 0.4;
+    }
+
+    .alarm-item-info { flex: 1; min-width: 0; }
+
+    .alarm-item-label {
+      font-size: 0.88rem;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .alarm-item-time {
+      font-size: 0.72rem;
+      color: var(--blue);
+      margin-top: 3px;
+    }
+
+    .alarm-item-source {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .alarm-toggle {
+      flex-shrink: 0;
+      width: 38px;
+      height: 22px;
+      border-radius: 11px;
+      border: none;
+      background: rgba(255,255,255,0.15);
+      cursor: pointer;
+      position: relative;
+      transition: background 0.2s;
+      margin-top: 3px;
+    }
+
+    .alarm-toggle.on { background: var(--blue); }
+
+    .alarm-toggle::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform 0.2s;
+    }
+
+    .alarm-toggle.on::after { transform: translateX(16px); }
+
+    .alarm-delete {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 0;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: color 0.15s;
+    }
+    .alarm-delete:hover { color: var(--accent); }
+
+    /* ── Firing alert banner ──────────────────── */
+    #alarm-alert {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: var(--accent);
+      color: #fff;
+      padding: 14px 20px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      z-index: 1000;
+      font-weight: 600;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 20px rgba(255,69,58,0.5);
+    }
+
+    #alarm-alert.show { display: flex; }
+
+    #alarm-alert-text { flex: 1; }
+
+    #dismiss-alert {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: #fff;
+      border-radius: 6px;
+      padding: 5px 12px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="dark">
+
+<div id="alarm-alert">
+  <span>🔔</span>
+  <span id="alarm-alert-text">Alarm!</span>
+  <button id="dismiss-alert">Dismiss</button>
+</div>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <a class="home-btn" href="index.html">← Home</a>
+    <span class="page-title">Clock &amp; Alarms</span>
+  </div>
+  <div class="topbar-right">
+    <button class="icon-btn" id="toggle-alarms">🔔 Alarms</button>
+    <button class="icon-btn" id="toggle-theme">☀️ Light</button>
+  </div>
+</div>
+
+<div class="main-content">
+  <!-- Clock -->
+  <div class="clock-section">
+    <div class="clock">
+      <div class="hour"><div class="hr" id="hr"></div></div>
+      <div class="min"><div class="mn" id="mn"></div></div>
+      <div class="sec"><div class="sc" id="sc"></div></div>
+      <div class="indicators">
+        <div></div><div></div><div></div><div></div>
+        <div></div><div></div><div></div><div></div>
+      </div>
+      <div class="nums">
+        <span id="three">3</span>
+        <span id="six">6</span>
+        <span id="nine">9</span>
+        <span id="twelve">12</span>
+      </div>
+    </div>
+    <div class="time" id="digital-time"></div>
+  </div>
+
+  <!-- Alarm panel -->
+  <div class="alarm-panel" id="alarm-panel">
+    <p class="panel-section-title">Add Alarm</p>
+    <div class="add-alarm-form">
+      <input class="alarm-input" type="text" id="alarm-label" placeholder="Label (e.g. Meeting)">
+      <div class="form-row">
+        <input class="alarm-input" type="date" id="alarm-date">
+        <input class="alarm-input" type="time" id="alarm-time">
+      </div>
+      <button class="add-alarm-btn" id="add-alarm-btn">+ Add Alarm</button>
+    </div>
+    <p class="panel-section-title">Scheduled Alarms</p>
+    <div class="alarms-list" id="alarms-list"></div>
+    <p style="font-size:0.65rem; color:var(--text-muted); padding:12px 16px 0; line-height:1.4;">
+      🔔 Alarms fire when the browser is running. Install as a PWA for background alarm support even when no tab is open.
+    </p>
+  </div>
+</div>
+
+<script>
+  // ── Popup mode: hide topbar ────────────────────────────────
+  if (new URLSearchParams(location.search).get('popup') === '1') {
+    const topbar = document.querySelector('.topbar');
+    if (topbar) topbar.style.display = 'none';
+  }
+
+  // ── Storage helpers ───────────────────────────────────────
+  function getAlarms() {
+    try { return JSON.parse(localStorage.getItem('utilityAlarms') || '[]'); }
+    catch { return []; }
+  }
+  function saveAlarms(data) {
+    localStorage.setItem('utilityAlarms', JSON.stringify(data));
+    syncAlarmsToIDB(data); // keep IndexedDB in sync for SW background checks
+  }
+  function uuid() {
+    return Math.random().toString(36).slice(2) + Date.now().toString(36);
+  }
+
+  // ── IndexedDB helpers (for service worker background alarm checks) ───
+  function openAlarmDB() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open('utilities-alarm-db', 1);
+      req.onupgradeneeded = e => {
+        if (!e.target.result.objectStoreNames.contains('alarms')) {
+          e.target.result.createObjectStore('alarms', { keyPath: 'id' });
+        }
+      };
+      req.onsuccess = e => resolve(e.target.result);
+      req.onerror = e => reject(e.target.error);
+    });
+  }
+
+  async function syncAlarmsToIDB(alarms) {
+    try {
+      const db = await openAlarmDB();
+      const tx = db.transaction('alarms', 'readwrite');
+      const store = tx.objectStore('alarms');
+      store.clear();
+      alarms.forEach(a => store.put(a));
+      db.close();
+    } catch(e) {}
+  }
+
+  // On startup, merge any fired-by-SW status back from IndexedDB into localStorage
+  async function mergeIDBFiredStatus() {
+    try {
+      const db = await openAlarmDB();
+      const idbAlarms = await new Promise((res, rej) => {
+        const req = db.transaction('alarms', 'readonly').objectStore('alarms').getAll();
+        req.onsuccess = e => res(e.target.result);
+        req.onerror = e => rej(e.target.error);
+      });
+      db.close();
+      if (!idbAlarms.length) return;
+      const local = getAlarms();
+      const idbMap = Object.fromEntries(idbAlarms.map(a => [a.id, a]));
+      let changed = false;
+      local.forEach(a => {
+        if (idbMap[a.id] && idbMap[a.id].fired && !a.fired) {
+          a.fired = true;
+          firedIds.add(a.id);
+          changed = true;
+        }
+      });
+      if (changed) {
+        localStorage.setItem('utilityAlarms', JSON.stringify(local));
+        renderAlarmsList();
+      }
+    } catch(e) {}
+  }
+
+  // ── Clock hands ───────────────────────────────────────────
+  const hr = document.querySelector('#hr');
+  const mn = document.querySelector('#mn');
+  const sc = document.querySelector('#sc');
+  const digitalTime = document.getElementById('digital-time');
+
+  let firedIds = new Set();
+
+  setInterval(() => {
+    const day = new Date();
+    const hour = day.getHours();
+    const min = day.getMinutes();
+    const sec = day.getSeconds();
+
+    hr.style.transform = `rotateZ(${hour * 30 + min / 2}deg)`;
+    mn.style.transform = `rotateZ(${min * 6}deg)`;
+    sc.style.transform = `rotateZ(${sec * 6}deg)`;
+
+    digitalTime.textContent =
+      String(hour).padStart(2,'0') + ' : ' +
+      String(min).padStart(2,'0') + ' : ' +
+      String(sec).padStart(2,'0');
+
+    // Check alarms every tick
+    checkAlarms(day);
+  }, 1000);
+
+  // ── Alarm check ───────────────────────────────────────────
+  let audioCtx = null;
+
+  function getAudioCtx() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx;
+  }
+
+  function playAlarmSound() {
+    try {
+      const ctx = getAudioCtx();
+      const beepPattern = [0, 0.3, 0.6];
+      beepPattern.forEach(offset => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = 880;
+        osc.type = 'sine';
+        gain.gain.setValueAtTime(0.4, ctx.currentTime + offset);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + offset + 0.25);
+        osc.start(ctx.currentTime + offset);
+        osc.stop(ctx.currentTime + offset + 0.25);
+      });
+    } catch(e) {}
+  }
+
+  function fireAlarm(alarm) {
+    // In-app banner
+    const alertEl = document.getElementById('alarm-alert');
+    document.getElementById('alarm-alert-text').textContent = '🔔 ' + alarm.label;
+    alertEl.classList.add('show');
+    setTimeout(() => alertEl.classList.remove('show'), 12000);
+
+    // Audio
+    playAlarmSound();
+
+    // Browser notification
+    if (Notification.permission === 'granted') {
+      new Notification('⏰ Alarm', {
+        body: alarm.label,
+        icon: './manifest.json',
+        requireInteraction: true
+      });
+    } else if (Notification.permission !== 'denied') {
+      Notification.requestPermission().then(p => {
+        if (p === 'granted') {
+          new Notification('⏰ Alarm', { body: alarm.label, requireInteraction: true });
+        }
+      });
+    }
+  }
+
+  function checkAlarms(now) {
+    const alarms = getAlarms();
+    let changed = false;
+
+    alarms.forEach(alarm => {
+      if (!alarm.active || alarm.fired) return;
+      if (firedIds.has(alarm.id)) return;
+
+      const alarmTime = new Date(alarm.datetime);
+      // Fire within a 59-second window (catches the minute regardless of what second we check)
+      const diffSec = (now - alarmTime) / 1000;
+      if (diffSec >= 0 && diffSec < 60) {
+        firedIds.add(alarm.id);
+        alarm.fired = true;
+        changed = true;
+        fireAlarm(alarm);
+      }
+    });
+
+    if (changed) {
+      saveAlarms(alarms);
+      renderAlarmsList();
+    }
+  }
+
+  // ── Alarm UI ──────────────────────────────────────────────
+  function renderAlarmsList() {
+    const alarms = getAlarms();
+    const list = document.getElementById('alarms-list');
+    list.innerHTML = '';
+
+    if (!alarms.length) {
+      list.innerHTML = '<p class="no-alarms">No alarms scheduled.<br>Add one above or via the Calendar.</p>';
+      return;
+    }
+
+    // Sort: upcoming first, fired last
+    const sorted = [...alarms].sort((a, b) => {
+      if (a.fired !== b.fired) return a.fired ? 1 : -1;
+      return new Date(a.datetime) - new Date(b.datetime);
+    });
+
+    sorted.forEach(alarm => {
+      const item = document.createElement('div');
+      item.className = 'alarm-item' + (alarm.fired ? ' fired' : '');
+
+      const info = document.createElement('div');
+      info.className = 'alarm-item-info';
+
+      const label = document.createElement('div');
+      label.className = 'alarm-item-label';
+      label.textContent = alarm.label || 'Alarm';
+      label.title = alarm.label;
+
+      const dt = new Date(alarm.datetime);
+      const timeEl = document.createElement('div');
+      timeEl.className = 'alarm-item-time';
+      timeEl.textContent = dt.toLocaleString('en-US', {
+        month: 'short', day: 'numeric', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+
+      info.appendChild(label);
+      info.appendChild(timeEl);
+      if (alarm.fired) {
+        const src = document.createElement('div');
+        src.className = 'alarm-item-source';
+        src.textContent = 'Fired';
+        info.appendChild(src);
+      }
+
+      const toggle = document.createElement('button');
+      toggle.className = 'alarm-toggle' + (alarm.active ? ' on' : '');
+      toggle.title = alarm.active ? 'Disable' : 'Enable';
+      toggle.addEventListener('click', () => {
+        const list = getAlarms();
+        const a = list.find(x => x.id === alarm.id);
+        if (a) {
+          a.active = !a.active;
+          if (a.active) { a.fired = false; firedIds.delete(a.id); }
+          saveAlarms(list);
+          renderAlarmsList();
+        }
+      });
+
+      const del = document.createElement('button');
+      del.className = 'alarm-delete';
+      del.innerHTML = '&times;';
+      del.title = 'Delete alarm';
+      del.addEventListener('click', () => {
+        const list = getAlarms().filter(x => x.id !== alarm.id);
+        saveAlarms(list);
+        firedIds.delete(alarm.id);
+        renderAlarmsList();
+      });
+
+      item.appendChild(info);
+      item.appendChild(toggle);
+      item.appendChild(del);
+      list.appendChild(item);
+    });
+  }
+
+  // Add alarm button
+  document.getElementById('add-alarm-btn').addEventListener('click', () => {
+    const label = document.getElementById('alarm-label').value.trim() || 'Alarm';
+    const date = document.getElementById('alarm-date').value;
+    const time = document.getElementById('alarm-time').value;
+
+    if (!date || !time) {
+      alert('Please set both a date and time for the alarm.');
+      return;
+    }
+
+    const alarms = getAlarms();
+    alarms.push({
+      id: uuid(),
+      datetime: `${date}T${time}`,
+      label,
+      active: true,
+      fired: false
+    });
+    saveAlarms(alarms);
+
+    document.getElementById('alarm-label').value = '';
+    document.getElementById('alarm-date').value = '';
+    document.getElementById('alarm-time').value = '';
+    renderAlarmsList();
+  });
+
+  // Set default date to today
+  const today = new Date().toISOString().slice(0, 10);
+  document.getElementById('alarm-date').value = today;
+
+  // Dismiss alert
+  document.getElementById('dismiss-alert').addEventListener('click', () => {
+    document.getElementById('alarm-alert').classList.remove('show');
+  });
+
+  // ── Panel toggle ─────────────────────────────────────────
+  const panel = document.getElementById('alarm-panel');
+  const toggleBtn = document.getElementById('toggle-alarms');
+
+  // Show by default on desktop, hidden on mobile
+  const mq = window.matchMedia('(min-width: 720px)');
+  let panelOpen = mq.matches;
+  function updatePanelVisibility() {
+    if (mq.matches) {
+      panel.style.display = 'flex';
+      toggleBtn.classList.add('active');
+    } else {
+      panel.classList.toggle('open', panelOpen);
+      toggleBtn.classList.toggle('active', panelOpen);
+    }
+  }
+  updatePanelVisibility();
+  mq.addEventListener('change', updatePanelVisibility);
+
+  toggleBtn.addEventListener('click', () => {
+    if (mq.matches) return; // can't toggle on desktop
+    panelOpen = !panelOpen;
+    updatePanelVisibility();
+  });
+
+  // ── Theme toggle ─────────────────────────────────────────
+  const themeBtn = document.getElementById('toggle-theme');
+  themeBtn.addEventListener('click', () => {
+    document.body.classList.toggle('light');
+    themeBtn.textContent = document.body.classList.contains('light') ? '🌙 Dark' : '☀️ Light';
+  });
+
+  // ── Notification permission ──────────────────────────────
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+
+  // ── Listen for cross-tab alarm updates ──────────────────
+  window.addEventListener('storage', e => {
+    if (e.key === 'utilityAlarms') renderAlarmsList();
+  });
+
+  // ── Service worker message relay ─────────────────────────
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('message', e => {
+      if (e.data && e.data.type === 'CHECK_ALARMS') {
+        checkAlarms(new Date());
+      }
+    });
+    navigator.serviceWorker.register('./sw.js').then(reg => {
+      // Register periodic background sync so alarms can fire without this page open
+      if ('periodicSync' in reg) {
+        navigator.permissions.query({ name: 'periodic-background-sync' }).then(status => {
+          if (status.state === 'granted') {
+            reg.periodicSync.register('check-alarms', { minInterval: 15 * 60 * 1000 }).catch(() => {});
+          }
+        }).catch(() => {});
+      }
+    }).catch(() => {});
+  }
+
+  // Init
+  renderAlarmsList();
+  syncAlarmsToIDB(getAlarms()); // ensure IDB is in sync with localStorage on startup
+  mergeIDBFiredStatus();        // pull back any alarms the SW fired while page was closed
+</script>
+</body>
+</html>
