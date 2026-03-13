@@ -373,8 +373,22 @@ footer{
 .mext:hover{border-color:var(--a)}
 .mx{background:none;border:none;color:var(--m);cursor:pointer;font-size:1.1rem;font-family:var(--mono);transition:color .2s;min-height:40px;min-width:40px;display:inline-flex;align-items:center;justify-content:center}
 .mx:hover{color:var(--t)}
-.mbody{flex:1;position:relative}
-.mbody iframe{width:100%;height:100%;border:none}
+.mbody{flex:1;position:relative;display:flex;flex-direction:column}
+.mbody iframe{flex:1;width:100%;border:none}
+.mfallback{
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  gap:1.2rem;flex:1;padding:2rem;text-align:center
+}
+.mfallback.show{display:flex}
+.mfallback svg{opacity:.35;color:var(--m)}
+.mfallback p{font-size:.85rem;color:var(--m);margin:0;max-width:28ch;line-height:1.6}
+.mfallback a{
+  font-size:11px;color:var(--a);text-decoration:none;letter-spacing:.1em;
+  text-transform:uppercase;border:1px solid rgba(200,160,92,.3);
+  padding:.4rem .8rem;border-radius:4px;transition:border-color .2s;
+  font-family:var(--mono);display:inline-flex;align-items:center;gap:.4em
+}
+.mfallback a:hover{border-color:var(--a)}
 
 /* Section groups */
 .sec-group{margin-bottom:3.5rem}
@@ -921,6 +935,14 @@ footer{
     </div>
     <div class="mbody">
       <iframe id="mif" title="App" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals"></iframe>
+      <div class="mfallback" id="mfall" aria-live="polite">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <p>Preview unavailable — this app uses strict frame security.</p>
+        <a id="mfallext" href="#" target="_blank" rel="noopener">Open full screen ↗</a>
+      </div>
     </div>
   </div>
 </div>
@@ -944,6 +966,8 @@ const mext=document.getElementById('mext');
 const mif=document.getElementById('mif');
 const mx=document.getElementById('mx');
 const mbg=document.getElementById('mbg');
+const mfall=document.getElementById('mfall');
+const mfallext=document.getElementById('mfallext');
 
 // Populate URL bars from data-url
 document.querySelectorAll('.card').forEach(c=>{
@@ -960,11 +984,44 @@ document.querySelectorAll('.card').forEach(c=>{
   }
 });
 
+// Iframe block detection: external URLs that resolve in < 150 ms have only
+// returned headers (no body was rendered), which is the browser's signal that
+// X-Frame-Options / CSP frame-ancestors blocked the embed.
+let frameBlockTimer=null;
+
+function showFallback(url){
+  mif.style.display='none';
+  mfallext.href=url;
+  mfall.classList.add('show');
+}
+
+function hideFallback(){
+  mfall.classList.remove('show');
+  mif.style.display='';
+}
+
 document.querySelectorAll('.card').forEach(c=>{
   c.addEventListener('click',()=>{
     const url=c.dataset.url, name=c.dataset.name;
     mt.textContent=name;
     mext.href=url;
+    hideFallback();
+    clearTimeout(frameBlockTimer);
+
+    const isExternal=url.startsWith('http');
+    if(isExternal){
+      const t0=Date.now();
+      mif.addEventListener('load',function onLoad(){
+        mif.removeEventListener('load',onLoad);
+        clearTimeout(frameBlockTimer);
+        // A genuine page render takes well over 150 ms even when cached;
+        // a header-only blocked response resolves almost instantly.
+        if(Date.now()-t0<150) showFallback(url);
+      });
+      // Safety net: if load never fires (some browsers suppress it for blocked frames)
+      frameBlockTimer=setTimeout(()=>showFallback(url),10000);
+    }
+
     mif.src=url;
     modal.classList.add('open');
     document.body.style.overflow='hidden';
@@ -974,7 +1031,8 @@ document.querySelectorAll('.card').forEach(c=>{
 function close(){
   modal.classList.remove('open');
   document.body.style.overflow='';
-  setTimeout(()=>mif.src='',300);
+  clearTimeout(frameBlockTimer);
+  setTimeout(()=>{mif.src='';hideFallback();},300);
 }
 
 mx.addEventListener('click',close);
