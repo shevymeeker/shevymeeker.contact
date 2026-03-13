@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1117">
+  <title>Percentage Calculator</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0d1117;
+      --surface: #161b22;
+      --surface2:#21262d;
+      --border:  #30363d;
+      --text:    #e6edf3;
+      --muted:   #8b949e;
+      --accent:  #FF453A;
+      --blue:    #58a6ff;
+      --green:   #3fb950;
+      --safe-b:  env(safe-area-inset-bottom, 0px);
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100dvh;
+      padding-bottom: var(--safe-b);
+    }
+
+    /* ── Top bar ──────────────────────────── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .home-btn {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.11);
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .home-btn:hover { background: rgba(255,255,255,0.14); }
+
+    .page-title { font-size: 1rem; font-weight: 600; }
+
+    /* ── Mode tabs ────────────────────────── */
+    .tab-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      margin: 14px 16px 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 4px;
+      flex-shrink: 0;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      border-radius: 9px;
+      padding: 9px 6px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      font-family: inherit;
+      line-height: 1.2;
+      text-align: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active {
+      background: var(--surface2);
+      color: var(--text);
+      font-weight: 600;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
+
+    /* ── Panel ────────────────────────────── */
+    main {
+      flex: 1;
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .panel {
+      display: none;
+      flex-direction: column;
+      gap: 18px;
+      width: 100%;
+      max-width: 420px;
+    }
+    .panel.active { display: flex; }
+
+    /* ── Input rows ───────────────────────── */
+    .input-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex: 1;
+      min-width: 80px;
+    }
+
+    .input-label {
+      font-size: 0.67rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      padding-left: 2px;
+    }
+
+    .num-input {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 1.4rem;
+      font-weight: 300;
+      padding: 12px 14px;
+      outline: none;
+      width: 100%;
+      text-align: right;
+      transition: border-color 0.15s;
+      -moz-appearance: textfield;
+    }
+    .num-input::-webkit-outer-spin-button,
+    .num-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .num-input:focus { border-color: var(--blue); }
+    .num-input::placeholder { color: rgba(255,255,255,0.2); font-size: 1.1rem; }
+
+    .connector {
+      font-size: 0.82rem;
+      color: var(--muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+      padding-top: 18px; /* align with inputs (offset for label) */
+    }
+
+    .suffix {
+      font-size: 1.1rem;
+      color: var(--muted);
+      padding-top: 18px;
+      flex-shrink: 0;
+    }
+
+    /* ── Result area ──────────────────────── */
+    .result-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 20px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      min-height: 100px;
+      justify-content: center;
+      transition: border-color 0.2s;
+    }
+
+    .result-card.has-result { border-color: rgba(88,166,255,0.3); }
+    .result-card.positive   { border-color: rgba(63,185,80,0.35); }
+    .result-card.negative   { border-color: rgba(255,69,58,0.35); }
+
+    .result-equals {
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .result-value {
+      font-size: 2.4rem;
+      font-weight: 200;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      text-align: center;
+      line-height: 1;
+      word-break: break-all;
+      transition: color 0.2s;
+    }
+
+    .result-value.positive { color: var(--green); }
+    .result-value.negative { color: var(--accent); }
+
+    .result-hint {
+      font-size: 0.76rem;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .result-placeholder {
+      color: rgba(255,255,255,0.18);
+      font-size: 0.88rem;
+      text-align: center;
+    }
+
+    /* Clear btn */
+    .clear-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 0.78rem;
+      padding: 7px 16px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      align-self: center;
+      display: none;
+    }
+    .clear-btn:hover { background: var(--surface2); color: var(--text); }
+    .clear-btn.visible { display: block; }
+
+    /* Direction arrow for mode 3 */
+    .change-arrow {
+      font-size: 1.1rem;
+      margin-right: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="home-btn" href="index.html">← Home</a>
+  <span class="page-title">Percentage</span>
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" data-panel="0">X% of Y</button>
+  <button class="tab-btn" data-panel="1">X of Y as %</button>
+  <button class="tab-btn" data-panel="2">% Change</button>
+</div>
+
+<main>
+
+  <!-- Mode 0: What is X% of Y? -->
+  <div class="panel active" id="panel-0">
+    <div class="input-row">
+      <div class="input-group">
+        <span class="input-label">Percentage</span>
+        <input class="num-input" id="p0-pct" type="number" inputmode="decimal" placeholder="15">
+      </div>
+      <span class="suffix" style="padding-top:22px;">%</span>
+      <span class="connector">of</span>
+      <div class="input-group">
+        <span class="input-label">Value</span>
+        <input class="num-input" id="p0-val" type="number" inputmode="decimal" placeholder="200">
+      </div>
+    </div>
+
+    <div class="result-card" id="p0-result-card">
+      <span class="result-placeholder">Enter values above</span>
+    </div>
+    <button class="clear-btn" id="p0-clear">Clear</button>
+  </div>
+
+  <!-- Mode 1: X is what % of Y? -->
+  <div class="panel" id="panel-1">
+    <div class="input-row">
+      <div class="input-group">
+        <span class="input-label">Part</span>
+        <input class="num-input" id="p1-part" type="number" inputmode="decimal" placeholder="30">
+      </div>
+      <span class="connector">is what % of</span>
+      <div class="input-group">
+        <span class="input-label">Total</span>
+        <input class="num-input" id="p1-total" type="number" inputmode="decimal" placeholder="200">
+      </div>
+    </div>
+
+    <div class="result-card" id="p1-result-card">
+      <span class="result-placeholder">Enter values above</span>
+    </div>
+    <button class="clear-btn" id="p1-clear">Clear</button>
+  </div>
+
+  <!-- Mode 2: % change from X to Y -->
+  <div class="panel" id="panel-2">
+    <div class="input-row">
+      <div class="input-group">
+        <span class="input-label">From</span>
+        <input class="num-input" id="p2-from" type="number" inputmode="decimal" placeholder="50">
+      </div>
+      <span class="connector">to</span>
+      <div class="input-group">
+        <span class="input-label">To</span>
+        <input class="num-input" id="p2-to" type="number" inputmode="decimal" placeholder="75">
+      </div>
+    </div>
+
+    <div class="result-card" id="p2-result-card">
+      <span class="result-placeholder">Enter values above</span>
+    </div>
+    <button class="clear-btn" id="p2-clear">Clear</button>
+  </div>
+
+</main>
+
+<script>
+  // ── Popup mode: hide topbar ───────────────────────────────────
+  if (new URLSearchParams(location.search).get('popup') === '1') {
+    const topbar = document.querySelector('.topbar');
+    if (topbar) topbar.style.display = 'none';
+  }
+
+  // ── Tab switching ─────────────────────────────────────────
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = btn.dataset.panel;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + idx).classList.add('active');
+    });
+  });
+
+  // ── Helpers ───────────────────────────────────────────────
+  function fmt(n, decimals = 2) {
+    if (!isFinite(n) || isNaN(n)) return null;
+    // Remove trailing zeros up to `decimals` places
+    return parseFloat(n.toFixed(decimals)).toLocaleString('en-US', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: decimals
+    });
+  }
+
+  function setResult(cardId, {value, label, hint, colorClass}) {
+    const card = document.getElementById(cardId);
+    card.innerHTML = '';
+    card.className = 'result-card';
+
+    if (value === null) {
+      card.innerHTML = '<span class="result-placeholder">Enter values above</span>';
+      return;
+    }
+
+    card.classList.add('has-result');
+    if (colorClass) card.classList.add(colorClass);
+
+    if (label) {
+      const eq = document.createElement('span');
+      eq.className = 'result-equals';
+      eq.textContent = label;
+      card.appendChild(eq);
+    }
+
+    const val = document.createElement('div');
+    val.className = 'result-value' + (colorClass ? ` ${colorClass}` : '');
+    val.textContent = value;
+    card.appendChild(val);
+
+    if (hint) {
+      const h = document.createElement('div');
+      h.className = 'result-hint';
+      h.textContent = hint;
+      card.appendChild(h);
+    }
+  }
+
+  function showClear(btnId, show) {
+    document.getElementById(btnId).classList.toggle('visible', show);
+  }
+
+  // ── Mode 0: What is X% of Y? ─────────────────────────────
+  function computeMode0() {
+    const pct = parseFloat(document.getElementById('p0-pct').value);
+    const val = parseFloat(document.getElementById('p0-val').value);
+    const hasInput = !isNaN(pct) || !isNaN(val);
+
+    if (isNaN(pct) || isNaN(val)) {
+      setResult('p0-result-card', { value: null });
+      showClear('p0-clear', hasInput);
+      return;
+    }
+
+    const result = (pct / 100) * val;
+    const fmtResult = fmt(result);
+
+    // Contextual hints
+    let hint = '';
+    if (pct === 15)  hint = `15% tip on a $${fmt(val)} bill → $${fmtResult}`;
+    else if (pct === 20) hint = `20% tip on a $${fmt(val)} bill → $${fmtResult}`;
+    else if (pct === 10) hint = `10% of ${fmt(val)} = ${fmtResult}`;
+
+    setResult('p0-result-card', {
+      value: fmtResult,
+      label: `${fmt(pct)}% of ${fmt(val)} =`,
+      hint
+    });
+    showClear('p0-clear', true);
+  }
+
+  ['p0-pct', 'p0-val'].forEach(id => {
+    document.getElementById(id).addEventListener('input', computeMode0);
+  });
+
+  document.getElementById('p0-clear').addEventListener('click', () => {
+    document.getElementById('p0-pct').value = '';
+    document.getElementById('p0-val').value = '';
+    computeMode0();
+  });
+
+  // ── Mode 1: X is what % of Y? ────────────────────────────
+  function computeMode1() {
+    const part  = parseFloat(document.getElementById('p1-part').value);
+    const total = parseFloat(document.getElementById('p1-total').value);
+    const hasInput = !isNaN(part) || !isNaN(total);
+
+    if (isNaN(part) || isNaN(total) || total === 0) {
+      setResult('p1-result-card', { value: null });
+      showClear('p1-clear', hasInput);
+      return;
+    }
+
+    const result = (part / total) * 100;
+    const fmtResult = fmt(result) + '%';
+
+    let hint = '';
+    if (total > 0) hint = `${fmt(part)} out of ${fmt(total)} = ${fmt(result)}%`;
+
+    setResult('p1-result-card', {
+      value: fmtResult,
+      label: `${fmt(part)} of ${fmt(total)} =`,
+      hint
+    });
+    showClear('p1-clear', true);
+  }
+
+  ['p1-part', 'p1-total'].forEach(id => {
+    document.getElementById(id).addEventListener('input', computeMode1);
+  });
+
+  document.getElementById('p1-clear').addEventListener('click', () => {
+    document.getElementById('p1-part').value = '';
+    document.getElementById('p1-total').value = '';
+    computeMode1();
+  });
+
+  // ── Mode 2: % change from X to Y ─────────────────────────
+  function computeMode2() {
+    const from = parseFloat(document.getElementById('p2-from').value);
+    const to   = parseFloat(document.getElementById('p2-to').value);
+    const hasInput = !isNaN(from) || !isNaN(to);
+
+    if (isNaN(from) || isNaN(to) || from === 0) {
+      setResult('p2-result-card', { value: null });
+      showClear('p2-clear', hasInput);
+      return;
+    }
+
+    const change = ((to - from) / Math.abs(from)) * 100;
+    const isIncrease = change >= 0;
+    const sign = isIncrease ? '+' : '';
+    const arrow = isIncrease ? '▲' : '▼';
+    const colorClass = isIncrease ? 'positive' : 'negative';
+    const word = isIncrease ? 'increase' : 'decrease';
+
+    setResult('p2-result-card', {
+      value: `${arrow} ${sign}${fmt(change)}%`,
+      label: `From ${fmt(from)} to ${fmt(to)} =`,
+      hint: `${Math.abs(fmt(change))}% ${word} (difference: ${fmt(Math.abs(to - from))})`,
+      colorClass
+    });
+    showClear('p2-clear', true);
+  }
+
+  ['p2-from', 'p2-to'].forEach(id => {
+    document.getElementById(id).addEventListener('input', computeMode2);
+  });
+
+  document.getElementById('p2-clear').addEventListener('click', () => {
+    document.getElementById('p2-from').value = '';
+    document.getElementById('p2-to').value = '';
+    computeMode2();
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1117">
+  <title>Unit Converter</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0d1117;
+      --surface:  #161b22;
+      --surface2: #21262d;
+      --border:   #30363d;
+      --text:     #e6edf3;
+      --muted:    #8b949e;
+      --accent:   #FF453A;
+      --blue:     #58a6ff;
+      --green:    #3fb950;
+      --safe-b:   env(safe-area-inset-bottom, 0px);
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100dvh;
+      padding-bottom: var(--safe-b);
+    }
+
+    /* ── Top bar ─────────────────────────── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .home-btn {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.11);
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .home-btn:hover { background: rgba(255,255,255,0.14); }
+
+    .page-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    /* ── Category chips ──────────────────── */
+    .cat-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      flex-shrink: 0;
+    }
+    .cat-bar::-webkit-scrollbar { display: none; }
+
+    .cat-chip {
+      flex-shrink: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 7px 16px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .cat-chip:hover { border-color: var(--blue); color: var(--text); }
+    .cat-chip.active {
+      background: rgba(88,166,255,0.15);
+      border-color: var(--blue);
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    /* ── Converter body ──────────────────── */
+    .converter-body {
+      flex: 1;
+      padding: 24px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      max-width: 500px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Input row */
+    .conv-row {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      align-items: stretch;
+    }
+
+    .conv-input-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .conv-label {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      padding-left: 2px;
+    }
+
+    .conv-input {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 1.6rem;
+      font-weight: 300;
+      padding: 14px 16px;
+      outline: none;
+      width: 100%;
+      text-align: right;
+      transition: border-color 0.15s;
+      -moz-appearance: textfield;
+    }
+    .conv-input::-webkit-outer-spin-button,
+    .conv-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .conv-input:focus { border-color: var(--blue); }
+    .conv-input::placeholder { color: rgba(255,255,255,0.18); font-size: 1.2rem; }
+
+    .unit-select-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .unit-select-label {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      padding-left: 2px;
+    }
+
+    .unit-select {
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 500;
+      padding: 14px 32px 14px 14px;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238b949e' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      min-width: 90px;
+    }
+    .unit-select:focus { border-color: var(--blue); }
+
+    /* Swap section */
+    .swap-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 8px 0;
+      position: relative;
+    }
+
+    .swap-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .swap-btn {
+      position: relative;
+      z-index: 1;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, border-color 0.15s, transform 0.3s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .swap-btn:hover { background: var(--surface); border-color: var(--blue); color: var(--blue); }
+    .swap-btn:active { transform: rotate(180deg); }
+    .swap-btn.rotating { transform: rotate(180deg); }
+
+    /* Quick ref table */
+    .ref-table {
+      width: 100%;
+      margin-top: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .ref-table-title {
+      padding: 10px 14px;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ref-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 14px;
+      font-size: 0.82rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: background 0.1s;
+    }
+    .ref-row:last-child { border-bottom: none; }
+    .ref-row:hover { background: var(--surface2); }
+
+    .ref-from { color: var(--muted); }
+    .ref-eq { color: rgba(255,255,255,0.3); font-size: 0.75rem; }
+    .ref-to { color: var(--text); font-weight: 500; }
+
+    /* Error state */
+    .conv-input.error { border-color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="home-btn" href="index.html">← Home</a>
+  <span class="page-title">Unit Converter</span>
+</div>
+
+<div class="cat-bar" id="cat-bar"></div>
+
+<div class="converter-body">
+  <div class="conv-row">
+    <div class="conv-input-wrap">
+      <span class="conv-label">From</span>
+      <input class="conv-input" id="from-input" type="number" inputmode="decimal" placeholder="0">
+    </div>
+    <div class="unit-select-wrap">
+      <span class="unit-select-label">Unit</span>
+      <select class="unit-select" id="from-unit"></select>
+    </div>
+  </div>
+
+  <div class="swap-section">
+    <div class="swap-line"></div>
+    <button class="swap-btn" id="swap-btn" title="Swap units">⇅</button>
+  </div>
+
+  <div class="conv-row">
+    <div class="conv-input-wrap">
+      <span class="conv-label">To</span>
+      <input class="conv-input" id="to-input" type="number" inputmode="decimal" placeholder="0">
+    </div>
+    <div class="unit-select-wrap">
+      <span class="unit-select-label">Unit</span>
+      <select class="unit-select" id="to-unit"></select>
+    </div>
+  </div>
+
+  <div class="ref-table" id="ref-table">
+    <div class="ref-table-title">Quick Reference</div>
+    <div id="ref-rows"></div>
+  </div>
+</div>
+
+<script>
+  // ── Conversion data ─────────────────────────────────────────────
+  // All non-temp units stored as conversion factor TO the base unit
+  // Temperature handled separately via functions
+
+  const CATEGORIES = {
+    Length: {
+      base: 'm',
+      units: {
+        mm:   { label: 'mm (millimeter)',   factor: 0.001 },
+        cm:   { label: 'cm (centimeter)',   factor: 0.01 },
+        m:    { label: 'm (meter)',          factor: 1 },
+        km:   { label: 'km (kilometer)',     factor: 1000 },
+        in:   { label: 'in (inch)',          factor: 0.0254 },
+        ft:   { label: 'ft (foot)',          factor: 0.3048 },
+        yd:   { label: 'yd (yard)',          factor: 0.9144 },
+        mi:   { label: 'mi (mile)',          factor: 1609.344 },
+      }
+    },
+    Weight: {
+      base: 'kg',
+      units: {
+        mg:  { label: 'mg (milligram)',  factor: 0.000001 },
+        g:   { label: 'g (gram)',        factor: 0.001 },
+        kg:  { label: 'kg (kilogram)',   factor: 1 },
+        t:   { label: 't (metric ton)',  factor: 1000 },
+        oz:  { label: 'oz (ounce)',      factor: 0.028349523 },
+        lb:  { label: 'lb (pound)',      factor: 0.45359237 },
+      }
+    },
+    Temperature: {
+      base: null, // special
+      units: {
+        '°C': { label: '°C (Celsius)' },
+        '°F': { label: '°F (Fahrenheit)' },
+        'K':  { label: 'K (Kelvin)' },
+      }
+    },
+    Volume: {
+      base: 'L',
+      units: {
+        mL:    { label: 'mL (milliliter)', factor: 0.001 },
+        L:     { label: 'L (liter)',        factor: 1 },
+        floz:  { label: 'fl oz (US)',       factor: 0.029573530 },
+        cup:   { label: 'cup (US)',          factor: 0.2365882 },
+        pt:    { label: 'pt (pint US)',      factor: 0.473176 },
+        qt:    { label: 'qt (quart US)',     factor: 0.946353 },
+        gal:   { label: 'gal (gallon US)',   factor: 3.785412 },
+      }
+    },
+    Speed: {
+      base: 'm/s',
+      units: {
+        'km/h':  { label: 'km/h',    factor: 0.277778 },
+        'mph':   { label: 'mph',     factor: 0.44704 },
+        'm/s':   { label: 'm/s',     factor: 1 },
+        'knot':  { label: 'knot',    factor: 0.514444 },
+      }
+    }
+  };
+
+  // Temperature conversion to/from Celsius (intermediate)
+  function toC(val, unit) {
+    if (unit === '°C') return val;
+    if (unit === '°F') return (val - 32) * 5/9;
+    if (unit === 'K')  return val - 273.15;
+  }
+  function fromC(val, unit) {
+    if (unit === '°C') return val;
+    if (unit === '°F') return val * 9/5 + 32;
+    if (unit === 'K')  return val + 273.15;
+  }
+
+  function convert(value, fromUnit, toUnit, cat) {
+    if (isNaN(value)) return NaN;
+    if (fromUnit === toUnit) return value;
+    if (cat === 'Temperature') {
+      return fromC(toC(value, fromUnit), toUnit);
+    }
+    const units = CATEGORIES[cat].units;
+    const inBase = value * units[fromUnit].factor;
+    return inBase / units[toUnit].factor;
+  }
+
+  function fmtNum(n) {
+    if (!isFinite(n) || isNaN(n)) return '';
+    // Smart formatting: avoid unnecessary trailing zeros
+    if (Math.abs(n) >= 0.0001 && Math.abs(n) < 1e13) {
+      const s = parseFloat(n.toPrecision(10)).toString();
+      return s;
+    }
+    return n.toExponential(5);
+  }
+
+  // ── State ────────────────────────────────────────────────────────
+  let activeCat = 'Length';
+  let lastChanged = 'from'; // which field was last edited
+
+  // ── Build UI ─────────────────────────────────────────────────────
+  function buildCatChips() {
+    const bar = document.getElementById('cat-bar');
+    Object.keys(CATEGORIES).forEach(cat => {
+      const btn = document.createElement('button');
+      btn.className = 'cat-chip' + (cat === activeCat ? ' active' : '');
+      btn.textContent = cat;
+      btn.addEventListener('click', () => selectCategory(cat));
+      bar.appendChild(btn);
+    });
+  }
+
+  function populateUnits(selectId, cat) {
+    const sel = document.getElementById(selectId);
+    const units = CATEGORIES[cat].units;
+    sel.innerHTML = '';
+    Object.entries(units).forEach(([key, u]) => {
+      const opt = document.createElement('option');
+      opt.value = key;
+      opt.textContent = u.label;
+      sel.appendChild(opt);
+    });
+  }
+
+  function selectCategory(cat) {
+    activeCat = cat;
+    // Update chips
+    document.querySelectorAll('.cat-chip').forEach(c => {
+      c.classList.toggle('active', c.textContent === cat);
+    });
+    // Repopulate selects
+    populateUnits('from-unit', cat);
+    populateUnits('to-unit', cat);
+    // Default to second unit in TO
+    const keys = Object.keys(CATEGORIES[cat].units);
+    if (keys.length > 1) document.getElementById('to-unit').value = keys[1];
+    // Clear inputs
+    document.getElementById('from-input').value = '';
+    document.getElementById('to-input').value = '';
+    buildRefTable();
+  }
+
+  // ── Conversion logic ─────────────────────────────────────────────
+  const fromInput = document.getElementById('from-input');
+  const toInput   = document.getElementById('to-input');
+  const fromSel   = document.getElementById('from-unit');
+  const toSel     = document.getElementById('to-unit');
+
+  function runConvert(source) {
+    const fromU = fromSel.value;
+    const toU   = toSel.value;
+    if (source === 'from') {
+      const v = parseFloat(fromInput.value);
+      if (fromInput.value === '' || fromInput.value === '-') { toInput.value = ''; return; }
+      const result = convert(v, fromU, toU, activeCat);
+      toInput.value = isNaN(result) ? '' : fmtNum(result);
+    } else {
+      const v = parseFloat(toInput.value);
+      if (toInput.value === '' || toInput.value === '-') { fromInput.value = ''; return; }
+      const result = convert(v, toU, fromU, activeCat);
+      fromInput.value = isNaN(result) ? '' : fmtNum(result);
+    }
+    buildRefTable();
+  }
+
+  fromInput.addEventListener('input', () => { lastChanged = 'from'; runConvert('from'); });
+  toInput.addEventListener('input',   () => { lastChanged = 'to';   runConvert('to'); });
+  fromSel.addEventListener('change',  () => runConvert(lastChanged));
+  toSel.addEventListener('change',    () => runConvert(lastChanged));
+
+  // ── Swap button ──────────────────────────────────────────────────
+  document.getElementById('swap-btn').addEventListener('click', () => {
+    const btn = document.getElementById('swap-btn');
+    btn.classList.add('rotating');
+    setTimeout(() => btn.classList.remove('rotating'), 300);
+
+    const fv = fromSel.value, tv = toSel.value;
+    fromSel.value = tv;
+    toSel.value   = fv;
+    runConvert(lastChanged);
+    buildRefTable();
+  });
+
+  // ── Quick reference table ────────────────────────────────────────
+  function buildRefTable() {
+    const rows = document.getElementById('ref-rows');
+    rows.innerHTML = '';
+    const fromU = fromSel.value;
+    const toU   = toSel.value;
+    const units  = Object.keys(CATEGORIES[activeCat].units);
+    const refs   = [1, 5, 10, 100, 1000].slice(0, 5);
+
+    refs.forEach(v => {
+      const result = convert(v, fromU, toU, activeCat);
+      if (isNaN(result) || !isFinite(result)) return;
+      const row = document.createElement('div');
+      row.className = 'ref-row';
+      row.innerHTML = `<span class="ref-from">${v} ${fromU}</span>
+                       <span class="ref-eq">=</span>
+                       <span class="ref-to">${fmtNum(result)} ${toU}</span>`;
+      rows.appendChild(row);
+    });
+  }
+
+  // ── Popup mode: hide topbar ───────────────────────────────────────
+  if (new URLSearchParams(location.search).get('popup') === '1') {
+    const topbar = document.querySelector('.topbar');
+    if (topbar) topbar.style.display = 'none';
+  }
+
+  // ── Init ─────────────────────────────────────────────────────────
+  buildCatChips();
+  populateUnits('from-unit', activeCat);
+  populateUnits('to-unit', activeCat);
+  // Default TO to 2nd unit (km → mi)
+  const firstKeys = Object.keys(CATEGORIES[activeCat].units);
+  if (firstKeys.length > 1) toSel.value = firstKeys[1];
+  buildRefTable();
+</script>
+</body>
+</html>
