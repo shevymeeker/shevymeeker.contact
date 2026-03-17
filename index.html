@@ -146,6 +146,10 @@
   --nav-h:65px;
   --ticker-h:24px;
   --r:6px;
+  --cat-edu:#c8a05c;
+  --cat-pro:#5f9ea8;
+  --cat-con:#c87a3c;
+  --cat-util:#5f9a6a;
 }
 
 html{scroll-behavior:smooth}
@@ -308,22 +312,51 @@ nav{
 .cf iframe{width:125%;height:125%;border:none;pointer-events:none;transform:scale(.8);transform-origin:top left}
 .fog{
   position:absolute;inset:0;
-  background:linear-gradient(to top,var(--s1) 0%,rgba(20,18,16,.52) 48%,transparent 100%);
-  transition:opacity .3s;pointer-events:none
+  background:linear-gradient(to top,var(--s1) 0%,rgba(20,18,16,.28) 55%,transparent 100%);
+  pointer-events:none
 }
-.card:hover .fog{opacity:.35}
 
-/* Card info */
-.ci{padding:1.1rem 1.2rem 1.3rem}
-.cn{font-family:var(--serif);font-style:italic;font-size:1.15rem;color:var(--t);margin-bottom:.4rem;line-height:1.15}
-.cd{font-size:13px;color:var(--m);line-height:1.6;margin-bottom:.85rem}
+/* Always-visible name bar */
+.cn-bar{
+  padding:.75rem 1.1rem .8rem;
+  background:rgba(18,16,14,.97);
+  border-top:1px solid var(--b);
+  display:flex;align-items:center;gap:.6rem
+}
+.cn{
+  font-family:var(--sans);font-weight:500;
+  font-size:.95rem;color:var(--t);line-height:1.2;flex:1
+}
+
+/* Collapsible description panel */
+.cd-panel{
+  max-height:0;overflow:hidden;
+  transition:max-height .32s ease,padding .32s ease;
+  padding:0 1.1rem;
+  background:var(--s1)
+}
+.card:hover .cd-panel{max-height:140px;padding:.6rem 1.1rem 1rem}
+.card.expanded .cd-panel{max-height:140px;padding:.6rem 1.1rem 1rem}
+.cd{font-size:13px;color:var(--m);line-height:1.6;margin-bottom:.75rem}
 .co{
   display:inline-flex;align-items:center;gap:.35rem;
   font-size:10px;color:var(--a);letter-spacing:.14em;
   text-transform:uppercase;font-family:var(--mono);
-  transition:gap .2s;opacity:.8
+  opacity:.85;background:none;border:none;cursor:pointer;
+  padding:0;transition:gap .2s,opacity .2s
 }
-.card:hover .co{gap:.6rem;opacity:1}
+.co:hover{gap:.6rem;opacity:1}
+
+/* On touch devices disable CSS hover-expand (JS handles it) */
+@media(hover:none){
+  .card:hover .cd-panel{max-height:0;padding:0 1.1rem}
+}
+
+/* Category left-border accents */
+[data-cat="edu"]  .card{border-left:3px solid var(--cat-edu)}
+[data-cat="pro"]  .card{border-left:3px solid var(--cat-pro)}
+[data-cat="con"]  .card{border-left:3px solid var(--cat-con)}
+[data-cat="util"] .card{border-left:3px solid var(--cat-util)}
 
 /* Experience */
 .exp-list{display:grid;gap:0}
@@ -496,7 +529,7 @@ footer{
   <p class="apps-sub"></p>
 
   <!-- Education -->
-  <div class="sec-group">
+  <div class="sec-group" data-cat="edu">
     <div class="sub-lbl">Education</div>
     <div class="bento">
 
@@ -508,10 +541,10 @@ footer{
           <iframe src="https://wildmanlegal.netlify.app/" loading="lazy" title="Wildman Legal Navigator" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
           <div class="fog"></div>
         </div>
-        <div class="ci">
-          <div class="cn">Wildman Legal Navigator</div>
+        <div class="cn-bar"><div class="cn">Wildman Legal Navigator</div></div>
+        <div class="cd-panel">
           <div class="cd">Not legal Advice, and it will always be a work in progress, but its a tool to help the layman, like myself, navigate the legal system</div>
-          <span class="co">Open app →</span>
+          <button class="co" type="button">Open app →</button>
         </div>
       </div>
 
@@ -523,10 +556,10 @@ footer{
           <iframe src="https://wildmantrafficstop.netlify.app/" loading="lazy" title="Wildman Traffic School" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
           <div class="fog"></div>
         </div>
-        <div class="ci">
-          <div class="cn">Wildman Traffic School</div>
+        <div class="cn-bar"><div class="cn">Wildman Traffic School</div></div>
+        <div class="cd-panel">
           <div class="cd">A high level crash course of Kentucky roadways</div>
-          <span class="co">Open app →</span>
+          <button class="co" type="button">Open app →</button>
         </div>
       </div>
 
@@ -538,10 +571,10 @@ footer{
           <iframe src="https://shevymeeker.github.io/games2/" loading="lazy" title="Wildman: Interrupted" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
           <div class="fog"></div>
         </div>
-        <div class="ci">
-          <div class="cn">Wildman: Interrupted</div>
+        <div class="cn-bar"><div class="cn">Wildman: Interrupted</div></div>
+        <div class="cd-panel">
           <div class="cd">Take a sit, think a thought, and play a game</div>
-          <span class="co">Open app →</span>
+          <button class="co" type="button">Open app →</button>
         </div>
       </div>
 
@@ -549,7 +582,7 @@ footer{
   </div>
 
   <!-- Productivity -->
-  <div class="sec-group">
+  <div class="sec-group" data-cat="pro">
     <div class="sub-lbl">Productivity</div>
     <div class="bento">
 
@@ -561,10 +594,10 @@ footer{
           <iframe src="https://wildmanscratchpad.netlify.app/" loading="lazy" title="Wildman Scratchpad" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
           <div class="fog"></div>
         </div>
-        <div class="ci">
-          <div class="cn">Wildman Scratchpad</div>
+        <div class="cn-bar"><div class="cn">Wildman Scratchpad</div></div>
+        <div class="cd-panel">
           <div class="cd">Encrypted, offline-first secure notes. Nothing leaves your device.</div>
-          <span class="co">Open app →</span>
+          <button class="co" type="button">Open app →</button>
         </div>
       </div>
 
@@ -576,10 +609,10 @@ footer{
           <iframe src="https://wildmantoday.netlify.app/" loading="lazy" title="Wildman Task Tracker" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
           <div class="fog"></div>
         </div>
-        <div class="ci">
-          <div class="cn">Wildman Task Tracker</div>
+        <div class="cn-bar"><div class="cn">Wildman Task Tracker</div></div>
+        <div class="cd-panel">
           <div class="cd">A simple but revolutionary concept of tracking your tasks alongside your interuptions and your silver linings, hang in there.</div>
-          <span class="co">Open app →</span>
+          <button class="co" type="button">Open app →</button>
         </div>
       </div>
 
@@ -591,10 +624,10 @@ footer{
           <iframe src="https://wildmanmoney.netlify.app/" loading="lazy" title="Wildman Bill Tracker" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
           <div class="fog"></div>
         </div>
-        <div class="ci">
-          <div class="cn">Wildman Bill Tracker</div>
+        <div class="cn-bar"><div class="cn">Wildman Bill Tracker</div></div>
+        <div class="cd-panel">
           <div class="cd">Track your income and your outcome, with visuals. not a budgeting app, we solely track income and bills, not every day spending.</div>
-          <span class="co">Open app →</span>
+          <button class="co" type="button">Open app →</button>
         </div>
       </div>
 
@@ -606,10 +639,10 @@ footer{
           <iframe src="https://shevymeeker.github.io/adhd/" loading="lazy" title="Wildman Focus Damnit" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
           <div class="fog"></div>
         </div>
-        <div class="ci">
-          <div class="cn">Wildman Focus Damnit</div>
+        <div class="cn-bar"><div class="cn">Wildman Focus Damnit</div></div>
+        <div class="cd-panel">
           <div class="cd">its a work in progress, but its functional, this one will take awhile to get perfect</div>
-          <span class="co">Open app →</span>
+          <button class="co" type="button">Open app →</button>
         </div>
       </div>
 
@@ -617,7 +650,7 @@ footer{
   </div>
 
   <!-- Contractor -->
-  <div class="sec-group">
+  <div class="sec-group" data-cat="con">
     <div class="sub-lbl">Contractor</div>
     <div class="bento">
 
@@ -629,10 +662,10 @@ footer{
           <iframe src="https://newestimating.netlify.app/" loading="lazy" title="Wildman Estimating" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
           <div class="fog"></div>
         </div>
-        <div class="ci">
-          <div class="cn">Wildman Estimating</div>
+        <div class="cn-bar"><div class="cn">Wildman Estimating</div></div>
+        <div class="cd-panel">
           <div class="cd">Civic construction logic heavy estimating</div>
-          <span class="co">Open app →</span>
+          <button class="co" type="button">Open app →</button>
         </div>
       </div>
 
@@ -644,10 +677,10 @@ footer{
           <iframe src="https://paintestimate.netlify.app/" loading="lazy" title="Wildman Interior Painting" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
           <div class="fog"></div>
         </div>
-        <div class="ci">
-          <div class="cn">Wildman Interior Painting</div>
+        <div class="cn-bar"><div class="cn">Wildman Interior Painting</div></div>
+        <div class="cd-panel">
           <div class="cd">Never guess on material again, use industry standard formulas to determine the amount of paint, rollers, brushes, tape, plastic, everything.</div>
-          <span class="co">Open app →</span>
+          <button class="co" type="button">Open app →</button>
         </div>
       </div>
 
@@ -659,10 +692,10 @@ footer{
           <iframe src="https://investorbplan.netlify.app/" loading="lazy" title="Wildman Business Plan" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
           <div class="fog"></div>
         </div>
-        <div class="ci">
-          <div class="cn">Wildman Business Plan</div>
+        <div class="cn-bar"><div class="cn">Wildman Business Plan</div></div>
+        <div class="cd-panel">
           <div class="cd">Draft an investor ready business plan</div>
-          <span class="co">Open app →</span>
+          <button class="co" type="button">Open app →</button>
         </div>
       </div>
 
@@ -670,7 +703,7 @@ footer{
   </div>
 
   <!-- Utility -->
-  <div class="sec-group">
+  <div class="sec-group" data-cat="util">
     <div class="sub-lbl">Utility</div>
     <div class="bento">
 
@@ -682,10 +715,10 @@ footer{
           <iframe src="https://wildmanmortgage.netlify.app/" loading="lazy" title="Wildman Mortgage Visualizer" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
           <div class="fog"></div>
         </div>
-        <div class="ci">
-          <div class="cn">Wildman Mortgage Visualizer</div>
+        <div class="cn-bar"><div class="cn">Wildman Mortgage Visualizer</div></div>
+        <div class="cd-panel">
           <div class="cd">Visualize potential amortization schedules before you talk to the bank, compares up to 7 different scenarios.</div>
-          <span class="co">Open app →</span>
+          <button class="co" type="button">Open app →</button>
         </div>
       </div>
 
@@ -697,10 +730,10 @@ footer{
           <iframe src="clock.html" loading="lazy" title="Clock" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
           <div class="fog"></div>
         </div>
-        <div class="ci">
-          <div class="cn">Clock</div>
+        <div class="cn-bar"><div class="cn">Clock</div></div>
+        <div class="cd-panel">
           <div class="cd">Clean, minimal clock. Works offline.</div>
-          <span class="co">Open app →</span>
+          <button class="co" type="button">Open app →</button>
         </div>
       </div>
 
@@ -712,10 +745,10 @@ footer{
           <iframe src="calendar.html" loading="lazy" title="Calendar" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
           <div class="fog"></div>
         </div>
-        <div class="ci">
-          <div class="cn">Calendar</div>
+        <div class="cn-bar"><div class="cn">Calendar</div></div>
+        <div class="cd-panel">
           <div class="cd">Month view calendar. No syncing, no account.</div>
-          <span class="co">Open app →</span>
+          <button class="co" type="button">Open app →</button>
         </div>
       </div>
 
@@ -727,10 +760,10 @@ footer{
           <iframe src="stopWatch.html" loading="lazy" title="Stopwatch" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
           <div class="fog"></div>
         </div>
-        <div class="ci">
-          <div class="cn">Stopwatch</div>
+        <div class="cn-bar"><div class="cn">Stopwatch</div></div>
+        <div class="cd-panel">
           <div class="cd">Lap timer and stopwatch. Fast and offline.</div>
-          <span class="co">Open app →</span>
+          <button class="co" type="button">Open app →</button>
         </div>
       </div>
 
@@ -742,10 +775,10 @@ footer{
           <iframe src="Calculator.html" loading="lazy" title="Calculator" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
           <div class="fog"></div>
         </div>
-        <div class="ci">
-          <div class="cn">Calculator</div>
+        <div class="cn-bar"><div class="cn">Calculator</div></div>
+        <div class="cd-panel">
           <div class="cd">Standard calculator. Works without a signal.</div>
-          <span class="co">Open app →</span>
+          <button class="co" type="button">Open app →</button>
         </div>
       </div>
 
@@ -757,10 +790,10 @@ footer{
           <iframe src="countdown.html" loading="lazy" title="Countdown Timer" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
           <div class="fog"></div>
         </div>
-        <div class="ci">
-          <div class="cn">Countdown Timer</div>
+        <div class="cn-bar"><div class="cn">Countdown Timer</div></div>
+        <div class="cd-panel">
           <div class="cd">Set a timer, walk away. Simple and offline.</div>
-          <span class="co">Open app →</span>
+          <button class="co" type="button">Open app →</button>
         </div>
       </div>
 
@@ -772,10 +805,10 @@ footer{
           <iframe src="unit-converter.html" loading="lazy" title="Unit Converter" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
           <div class="fog"></div>
         </div>
-        <div class="ci">
-          <div class="cn">Unit Converter</div>
+        <div class="cn-bar"><div class="cn">Unit Converter</div></div>
+        <div class="cd-panel">
           <div class="cd">Convert length, weight, temp, and more. No internet needed.</div>
-          <span class="co">Open app →</span>
+          <button class="co" type="button">Open app →</button>
         </div>
       </div>
 
@@ -787,10 +820,10 @@ footer{
           <iframe src="percentage.html" loading="lazy" title="Percentage Calculator" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
           <div class="fog"></div>
         </div>
-        <div class="ci">
-          <div class="cn">Percentage Calculator</div>
+        <div class="cn-bar"><div class="cn">Percentage Calculator</div></div>
+        <div class="cd-panel">
           <div class="cd">Quick percentage math — tips, discounts, markups.</div>
-          <span class="co">Open app →</span>
+          <button class="co" type="button">Open app →</button>
         </div>
       </div>
 
@@ -994,32 +1027,56 @@ function hideFallback(){
   mif.style.display='';
 }
 
+function openModal(url,name){
+  mt.textContent=name;
+  mext.href=url;
+  hideFallback();
+  clearTimeout(frameBlockTimer);
+  const isExternal=url.startsWith('http');
+  if(isExternal){
+    const t0=Date.now();
+    mif.addEventListener('load',function onLoad(){
+      mif.removeEventListener('load',onLoad);
+      clearTimeout(frameBlockTimer);
+      if(Date.now()-t0<150) showFallback(url);
+    });
+    frameBlockTimer=setTimeout(()=>showFallback(url),10000);
+  }
+  mif.src=url;
+  modal.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+const isTouch=()=>window.matchMedia('(hover:none)').matches;
+
 document.querySelectorAll('.card').forEach(c=>{
-  c.addEventListener('click',()=>{
-    const url=c.dataset.url, name=c.dataset.name;
-    mt.textContent=name;
-    mext.href=url;
-    hideFallback();
-    clearTimeout(frameBlockTimer);
-
-    const isExternal=url.startsWith('http');
-    if(isExternal){
-      const t0=Date.now();
-      mif.addEventListener('load',function onLoad(){
-        mif.removeEventListener('load',onLoad);
-        clearTimeout(frameBlockTimer);
-        // A genuine page render takes well over 150 ms even when cached;
-        // a header-only blocked response resolves almost instantly.
-        if(Date.now()-t0<150) showFallback(url);
-      });
-      // Safety net: if load never fires (some browsers suppress it for blocked frames)
-      frameBlockTimer=setTimeout(()=>showFallback(url),10000);
+  c.addEventListener('click',e=>{
+    // "Open app" button always opens modal regardless of device
+    if(e.target.closest('.co')){
+      e.stopPropagation();
+      openModal(c.dataset.url,c.dataset.name);
+      return;
     }
-
-    mif.src=url;
-    modal.classList.add('open');
-    document.body.style.overflow='hidden';
+    if(isTouch()){
+      // Touch: first tap expands, second tap on already-expanded card also opens modal
+      if(c.classList.contains('expanded')){
+        openModal(c.dataset.url,c.dataset.name);
+      } else {
+        document.querySelectorAll('.card.expanded').forEach(x=>x.classList.remove('expanded'));
+        c.classList.add('expanded');
+      }
+    } else {
+      // Desktop: clicking card body (not .co button) opens modal directly
+      openModal(c.dataset.url,c.dataset.name);
+    }
   });
+});
+
+// Collapse expanded cards when tapping outside
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.card')){
+    document.querySelectorAll('.card.expanded').forEach(x=>x.classList.remove('expanded'));
+  }
 });
 
 function close(){
