@@ -242,7 +242,11 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<!-- Non-blocking font load: page renders instantly with system fonts,
+     custom fonts swap in once downloaded. Prevents render-blocking on slow
+     or unavailable font CDN connections. -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"></noscript>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -280,7 +284,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content
 @media(prefers-reduced-motion:reduce){.tick-t{animation-play-state:paused}}
 
 .hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:calc(7rem + var(--ticker-h)) 2rem 6rem;overflow:hidden}
-.orb{position:absolute;border-radius:50%;filter:blur(110px);opacity:.1;animation:drift 22s ease-in-out infinite}
+.orb{position:absolute;border-radius:50%;filter:blur(72px);opacity:.12;animation:drift 22s ease-in-out infinite;contain:strict}
 .o1{width:800px;height:800px;background:var(--a);top:-200px;left:-200px}
 .o2{width:550px;height:550px;background:var(--a2);bottom:-150px;right:-150px;animation-delay:-8s;animation-direction:reverse}
 .o3{width:400px;height:400px;background:var(--a);top:35%;left:50%;animation-delay:-16s;opacity:.07}
@@ -946,12 +950,20 @@ window.addEventListener('scroll',()=>{document.getElementById('prog').style.widt
 new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.1}).observe(document.querySelectorAll('.fade'));
 const io2=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.1});
 document.querySelectorAll('.fade').forEach(el=>io2.observe(el));
+// rAF-throttled orb parallax — coalesce rapid mousemove events into one
+// style update per animation frame instead of one per pixel moved
+const o1=document.querySelector('.o1'),o2=document.querySelector('.o2'),o3=document.querySelector('.o3');
+let _mx=0,_my=0,_orbRaf=false;
 document.addEventListener('mousemove',e=>{
-  const x=(e.clientX/window.innerWidth-.5)*18,y=(e.clientY/window.innerHeight-.5)*18;
-  document.querySelector('.o1').style.transform=`translate(${x*.6}px,${y*.6}px)`;
-  document.querySelector('.o2').style.transform=`translate(${-x*.4}px,${-y*.4}px)`;
-  document.querySelector('.o3').style.transform=`translate(${x*.9}px,${y*.9}px)`;
-});
+  _mx=e.clientX;_my=e.clientY;
+  if(!_orbRaf){_orbRaf=true;requestAnimationFrame(()=>{
+    const x=(_mx/window.innerWidth-.5)*18,y=(_my/window.innerHeight-.5)*18;
+    o1.style.transform=`translate(${x*.6}px,${y*.6}px)`;
+    o2.style.transform=`translate(${-x*.4}px,${-y*.4}px)`;
+    o3.style.transform=`translate(${x*.9}px,${y*.9}px)`;
+    _orbRaf=false;
+  });}
+},{passive:true});
 </script>
 </body>
 </html>
