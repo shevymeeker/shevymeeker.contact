@@ -284,7 +284,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content
 @media(prefers-reduced-motion:reduce){.tick-t{animation-play-state:paused}}
 
 .hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:calc(7rem + var(--ticker-h)) 2rem 6rem;overflow:hidden}
-.orb{position:absolute;border-radius:50%;filter:blur(72px);opacity:.12;animation:drift 22s ease-in-out infinite;contain:strict}
+.orb{position:absolute;border-radius:50%;filter:blur(72px);opacity:.12;animation:drift 22s ease-in-out infinite;contain:strict;will-change:transform}
 .o1{width:800px;height:800px;background:var(--a);top:-200px;left:-200px}
 .o2{width:550px;height:550px;background:var(--a2);bottom:-150px;right:-150px;animation-delay:-8s;animation-direction:reverse}
 .o3{width:400px;height:400px;background:var(--a);top:35%;left:50%;animation-delay:-16s;opacity:.07}
@@ -456,6 +456,8 @@ footer{border-top:1px solid var(--b);padding:3rem 2rem;display:flex;justify-cont
 @media(max-width:640px){.sec{padding:4rem 1.25rem}.hero{padding:calc(5rem + var(--ticker-h)) 1.25rem 4rem}.app-grid{grid-template-columns:1fr 1fr;gap:10px}.app-card-top{min-height:110px;padding:16px 14px 14px}.app-short-name{font-size:1.15rem}.app-glyph{font-size:1.2rem}.app-card-body{padding:12px 13px 14px}.app-tags{display:none}}
 @media(max-width:380px){.app-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.orb{animation:none}.fade{opacity:1;transform:none}.app-card{transition:none}}
+/* Touch devices: disable GPU-expensive blur animations and backdrop filter */
+@media(hover:none) and (pointer:coarse){.orb{animation:none;filter:blur(30px);opacity:.08}nav{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(13,11,9,.99)}}
 
 /* ── Service cards ──────────────────────────────────────── */
 .svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
@@ -947,23 +949,23 @@ document.addEventListener('keydown',e=>e.key==='Escape'&&closeModal());
 
 // ── Progress bar + fade-in + orbs ─────────────────────────────────
 window.addEventListener('scroll',()=>{document.getElementById('prog').style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%'},{passive:true});
-new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.1}).observe(document.querySelectorAll('.fade'));
 const io2=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.1});
 document.querySelectorAll('.fade').forEach(el=>io2.observe(el));
-// rAF-throttled orb parallax — coalesce rapid mousemove events into one
-// style update per animation frame instead of one per pixel moved
+// rAF-throttled orb parallax — desktop/hover-capable devices only
 const o1=document.querySelector('.o1'),o2=document.querySelector('.o2'),o3=document.querySelector('.o3');
-let _mx=0,_my=0,_orbRaf=false;
-document.addEventListener('mousemove',e=>{
-  _mx=e.clientX;_my=e.clientY;
-  if(!_orbRaf){_orbRaf=true;requestAnimationFrame(()=>{
-    const x=(_mx/window.innerWidth-.5)*18,y=(_my/window.innerHeight-.5)*18;
-    o1.style.transform=`translate(${x*.6}px,${y*.6}px)`;
-    o2.style.transform=`translate(${-x*.4}px,${-y*.4}px)`;
-    o3.style.transform=`translate(${x*.9}px,${y*.9}px)`;
-    _orbRaf=false;
-  });}
-},{passive:true});
+if(window.matchMedia('(hover:hover)').matches){
+  let _mx=0,_my=0,_orbRaf=false;
+  document.addEventListener('mousemove',e=>{
+    _mx=e.clientX;_my=e.clientY;
+    if(!_orbRaf){_orbRaf=true;requestAnimationFrame(()=>{
+      const x=(_mx/window.innerWidth-.5)*18,y=(_my/window.innerHeight-.5)*18;
+      o1.style.transform=`translate(${x*.6}px,${y*.6}px)`;
+      o2.style.transform=`translate(${-x*.4}px,${-y*.4}px)`;
+      o3.style.transform=`translate(${x*.9}px,${y*.9}px)`;
+      _orbRaf=false;
+    });}
+  },{passive:true});
+}
 </script>
 </body>
 </html>
