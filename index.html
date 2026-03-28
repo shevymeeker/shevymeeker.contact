@@ -377,16 +377,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content
   padding:15px 17px 17px;
   display:flex;flex-direction:column;gap:9px;flex:1;
 }
-.app-cat{
-  font-size:9px;letter-spacing:.38em;text-transform:uppercase;
-  font-family:var(--mono);color:var(--ac);opacity:.9;
-}
 .app-desc{font-size:13px;color:var(--m);line-height:1.62;flex:1}
-.app-tags{display:flex;gap:5px;flex-wrap:wrap}
-.app-tag{
-  font-size:9px;font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;
-  color:var(--m);border:1px solid var(--b);border-radius:4px;padding:3px 7px;opacity:.65;
-}
 .app-cta{
   background:var(--ac);border:none;border-radius:8px;
   font-family:var(--mono);font-size:11px;font-weight:700;
@@ -456,7 +447,7 @@ footer{border-top:1px solid var(--b);padding:3rem 2rem;display:flex;justify-cont
 @media(min-width:640px){:root{--nav-h:70px}nav{padding:.8rem 1.75rem}.nav-links{display:flex}}
 @media(min-width:960px){:root{--nav-h:75px}nav{padding:.9rem 2.25rem}}
 @media(max-width:960px){.exp{grid-template-columns:1fr;gap:.75rem}}
-@media(max-width:640px){.sec{padding:4rem 1.25rem}.hero{padding:5rem 1.25rem 4rem}.app-grid{grid-template-columns:1fr 1fr;gap:10px}.app-card-top{min-height:110px;padding:16px 14px 14px}.app-short-name{font-size:1.15rem}.app-glyph{font-size:1.2rem}.app-card-body{padding:12px 13px 14px}.app-tags{display:none}}
+@media(max-width:640px){.sec{padding:4rem 1.25rem}.hero{padding:5rem 1.25rem 4rem}.app-grid{grid-template-columns:1fr 1fr;gap:10px}.app-card-top{min-height:110px;padding:16px 14px 14px}.app-short-name{font-size:1.15rem}.app-glyph{font-size:1.2rem}.app-card-body{padding:12px 13px 14px}}
 @media(max-width:380px){.app-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.orb{animation:none}.fade{opacity:1;transform:none}.app-card{transition:none}}
 /* Touch devices: disable GPU-expensive blur animations and backdrop filter */
@@ -469,21 +460,11 @@ footer{border-top:1px solid var(--b);padding:3rem 2rem;display:flex;justify-cont
 .svc-icon{font-size:1.8rem;line-height:1}
 .svc-name{font-family:var(--serif);font-style:italic;font-size:1.4rem;color:var(--t);line-height:1.1}
 .svc-body{font-size:13px;color:var(--m);line-height:1.78;flex:1}
-.svc-tags{display:flex;gap:5px;flex-wrap:wrap}
-.svc-tag{font-size:9px;font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--a);border:1px solid rgba(200,160,92,.25);border-radius:4px;padding:3px 7px}
-
 /* ── Portfolio cards ────────────────────────────────────── */
 .port-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
-.port-card{background:var(--s1);border:1px solid var(--b);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s,transform .22s}
+.port-card{background:var(--s1);border:1px solid var(--b);border-radius:12px;padding:24px;display:flex;justify-content:space-between;align-items:center;gap:1rem;transition:border-color .2s,transform .22s}
 .port-card:hover{border-color:rgba(200,160,92,.38);transform:translateY(-4px)}
-.port-top{padding:28px 24px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
-.port-badge{font-size:9px;font-family:var(--mono);letter-spacing:.22em;text-transform:uppercase;padding:4px 10px;border-radius:100px;display:inline-flex;width:fit-content}
-.port-badge.live{background:rgba(74,222,128,.08);color:#4ade80;border:1px solid rgba(74,222,128,.22)}
-.port-badge.demo{background:rgba(129,140,248,.08);color:#818cf8;border:1px solid rgba(129,140,248,.22)}
-.port-title{font-family:var(--serif);font-style:italic;font-size:1.55rem;color:var(--t);line-height:1.1}
-.port-desc{font-size:13px;color:var(--m);line-height:1.72}
-.port-footer{border-top:1px solid var(--b);padding:14px 24px;display:flex;justify-content:space-between;align-items:center;gap:1rem}
-.port-loc{font-size:11px;font-family:var(--mono);color:var(--m);opacity:.55;letter-spacing:.07em}
+.port-title{font-family:var(--serif);font-style:italic;font-size:1.4rem;color:var(--t);line-height:1.1}
 .port-link{font-size:11px;font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--a);text-decoration:none;border:1px solid rgba(200,160,92,.28);padding:7px 14px;border-radius:4px;transition:border-color .2s,background .2s;white-space:nowrap;flex-shrink:0}
 .port-link:hover{border-color:var(--a);background:rgba(200,160,92,.06)}
 
@@ -535,7 +516,6 @@ footer{border-top:1px solid var(--b);padding:3rem 2rem;display:flex;justify-cont
 
 <section class="sec fade" id="work">
   <h2 class="h">Built to be used.</h2>
-  <p class="sec-sub">Unbranded versions of apps ive built for clients. all work offline, requires no login, and stores all data on your device. Click any card to launch.</p>
 
   <div class="filter-bar" id="filter-bar"></div>
   <div class="app-grid" id="app-grid"></div>
@@ -550,56 +530,48 @@ footer{border-top:1px solid var(--b);padding:3rem 2rem;display:flex;justify-cont
       <div class="svc-icon">🌐</div>
       <div class="svc-name">Business Webpage</div>
       <p class="svc-body">Clients will never see you on Google without a website.</p>
-      <div class="svc-tags"><span class="svc-tag">HTML / CSS / JS</span><span class="svc-tag">Mobile-First</span></div>
     </div>
 
     <div class="svc-card">
       <div class="svc-icon">📍</div>
       <div class="svc-name">Local SEO</div>
       <p class="svc-body">No matter where your business operates, it's local SEO that helps Google know when to show your business to searchers.</p>
-      <div class="svc-tags"><span class="svc-tag">Schema Markup</span><span class="svc-tag">Geo Tags</span><span class="svc-tag">Google Rankings</span></div>
     </div>
 
     <div class="svc-card">
       <div class="svc-icon">🗺️</div>
       <div class="svc-name">Google Business Profile</div>
       <p class="svc-body">One of the many things that factor into where your business ranks on Google searches.</p>
-      <div class="svc-tags"><span class="svc-tag">Kentucky</span><span class="svc-tag">GBP Setup</span><span class="svc-tag">Verified Listing</span></div>
     </div>
 
     <div class="svc-card">
       <div class="svc-icon">📋</div>
       <div class="svc-name">Kentucky Business Formation</div>
       <p class="svc-body">Let me help make your business legally compliant in the state of Kentucky.</p>
-      <div class="svc-tags"><span class="svc-tag">LLC Formation</span><span class="svc-tag">KY Only</span><span class="svc-tag">Legal Setup</span></div>
     </div>
 
     <div class="svc-card">
       <div class="svc-icon">🖨️</div>
       <div class="svc-name">Print Design</div>
       <p class="svc-body">Physical face-to-face contact with potential clients is still one of the best ways to advertise. Business cards, flyers, car and truck stickers.</p>
-      <div class="svc-tags"><span class="svc-tag">Business Cards</span><span class="svc-tag">Flyers</span><span class="svc-tag">Vehicle Stickers</span></div>
     </div>
 
     <div class="svc-card">
       <div class="svc-icon">📊</div>
       <div class="svc-name">Excel Dashboards</div>
       <p class="svc-body">Spreadsheets are great, they manage troves of data. Let us turn that data into visuals you understand.</p>
-      <div class="svc-tags"><span class="svc-tag">Data Visualization</span><span class="svc-tag">Dashboards</span><span class="svc-tag">Excel Import</span></div>
     </div>
 
     <div class="svc-card">
       <div class="svc-icon">📄</div>
       <div class="svc-name">Business Documents</div>
       <p class="svc-body">Handbooks, SOPs, onboarding, white papers.</p>
-      <div class="svc-tags"><span class="svc-tag">Employee Handbooks</span><span class="svc-tag">White Papers</span><span class="svc-tag">Onboarding</span></div>
     </div>
 
     <div class="svc-card">
       <div class="svc-icon">✍️</div>
       <div class="svc-name">Mobile Notary Public — Owensboro, KY</div>
       <p class="svc-body">Commissioned by the Commonwealth of Kentucky.</p>
-      <div class="svc-tags"><span class="svc-tag">Mobile · Owensboro KY</span><span class="svc-tag">After Hours</span><span class="svc-tag">Weekends &amp; Holidays</span></div>
     </div>
 
   </div>
@@ -612,50 +584,23 @@ footer{border-top:1px solid var(--b);padding:3rem 2rem;display:flex;justify-cont
   <div class="port-grid">
 
     <div class="port-card">
-      <div class="port-top">
-      
-        <div class="port-title">Owensboro Mowing Company</div>
-        
-      </div>
-      <div class="port-footer">
-        <span class="port-loc">Owensboro, KY</span>
-        <a class="port-link" href="https://owensboromowingcompany.com" target="_blank" rel="noopener">View Site ↗</a>
-      </div>
+      <div class="port-title">Owensboro Mowing Company</div>
+      <a class="port-link" href="https://owensboromowingcompany.com" target="_blank" rel="noopener">View ↗</a>
     </div>
 
     <div class="port-card">
-      <div class="port-top">
-       
-        <div class="port-title">Notta Trace Tree Service</div>
-        
-      </div>
-      <div class="port-footer">
-        <span class="port-loc">McLean County, KY</span>
-        <a class="port-link" href="https://nottatrace.com" target="_blank" rel="noopener">View Site ↗</a>
-      </div>
+      <div class="port-title">Notta Trace Tree Service</div>
+      <a class="port-link" href="https://nottatrace.com" target="_blank" rel="noopener">View ↗</a>
     </div>
 
     <div class="port-card">
-      <div class="port-top">
-        
-        <div class="port-title">Dismantle Demo Solutions</div>
-        
-      <div class="port-footer">
-        <span class="port-loc">Owensboro, KY</span>
-        <a class="port-link" href="https://shevymeeker.github.io/disclaimed/" target="_blank" rel="noopener">View Site ↗</a>
-      </div>
+      <div class="port-title">Dismantle Demo Solutions</div>
+      <a class="port-link" href="https://shevymeeker.github.io/disclaimed/" target="_blank" rel="noopener">View ↗</a>
     </div>
 
     <div class="port-card">
-      <div class="port-top">
-        
-        <div class="port-title">Contractor Command Center</div>
-        
-      </div>
-      <div class="port-footer">
-        <span class="port-loc">Industry: Construction</span>
-        <a class="port-link" href="https://shevymeeker.github.io/onebusinessapp/" target="_blank" rel="noopener">View App ↗</a>
-      </div>
+      <div class="port-title">Contractor Command Center</div>
+      <a class="port-link" href="https://shevymeeker.github.io/onebusinessapp/" target="_blank" rel="noopener">View ↗</a>
     </div>
 
   </div>
@@ -845,8 +790,6 @@ const grid = document.getElementById('app-grid');
 APPS.forEach(app => {
   const color = CATS[app.cat].color;
   const btnClass = isLight(color) ? 'app-cta light-btn' : 'app-cta dark-btn';
-  const tagsHtml = app.tags.map(t => `<span class="app-tag">${t}</span>`).join('');
-
   const card = document.createElement('div');
   card.className = 'app-card';
   card.dataset.cat = app.cat;
@@ -857,9 +800,7 @@ APPS.forEach(app => {
       <div class="app-short-name">${app.s}</div>
     </div>
     <div class="app-card-body">
-      <div class="app-cat">${app.cat}</div>
       <p class="app-desc">${app.d}</p>
-      <div class="app-tags">${tagsHtml}</div>
       <button class="${btnClass}">Launch App →</button>
     </div>`;
 
