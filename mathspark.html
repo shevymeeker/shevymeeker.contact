@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Math Spark</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ─── Reset ─── */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* ─── Tokens ─── */
+        :root {
+            --bg:           #f0f0ff;
+            --card:         #ffffff;
+            --shadow:       0 4px 24px rgba(99, 102, 241, 0.10);
+            --shadow-hover: 0 8px 32px rgba(99, 102, 241, 0.18);
+
+            --indigo:       #6366f1;
+            --indigo-light: #eef2ff;
+            --indigo-mid:   #c7d2fe;
+
+            --green:        #22c55e;
+            --green-light:  #dcfce7;
+            --green-border: #86efac;
+
+            --red:          #ef4444;
+            --red-light:    #fee2e2;
+            --red-border:   #fca5a5;
+
+            --amber:        #f59e0b;
+            --amber-light:  #fef3c7;
+
+            --text:         #312e81;
+            --text-mid:     #6366f1;
+            --text-soft:    #94a3b8;
+            --text-body:    #1e1b4b;
+
+            --radius-sm:    10px;
+            --radius-md:    16px;
+            --radius-lg:    24px;
+            --radius-pill:  100px;
+        }
+
+        /* ─── Base ─── */
+        html { font-size: 16px; }
+
+        body {
+            font-family: 'Nunito', 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text-body);
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 28px 16px calc(32px + env(safe-area-inset-bottom));
+        }
+
+        /* ─── Shell ─── */
+        .shell {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+        }
+
+        /* ─── App header ─── */
+        .app-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            align-self: flex-start;
+            margin-bottom: 2px;
+        }
+
+        .app-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--indigo);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .app-name {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--indigo);
+            letter-spacing: -0.3px;
+        }
+
+        /* ─── Stats pill ─── */
+        .stats-bar {
+            width: 100%;
+            background: var(--card);
+            border-radius: var(--radius-pill);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+        }
+
+        .streak {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-soft);
+            transition: color 0.3s;
+        }
+
+        .streak.hot { color: var(--amber); }
+
+        .score {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-soft);
+        }
+
+        .pool-badge {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--indigo-mid);
+            background: var(--indigo-light);
+            padding: 3px 10px;
+            border-radius: var(--radius-pill);
+        }
+
+        /* ─── Selectors (difficulty + op) ─── */
+        .selector {
+            width: 100%;
+            background: var(--card);
+            border-radius: var(--radius-pill);
+            padding: 5px;
+            display: flex;
+            gap: 4px;
+            box-shadow: var(--shadow);
+        }
+
+        .sel-btn {
+            flex: 1;
+            padding: 9px 6px;
+            border: none;
+            border-radius: var(--radius-pill);
+            background: transparent;
+            font-family: 'Nunito', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-soft);
+            cursor: pointer;
+            transition: background 0.18s, color 0.18s, transform 0.12s;
+            min-height: 42px;
+            letter-spacing: 0.2px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sel-btn:hover:not(.active) {
+            background: var(--indigo-light);
+            color: var(--indigo);
+        }
+
+        .sel-btn.active {
+            background: var(--indigo);
+            color: #fff;
+            box-shadow: 0 2px 10px rgba(99,102,241,0.35);
+        }
+
+        .sel-btn:active { transform: scale(0.96); }
+
+        /* Op selector — slightly bigger symbols */
+        .op-selector .sel-btn { font-size: 15px; }
+
+        /* ─── Equation card ─── */
+        .card {
+            width: 100%;
+            background: var(--card);
+            border-radius: var(--radius-lg);
+            padding: 44px 28px 36px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border: 2px solid transparent;
+            transition: border-color 0.22s, box-shadow 0.22s, background 0.22s;
+            position: relative;
+        }
+
+        .card.correct {
+            border-color: var(--green-border);
+            background: var(--green-light);
+            box-shadow: 0 6px 32px rgba(34, 197, 94, 0.2);
+        }
+
+        .card.wrong {
+            border-color: var(--red-border);
+            background: var(--red-light);
+            box-shadow: 0 6px 32px rgba(239, 68, 68, 0.2);
+            animation: shake 0.35s ease;
+        }
+
+        @keyframes shake {
+            0%   { transform: translateX(0);    }
+            20%  { transform: translateX(-8px); }
+            40%  { transform: translateX(8px);  }
+            60%  { transform: translateX(-5px); }
+            80%  { transform: translateX(5px);  }
+            100% { transform: translateX(0);    }
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.92); opacity: 0; }
+            to   { transform: scale(1);    opacity: 1; }
+        }
+
+        .equation {
+            font-size: clamp(48px, 14vw, 80px);
+            font-weight: 900;
+            color: var(--text);
+            letter-spacing: -1px;
+            line-height: 1;
+            margin-bottom: 18px;
+            min-height: 1.1em;
+            transition: opacity 0.2s;
+        }
+
+        .equation.idle {
+            opacity: 0.2;
+            font-size: clamp(32px, 9vw, 52px);
+            color: var(--text-soft);
+        }
+
+        .feedback-msg {
+            font-size: 17px;
+            font-weight: 700;
+            min-height: 1.5em;
+            line-height: 1.5;
+            transition: color 0.2s;
+        }
+
+        .feedback-msg.hint    { color: var(--text-soft); font-weight: 600; }
+        .feedback-msg.correct { color: var(--green); animation: popIn 0.2s ease; }
+        .feedback-msg.wrong   { color: var(--red);   animation: popIn 0.2s ease; }
+
+        /* ─── Answer input row ─── */
+        .input-row {
+            width: 100%;
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(8px);
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .input-row.visible {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0);
+        }
+
+        #answerInput {
+            flex: 1;
+            background: var(--card);
+            border: 2px solid var(--indigo-mid);
+            border-radius: var(--radius-md);
+            color: var(--text-body);
+            font-family: 'Nunito', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            text-align: center;
+            padding: 14px 16px;
+            min-height: 58px;
+            outline: none;
+            transition: border-color 0.18s, box-shadow 0.18s;
+            -moz-appearance: textfield;
+            box-shadow: var(--shadow);
+        }
+
+        #answerInput::-webkit-outer-spin-button,
+        #answerInput::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+        #answerInput:focus {
+            border-color: var(--indigo);
+            box-shadow: 0 0 0 4px rgba(99,102,241,0.15);
+        }
+
+        #answerInput::placeholder {
+            color: var(--indigo-mid);
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        #checkButton {
+            background: var(--indigo);
+            border: none;
+            border-radius: var(--radius-md);
+            color: #fff;
+            font-family: 'Nunito', sans-serif;
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            padding: 14px 22px;
+            min-height: 58px;
+            min-width: 88px;
+            cursor: pointer;
+            transition: background 0.18s, transform 0.12s, box-shadow 0.18s;
+            box-shadow: 0 4px 16px rgba(99,102,241,0.35);
+        }
+
+        #checkButton:hover {
+            background: #4f46e5;
+            box-shadow: 0 6px 20px rgba(99,102,241,0.45);
+        }
+
+        #checkButton:active { transform: scale(0.95); }
+
+        /* ─── Primary action button ─── */
+        .action-btn {
+            width: 100%;
+            padding: 17px;
+            border: none;
+            border-radius: var(--radius-md);
+            background: var(--indigo);
+            color: #fff;
+            font-family: 'Nunito', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            transition: background 0.18s, box-shadow 0.18s, transform 0.12s;
+            box-shadow: 0 4px 20px rgba(99,102,241,0.35);
+            min-height: 58px;
+        }
+
+        .action-btn:hover {
+            background: #4f46e5;
+            box-shadow: 0 6px 28px rgba(99,102,241,0.45);
+            transform: translateY(-1px);
+        }
+
+        .action-btn:active { transform: scale(0.97); }
+
+        .action-btn.next {
+            background: var(--green);
+            box-shadow: 0 4px 20px rgba(34, 197, 94, 0.35);
+        }
+
+        .action-btn.next:hover {
+            background: #16a34a;
+            box-shadow: 0 6px 28px rgba(34, 197, 94, 0.45);
+        }
+
+        /* ─── Responsive ─── */
+        @media (max-width: 380px) {
+            body { padding: 20px 12px calc(24px + env(safe-area-inset-bottom)); }
+            .equation { font-size: 42px; }
+            .sel-btn { font-size: 12px; padding: 8px 4px; }
+        }
+    </style>
+</head>
+<body>
+<div class="shell">
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="app-icon">⚡</div>
+        <span class="app-name">Math Spark</span>
+    </header>
+
+    <!-- Stats -->
+    <div class="stats-bar">
+        <span class="streak" id="streakDisplay">🔥 0 streak</span>
+        <span class="score"  id="scoreDisplay">0 / 0</span>
+        <span class="pool-badge" id="poolDisplay">— left</span>
+    </div>
+
+    <!-- Difficulty -->
+    <div class="selector" id="diffSelector">
+        <button class="sel-btn active" data-diff="easy">Easy</button>
+        <button class="sel-btn"        data-diff="medium">Medium</button>
+        <button class="sel-btn"        data-diff="hard">Hard</button>
+    </div>
+
+    <!-- Operation -->
+    <nav>
+        <ul id="opSelector" class="selector op-selector" style="list-style:none;">
+            <li style="flex:1"><a class="sel-btn active" id="additionLink"       href="javascript:void(0)">＋</a></li>
+            <li style="flex:1"><a class="sel-btn"        id="subtractionLink"    href="javascript:void(0)">－</a></li>
+            <li style="flex:1"><a class="sel-btn"        id="multiplicationLink" href="javascript:void(0)">×</a></li>
+            <li style="flex:1"><a class="sel-btn"        id="divisionLink"       href="javascript:void(0)">÷</a></li>
+        </ul>
+    </nav>
+
+    <!-- Equation card -->
+    <div class="card" id="displayCard">
+        <div class="equation idle" id="displayNumbers">? ○ ?</div>
+        <div class="feedback-msg hint" id="feedbackMsg">tap New Problem to start</div>
+    </div>
+
+    <!-- Answer input -->
+    <div class="input-row" id="inputZone">
+        <input
+            id="answerInput"
+            type="number"
+            inputmode="decimal"
+            autocomplete="off"
+            placeholder="your answer"
+            aria-label="Type your answer"
+        >
+        <button id="checkButton">Check ✓</button>
+    </div>
+
+    <!-- New / Next -->
+    <button class="action-btn" id="actionButton">New Problem</button>
+
+</div>
+
+<script>
+// ─── State ───────────────────────────────────────────────────────────────────
+const state = {
+    phase:      'idle',
+    op:         'addition',
+    difficulty: 'easy',
+    num1:       0,
+    num2:       0,
+    correct:    0,
+    total:      0,
+    streak:     0,
+    pool:       [],
+    poolIndex:  0,
+    lastKey:    null,
+};
+
+// ─── Operations ──────────────────────────────────────────────────────────────
+const ops = {
+    addition:       { symbol: '+', compute: (a, b) => a + b                          },
+    subtraction:    { symbol: '−', compute: (a, b) => a - b                          },
+    multiplication: { symbol: '×', compute: (a, b) => a * b                          },
+    division:       { symbol: '÷', compute: (a, b) => parseFloat((a / b).toFixed(2)) },
+};
+
+// ─── Difficulty ranges ────────────────────────────────────────────────────────
+const ranges = {
+    easy:   { a: [2, 12],   b: [2, 12]  },
+    medium: { a: [10, 50],  b: [2, 20]  },
+    hard:   { a: [50, 200], b: [10, 50] },
+};
+
+// ─── DOM ─────────────────────────────────────────────────────────────────────
+const els = {
+    equation:      document.getElementById('displayNumbers'),
+    feedbackMsg:   document.getElementById('feedbackMsg'),
+    card:          document.getElementById('displayCard'),
+    inputZone:     document.getElementById('inputZone'),
+    answerInput:   document.getElementById('answerInput'),
+    checkButton:   document.getElementById('checkButton'),
+    actionButton:  document.getElementById('actionButton'),
+    streakDisplay: document.getElementById('streakDisplay'),
+    scoreDisplay:  document.getElementById('scoreDisplay'),
+    poolDisplay:   document.getElementById('poolDisplay'),
+};
+
+// ─── Pool ─────────────────────────────────────────────────────────────────────
+function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function buildPool() {
+    const { a, b } = ranges[state.difficulty];
+    const pairs = [];
+    if (state.op === 'division') {
+        for (let divisor = b[0]; divisor <= b[1]; divisor++) {
+            const minM = Math.max(2, Math.ceil(a[0] / divisor));
+            const maxM = Math.floor(a[1] / divisor);
+            for (let m = minM; m <= maxM; m++) pairs.push([divisor * m, divisor]);
+        }
+    } else {
+        for (let n1 = a[0]; n1 <= a[1]; n1++)
+            for (let n2 = b[0]; n2 <= b[1]; n2++)
+                pairs.push([n1, n2]);
+    }
+    return shuffle(pairs);
+}
+
+function resetPool() {
+    state.pool      = buildPool();
+    state.poolIndex = 0;
+    state.lastKey   = null;
+}
+
+function nextFromPool() {
+    if (state.poolIndex >= state.pool.length) {
+        state.pool = buildPool();
+        if (state.pool.length > 1 && state.pool[0].join() === state.lastKey)
+            [state.pool[0], state.pool[1]] = [state.pool[1], state.pool[0]];
+        state.poolIndex = 0;
+    }
+    const pair = state.pool[state.poolIndex++];
+    state.lastKey = pair.join();
+    return pair;
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+function correctAnswer() {
+    return ops[state.op].compute(state.num1, state.num2);
+}
+
+// ─── Render ───────────────────────────────────────────────────────────────────
+function render() {
+    const { phase, streak, correct, total } = state;
+    const op = ops[state.op];
+
+    // Equation
+    if (phase === 'idle') {
+        els.equation.textContent = '? ○ ?';
+        els.equation.className   = 'equation idle';
+    } else {
+        els.equation.textContent = `${state.num1} ${op.symbol} ${state.num2}`;
+        els.equation.className   = 'equation';
+    }
+
+    // Card state
+    els.card.className = 'card';
+    if (phase === 'feedback-correct') els.card.classList.add('correct');
+    if (phase === 'feedback-wrong')   els.card.classList.add('wrong');
+
+    // Feedback message
+    const msgs = {
+        'idle':             ['tap New Problem to start', 'hint'],
+        'answering':        ['', ''],
+        'feedback-correct': ['✓  Correct!',                 'correct'],
+        'feedback-wrong':   [`✗  Answer: ${correctAnswer()}`, 'wrong'],
+    };
+    const [msg, cls] = msgs[phase] || ['', ''];
+    els.feedbackMsg.textContent = msg;
+    els.feedbackMsg.className   = cls ? `feedback-msg ${cls}` : 'feedback-msg';
+
+    // Input
+    els.inputZone.classList.toggle('visible', phase === 'answering');
+
+    // Action button
+    const inFeedback = phase === 'feedback-correct' || phase === 'feedback-wrong';
+    els.actionButton.textContent = inFeedback ? 'Next Problem →' : 'New Problem';
+    els.actionButton.className   = inFeedback ? 'action-btn next' : 'action-btn';
+
+    // Stats
+    els.streakDisplay.textContent = `🔥 ${streak} streak`;
+    els.streakDisplay.className   = streak >= 5 ? 'streak hot' : 'streak';
+    els.scoreDisplay.textContent  = `${correct} / ${total}`;
+    const left = state.pool.length - state.poolIndex;
+    els.poolDisplay.textContent   = `${left} left`;
+}
+
+// ─── Actions ─────────────────────────────────────────────────────────────────
+function startNewProblem() {
+    const [n1, n2] = nextFromPool();
+    state.num1  = n1;
+    state.num2  = n2;
+    state.phase = 'answering';
+    els.answerInput.value = '';
+    render();
+    requestAnimationFrame(() => els.answerInput.focus());
+}
+
+function checkAnswer() {
+    const raw = els.answerInput.value.trim();
+    if (!raw) return;
+
+    const userVal   = parseFloat(raw);
+    const answerVal = correctAnswer();
+    const isCorrect = Math.abs(userVal - answerVal) < 0.01;
+
+    state.total++;
+    if (isCorrect) {
+        state.correct++;
+        state.streak++;
+        state.phase = 'feedback-correct';
+    } else {
+        state.streak = 0;
+        state.phase  = 'feedback-wrong';
+    }
+
+    render();
+    setTimeout(() => { if (state.phase !== 'idle') startNewProblem(); }, 1500);
+}
+
+function handleAction() {
+    if (state.phase !== 'answering') startNewProblem();
+}
+
+// ─── Event wiring ─────────────────────────────────────────────────────────────
+
+// Operation tabs
+Object.keys(ops).forEach(opKey => {
+    document.getElementById(`${opKey}Link`).addEventListener('click', () => {
+        if (state.op === opKey) return;
+        state.op    = opKey;
+        state.phase = 'idle';
+        resetPool();
+        document.querySelectorAll('#opSelector .sel-btn').forEach(a => a.classList.remove('active'));
+        document.getElementById(`${opKey}Link`).classList.add('active');
+        render();
+    });
+});
+
+// Difficulty
+document.querySelectorAll('#diffSelector .sel-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (state.difficulty === btn.dataset.diff) return;
+        document.querySelectorAll('#diffSelector .sel-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.difficulty = btn.dataset.diff;
+        state.phase      = 'idle';
+        resetPool();
+        render();
+    });
+});
+
+els.checkButton.addEventListener('click', checkAnswer);
+els.answerInput.addEventListener('keydown', e => { if (e.key === 'Enter') checkAnswer(); });
+els.actionButton.addEventListener('click',  handleAction);
+els.actionButton.addEventListener('keydown', e => {
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); handleAction(); }
+});
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+resetPool();
+render();
+</script>
+</body>
+</html>
