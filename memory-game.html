@@ -3,7 +3,12 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta charset="UTF-8">
+    <meta name="theme-color" content="#0d0b09">
     <title>Prism</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"></noscript>
 
     <style>
         *, *::before, *::after {
@@ -12,14 +17,59 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --bg:    #0d0b09;
+            --s1:    #141210;
+            --s2:    #1c1916;
+            --b:     #2d2922;
+            --a:     #c8a05c;
+            --t:     #ede9e2;
+            --m:     #9a9390;
+            --mono:  'Space Mono', monospace;
+            --serif: 'Instrument Serif', Georgia, serif;
+            --sans:  'DM Sans', system-ui, sans-serif;
+        }
+
         body {
-            background-color: #0c0f1a;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            color: #cdd6e8;
+            background-color: var(--bg);
+            font-family: var(--sans);
+            color: var(--t);
             min-height: 100vh;
             min-height: 100dvh;
             padding-bottom: env(safe-area-inset-bottom, 0px);
+            -webkit-font-smoothing: antialiased;
         }
+
+        /* ── Topbar ── */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--b);
+            background: rgba(13,11,9,.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .home-btn {
+            background: transparent;
+            border: 1px solid var(--b);
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 10px;
+            font-family: var(--mono);
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--m);
+            text-decoration: none;
+            transition: border-color .2s, color .2s;
+        }
+        .home-btn:hover { border-color: var(--a); color: var(--a); }
 
         /* ── Layout shell ── */
         .container {
@@ -35,8 +85,7 @@
         }
 
         .vertical-space-manager {
-            min-height: 100vh;
-            min-height: 100dvh;
+            min-height: calc(100vh - 49px);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -46,40 +95,39 @@
 
         /* ── Game card ── */
         .game-player {
-            background: #111520;
-            border: 1px solid #1c2236;
-            border-radius: 22px;
+            background: var(--s1);
+            border: 1px solid var(--b);
+            border-radius: 18px;
             padding: 36px 28px 40px;
             overflow: hidden;
             position: relative;
         }
 
-        /* Decorative top border shimmer */
         .game-player::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 10%;
-            right: 10%;
+            top: 0; left: 10%; right: 10%;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.6), transparent);
+            background: linear-gradient(90deg, transparent, rgba(200,160,92,.4), transparent);
         }
 
         /* ── Headings ── */
         .game-title {
             text-align: center;
             font-size: 28px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: #f0f4ff;
+            font-weight: 400;
+            letter-spacing: 1px;
+            color: var(--t);
             margin-bottom: 8px;
+            font-family: var(--serif);
+            font-style: italic;
         }
 
         #game-description {
             text-align: center;
-            font-size: 15px;
-            line-height: 1.7;
-            color: #4e5c7a;
+            font-size: 14px;
+            line-height: 1.75;
+            color: var(--m);
             margin-bottom: 0;
         }
 
@@ -98,29 +146,30 @@
         }
 
         #start-button {
-            background: linear-gradient(135deg, #6d28d9, #8b5cf6);
-            color: #fff;
+            background: var(--a);
+            color: var(--bg);
             padding: 13px 36px;
             border: none;
-            border-radius: 50px;
+            border-radius: 100px;
             cursor: pointer;
-            font-size: 15px;
-            font-weight: 600;
-            letter-spacing: 1px;
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase;
             min-height: 48px;
-            transition: opacity 0.2s, transform 0.15s;
-            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.35);
+            transition: background .2s, transform .15s;
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
         }
 
         #start-button:hover {
-            opacity: 0.85;
+            background: #d4a862;
             transform: translateY(-1px);
         }
 
         #start-button:focus-visible {
-            outline: 3px solid #8b5cf6;
+            outline: 2px solid var(--a);
             outline-offset: 3px;
         }
 
@@ -131,14 +180,15 @@
 
         #current-level-number-display {
             text-align: center;
-            font-size: 15px;
-            font-weight: 600;
-            letter-spacing: 2px;
+            font-size: 10px;
+            font-family: var(--mono);
+            font-weight: 700;
+            letter-spacing: .2em;
             text-transform: uppercase;
-            color: #8b5cf6;
+            color: var(--a);
             margin-bottom: 20px;
             opacity: 0;
-            transition: opacity 0.2s;
+            transition: opacity .2s;
         }
 
         .current-level-number-display-enabled {
@@ -147,11 +197,12 @@
 
         #current-level-guesses-message {
             text-align: center;
-            font-size: 15px;
-            color: #4e5c7a;
-            letter-spacing: 1px;
+            font-size: 13px;
+            color: var(--m);
+            letter-spacing: .04em;
             margin-bottom: 16px;
             min-height: 1.5em;
+            font-family: var(--mono);
         }
 
         /* Progress dots row */
@@ -168,7 +219,7 @@
             width: 18px;
             height: 18px;
             border-radius: 5px;
-            transition: all 0.15s;
+            transition: all .15s;
             flex-shrink: 0;
         }
 
@@ -184,10 +235,10 @@
         #random-panel {
             width: 160px;
             height: 160px;
-            border-radius: 22px;
-            background: #191e2e;
-            border: 2px solid #1c2236;
-            transition: background 0.08s, box-shadow 0.08s;
+            border-radius: 18px;
+            background: var(--s2);
+            border: 1px solid var(--b);
+            transition: background .08s, box-shadow .08s;
         }
 
         .random-panel-none {
@@ -195,25 +246,17 @@
         }
 
         /* Color glow states for the flash panel */
-        #random-panel.bg-red {
-            box-shadow: 0 0 40px rgba(244, 63, 94, 0.55);
-        }
-        #random-panel.bg-yellow {
-            box-shadow: 0 0 40px rgba(245, 158, 11, 0.55);
-        }
-        #random-panel.bg-green {
-            box-shadow: 0 0 40px rgba(16, 185, 129, 0.55);
-        }
-        #random-panel.bg-purple {
-            box-shadow: 0 0 40px rgba(139, 92, 246, 0.55);
-        }
+        #random-panel.bg-red    { box-shadow: 0 0 40px rgba(244, 63, 94, 0.55); }
+        #random-panel.bg-yellow { box-shadow: 0 0 40px rgba(200, 160, 92, 0.55); }
+        #random-panel.bg-green  { box-shadow: 0 0 40px rgba(95, 158, 168, 0.55); }
+        #random-panel.bg-purple { box-shadow: 0 0 40px rgba(139, 92, 246, 0.55); }
 
         /* ── Controls ── */
         #controls {
             margin-top: 32px;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.2s;
+            transition: opacity .2s;
         }
 
         .controls-enabled {
@@ -223,10 +266,12 @@
 
         #controls-instructions {
             text-align: center;
-            font-size: 15px;
-            letter-spacing: 1.5px;
+            font-size: 10px;
+            font-family: var(--mono);
+            letter-spacing: .18em;
             text-transform: uppercase;
-            color: #3d4e6a;
+            color: var(--m);
+            opacity: .55;
             margin-bottom: 20px;
         }
 
@@ -240,26 +285,19 @@
         .controls-btn {
             flex: 1;
             aspect-ratio: 1;
-            border-radius: 16px;
+            border-radius: 14px;
             cursor: pointer;
-            transition: opacity 0.15s, transform 0.12s, box-shadow 0.15s;
+            transition: opacity .15s, transform .12s, box-shadow .15s;
             border: none;
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
         }
 
-        .controls-btn:hover {
-            opacity: 0.82;
-            transform: translateY(-2px);
-        }
-
-        .controls-btn:active {
-            transform: scale(0.93);
-            opacity: 1;
-        }
+        .controls-btn:hover  { opacity: .82; transform: translateY(-2px); }
+        .controls-btn:active { transform: scale(.93); opacity: 1; }
 
         .controls-btn:focus-visible {
-            outline: 3px solid #fff;
+            outline: 2px solid rgba(255,255,255,.5);
             outline-offset: 3px;
         }
 
@@ -275,10 +313,11 @@
 
         #game-over-message {
             text-align: center;
-            font-size: 15px;
+            font-size: 14px;
             line-height: 1.9;
-            color: #f43f5e;
+            color: rgba(244, 63, 94, .85);
             margin-bottom: 16px;
+            font-family: var(--mono);
         }
 
         #game-over-correct-solution {
@@ -291,24 +330,29 @@
 
         /* ── Four signal colors ── */
         .bg-red    { background-color: #f43f5e; }
-        .bg-yellow { background-color: #f59e0b; }
-        .bg-green  { background-color: #10b981; }
+        .bg-yellow { background-color: #c8a05c; }
+        .bg-green  { background-color: #5f9ea8; }
         .bg-purple { background-color: #8b5cf6; }
 
-        /* Glow on the control buttons */
-        #controls-btn-red    { box-shadow: 0 4px 18px rgba(244, 63, 94, 0.3);  }
-        #controls-btn-yellow { box-shadow: 0 4px 18px rgba(245, 158, 11, 0.3); }
-        #controls-btn-green  { box-shadow: 0 4px 18px rgba(16, 185, 129, 0.3); }
-        #controls-btn-purple { box-shadow: 0 4px 18px rgba(139, 92, 246, 0.3); }
+        /* Glow on control buttons */
+        #controls-btn-red    { box-shadow: 0 4px 18px rgba(244, 63, 94, 0.3);   }
+        #controls-btn-yellow { box-shadow: 0 4px 18px rgba(200, 160, 92, 0.3);  }
+        #controls-btn-green  { box-shadow: 0 4px 18px rgba(95, 158, 168, 0.3);  }
+        #controls-btn-purple { box-shadow: 0 4px 18px rgba(139, 92, 246, 0.3);  }
 
-        #controls-btn-red:hover    { box-shadow: 0 6px 28px rgba(244, 63, 94, 0.55);  }
-        #controls-btn-yellow:hover { box-shadow: 0 6px 28px rgba(245, 158, 11, 0.55); }
-        #controls-btn-green:hover  { box-shadow: 0 6px 28px rgba(16, 185, 129, 0.55); }
-        #controls-btn-purple:hover { box-shadow: 0 6px 28px rgba(139, 92, 246, 0.55); }
+        #controls-btn-red:hover    { box-shadow: 0 6px 28px rgba(244, 63, 94, 0.55);   }
+        #controls-btn-yellow:hover { box-shadow: 0 6px 28px rgba(200, 160, 92, 0.55);  }
+        #controls-btn-green:hover  { box-shadow: 0 6px 28px rgba(95, 158, 168, 0.55);  }
+        #controls-btn-purple:hover { box-shadow: 0 6px 28px rgba(139, 92, 246, 0.55);  }
     </style>
 </head>
 
 <body>
+<div class="topbar">
+    <a class="home-btn" href="index.html">← Home</a>
+    <span style="font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:1.05rem;color:#ede9e2">Prism</span>
+    <div style="width:60px"></div>
+</div>
 <div>
     <div class="container">
         <div class="container-inner">

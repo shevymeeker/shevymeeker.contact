@@ -1,19 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-  <meta name="description" content="Calculator Using Javascript">
-
+  <meta name="description" content="Calculator">
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#0d1117">
+  <meta name="theme-color" content="#0d0b09">
   <title>Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Instrument+Serif:ital@1&family=Space+Mono:wght@400;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Instrument+Serif:ital@1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"></noscript>
   <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:    #0d0b09;
+      --s1:    #141210;
+      --s2:    #1c1916;
+      --s3:    #231f1b;
+      --b:     #2d2922;
+      --a:     #c8a05c;
+      --a2:    #5f9ea8;
+      --t:     #ede9e2;
+      --m:     #9a9390;
+      --mono:  'Space Mono', 'Courier New', monospace;
+      --serif: 'Instrument Serif', Georgia, serif;
+      --sans:  'DM Sans', system-ui, sans-serif;
     }
 
     body {
@@ -22,104 +35,129 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: rgba(0, 0, 0, 0.82);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      font-family: var(--sans);
       -webkit-font-smoothing: antialiased;
       padding: 16px;
       padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
     }
 
-    /* ── Card ──────────────────────────────────── */
+    /* ── Card ──────────────────────────────────────────────── */
     .calc-card {
-      background: #1a1f2e;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 28px;
+      background: var(--s1);
+      border: 1px solid var(--b);
+      border-radius: 20px;
       width: 100%;
       max-width: 340px;
       box-shadow:
-        0 4px 6px rgba(0,0,0,0.3),
-        0 20px 60px rgba(0,0,0,0.6),
-        inset 0 1px 0 rgba(255,255,255,0.06);
+        0 4px 6px rgba(0,0,0,.5),
+        0 24px 64px rgba(0,0,0,.7),
+        inset 0 1px 0 rgba(255,255,255,.04);
       overflow: hidden;
+      position: relative;
     }
 
-    /* ── Top bar ───────────────────────────────── */
+    /* Amber accent shimmer at top */
+    .calc-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 8%; right: 8%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(200,160,92,.55), transparent);
+      pointer-events: none;
+    }
+
+    /* ── Topbar ─────────────────────────────────────────────── */
     .calc-topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 14px 16px 10px;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
+      border-bottom: 1px solid var(--b);
     }
 
     .home-btn {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 8px;
+      background: transparent;
+      border: 1px solid var(--b);
+      border-radius: 4px;
       padding: 5px 10px;
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.6);
+      font-size: 10px;
+      font-family: var(--mono);
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--m);
       text-decoration: none;
-      transition: background 0.15s;
+      transition: border-color .2s, color .2s;
+      white-space: nowrap;
     }
-    .home-btn:hover { background: rgba(255,255,255,0.14); }
+    .home-btn:hover { border-color: var(--a); color: var(--a); }
 
     .calc-label {
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: rgba(255,255,255,0.4);
-      letter-spacing: 0.04em;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--t);
+      letter-spacing: .01em;
     }
 
     .spacer { width: 60px; }
 
-    /* ── Display ───────────────────────────────── */
+    /* ── Display ─────────────────────────────────────────────── */
     .calc-display {
-      padding: 12px 20px 16px;
+      padding: 14px 22px 20px;
       text-align: right;
-      min-height: 84px;
+      min-height: 90px;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
     }
 
     #expr {
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.38);
+      font-size: 0.72rem;
+      font-family: var(--mono);
+      color: var(--m);
       min-height: 18px;
       word-break: break-all;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
+      letter-spacing: .02em;
     }
 
     #result {
-      font-size: 2.6rem;
-      font-weight: 200;
-      color: #fff;
+      font-size: 2.8rem;
+      font-family: var(--mono);
+      font-weight: 400;
+      color: var(--t);
       word-break: break-all;
       line-height: 1;
-      letter-spacing: -0.02em;
+      letter-spacing: -.03em;
+      transition: color .15s;
     }
 
-    /* ── Button grid ───────────────────────────── */
+    #result.flash {
+      color: var(--a);
+    }
+
+    /* ── Button grid ─────────────────────────────────────────── */
     .calc-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 1px;
-      background: rgba(255,255,255,0.06);
-      border-top: 1px solid rgba(255,255,255,0.07);
+      background: var(--b);
+      border-top: 1px solid var(--b);
     }
 
     .btn {
       border: none;
-      background: #1e2537;
-      color: #fff;
-      font-size: 1.25rem;
-      font-family: inherit;
+      background: var(--s1);
+      color: var(--t);
+      font-size: 1.15rem;
+      font-family: var(--mono);
       font-weight: 400;
       padding: 0;
-      height: 72px;
+      height: 70px;
       cursor: pointer;
-      transition: background 0.1s, transform 0.08s;
+      transition: background .1s, transform .08s;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -127,52 +165,54 @@
       user-select: none;
     }
 
-    /* Slightly larger on wide screens */
     @media (min-width: 400px) {
-      .btn { height: 76px; font-size: 1.3rem; }
+      .btn { height: 74px; font-size: 1.2rem; }
     }
 
-    .btn:active {
-      background: #2a3347;
-      transform: scale(0.94);
-    }
+    .btn:hover  { background: var(--s2); }
+    .btn:active { background: var(--s3); transform: scale(.95); }
 
-    /* Function buttons (AC, +/−, %) */
+    /* Function buttons */
     .btn.fn {
-      background: #2c3347;
-      color: rgba(255,255,255,0.75);
-      font-size: 1rem;
+      background: var(--s2);
+      color: var(--m);
+      font-size: 0.78rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
     }
-    .btn.fn:active { background: #374057; }
+    .btn.fn:hover  { background: var(--s3); }
+    .btn.fn:active { background: #2a2520; }
 
     /* Operator buttons */
     .btn.op {
-      background: #1e2e4a;
-      color: #58a6ff;
-      font-size: 1.3rem;
-      font-weight: 600;
+      color: var(--a);
+      font-size: 1.2rem;
+      font-weight: 700;
     }
-    .btn.op:active { background: #243756; }
+    .btn.op:hover  { background: rgba(200,160,92,.07); }
+    .btn.op:active { background: rgba(200,160,92,.12); transform: scale(.95); }
 
     /* Equals */
     .btn.eq {
-      background: #FF453A;
-      color: #fff;
+      background: var(--a);
+      color: var(--bg);
       font-weight: 700;
+      font-size: 1.3rem;
     }
-    .btn.eq:active { background: #e03028; }
+    .btn.eq:hover  { background: #d4a862; }
+    .btn.eq:active { background: #b8924e; transform: scale(.95); }
 
     /* Zero spans 2 cols */
     .btn.zero {
       grid-column: span 2;
       justify-content: flex-start;
-      padding-left: 28px;
-      font-size: 1.25rem;
+      padding-left: 26px;
+      font-size: 1.15rem;
     }
 
     /* Bottom-row rounding */
-    .calc-grid .btn:last-child { border-radius: 0 0 28px 0; }
-    .calc-grid .btn.zero { border-radius: 0 0 0 28px; }
+    .calc-grid .btn:last-child { border-radius: 0 0 20px 0; }
+    .calc-grid .btn.zero       { border-radius: 0 0 0 20px; }
   </style>
 </head>
 <body>
@@ -235,8 +275,13 @@
     }
 
     function render() {
-      exprEl.textContent  = state.expr;
+      exprEl.textContent   = state.expr;
       resultEl.textContent = fmt(state.value);
+    }
+
+    function flash() {
+      resultEl.classList.add('flash');
+      setTimeout(() => resultEl.classList.remove('flash'), 300);
     }
 
     function num(v) {
@@ -269,14 +314,15 @@
         case '−': r = a - b; break;
         case '×': r = a * b; break;
         case '/': r = b !== 0 ? a / b : 'Error'; break;
-        default: r = b;
+        default:  r = b;
       }
       if (showExpr) state.expr = `${fmt(state.prev)} ${state.op} ${fmt(state.value)} =`;
-      state.value = r === 'Error' ? 'Error' : String(r);
-      state.op = null;
-      state.prev = null;
+      state.value    = r === 'Error' ? 'Error' : String(r);
+      state.op       = null;
+      state.prev     = null;
       state.newInput = true;
       render();
+      if (showExpr) flash();
     }
 
     document.querySelector('.calc-grid').addEventListener('click', e => {
@@ -302,7 +348,6 @@
       }
     });
 
-    // Keyboard support
     document.addEventListener('keydown', e => {
       if (e.key >= '0' && e.key <= '9') num(e.key);
       else if (e.key === '.') dot();

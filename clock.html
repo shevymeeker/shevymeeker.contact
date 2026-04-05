@@ -7,38 +7,46 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#091921">
+  <meta name="theme-color" content="#0d0b09">
   <title>Clock & Alarms</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"></noscript>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg: #091921;
-      --surface: #0f2433;
-      --surface2: #132d3f;
-      --border: rgba(255,255,255,0.1);
-      --text: #e6edf3;
-      --text-muted: rgba(255,255,255,0.45);
-      --accent: #FF453A;
-      --blue: #58a6ff;
+      --bg:      #0d0b09;
+      --surface: #141210;
+      --surface2:#1c1916;
+      --border:  #2d2922;
+      --text:    #ede9e2;
+      --text-muted: #9a9390;
+      --accent:  #c8a05c;
+      --blue:    #5f9ea8;
+      --mono:    'Space Mono', 'Courier New', monospace;
+      --serif:   'Instrument Serif', Georgia, serif;
+      --sans:    'DM Sans', system-ui, sans-serif;
       --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
       min-height: 100dvh;
       display: flex;
       flex-direction: column;
     }
 
     body.light {
-      --bg: #d1dae3;
-      --surface: #c2cdd8;
-      --surface2: #b8c8d8;
-      --border: rgba(0,0,0,0.1);
-      --text: #111;
+      --bg:      #ede9e2;
+      --surface: #e0dbd2;
+      --surface2:#d4cfc5;
+      --border:  rgba(0,0,0,0.12);
+      --text:    #1c1916;
       --text-muted: rgba(0,0,0,0.45);
     }
 
@@ -47,9 +55,19 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 16px;
+      padding: 14px 20px;
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
+      background: rgba(13,11,9,.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    body.light .topbar {
+      background: rgba(237,233,226,.92);
     }
 
     .topbar-left {
@@ -59,20 +77,25 @@
     }
 
     .home-btn {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 8px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 4px;
       padding: 5px 10px;
-      font-size: 0.78rem;
+      font-size: 10px;
+      font-family: var(--mono);
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
       color: var(--text-muted);
       text-decoration: none;
-      transition: background 0.15s;
+      transition: border-color .2s, color .2s;
     }
-    .home-btn:hover { background: rgba(255,255,255,0.16); }
+    .home-btn:hover { border-color: var(--accent); color: var(--accent); }
 
     .page-title {
-      font-size: 1rem;
-      font-weight: 600;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.05rem;
       color: var(--text);
     }
 
@@ -82,18 +105,22 @@
     }
 
     .icon-btn {
-      background: rgba(255,255,255,0.08);
+      background: transparent;
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 6px 12px;
-      font-size: 0.78rem;
-      color: var(--text);
+      border-radius: 4px;
+      padding: 5px 10px;
+      font-size: 10px;
+      font-family: var(--mono);
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
       cursor: pointer;
-      transition: background 0.15s;
+      transition: border-color .2s, color .2s;
       white-space: nowrap;
     }
-    .icon-btn:hover { background: rgba(255,255,255,0.16); }
-    .icon-btn.active { background: rgba(88,166,255,0.18); border-color: var(--blue); color: var(--blue); }
+    .icon-btn:hover { border-color: var(--text-muted); color: var(--text); }
+    .icon-btn.active { border-color: var(--blue); color: var(--blue); }
 
     /* ── Layout ────────────────────────────────── */
     .main-content {
@@ -142,34 +169,34 @@
 
     body.light .clock {
       background: var(--bg);
-      border-color: #cad3dc;
+      border-color: #d4cfc5;
       box-shadow:
         -6px -6px 12px rgba(255,255,255,0.5),
-        8px 8px 8px rgba(0,0,0,0.3),
+        8px 8px 8px rgba(0,0,0,0.15),
         inset -6px -6px 12px rgba(255,255,255,0.5),
-        inset 8px 8px 8px rgba(0,0,0,0.3);
+        inset 8px 8px 8px rgba(0,0,0,0.15);
     }
 
     .clock::before {
       content: '';
       position: absolute;
-      height: 12px;
-      width: 12px;
-      background: #fff;
+      height: 10px;
+      width: 10px;
+      background: var(--accent);
       border-radius: 50%;
       z-index: 100000;
     }
 
-    body.light .clock::before { background: #008eff; }
+    body.light .clock::before { background: var(--blue); }
 
     .indicators div {
       position: absolute;
       width: 2px;
-      height: 12px;
-      background: #404040;
+      height: 10px;
+      background: #3a3530;
     }
 
-    body.light .indicators div { background: #808080; }
+    body.light .indicators div { background: #9a9390; }
 
     .indicators div:nth-child(1)  { transform: rotate(30deg)  translateY(-104px) translateX(-2px); }
     .indicators div:nth-child(2)  { transform: rotate(60deg)  translateY(-104px) translateX(-4px); }
@@ -180,7 +207,7 @@
     .indicators div:nth-child(7)  { transform: rotate(300deg) translateY(-104px) translateX(4px); }
     .indicators div:nth-child(8)  { transform: rotate(330deg) translateY(-104px) translateX(2px); }
 
-    .nums { position: absolute; font-size: 22px; font-weight: bold; color: #808080; }
+    .nums { position: absolute; font-size: 18px; font-family: var(--mono); font-weight: 400; color: var(--text-muted); }
 
     #three  { position: absolute; left: 95px;  top: -12px; }
     #six    { position: absolute; top: 87px;   left: -6px; }
@@ -208,7 +235,7 @@
       position: absolute;
       width: 7px;
       height: 64px;
-      background: #ff105e;
+      background: var(--accent);
       z-index: 10;
       border-radius: 5px 5px 0 0;
     }
@@ -218,29 +245,30 @@
       position: absolute;
       width: 4px;
       height: 72px;
-      background: #ffffff;
+      background: var(--text);
       z-index: 11;
       border-radius: 5px 5px 0 0;
     }
 
-    body.light .mn::before { background: #091921; }
+    body.light .mn::before { background: #1c1916; }
 
     .sc::before {
       content: '';
       position: absolute;
       width: 2px;
       height: 120px;
-      background: #008eff;
+      background: var(--blue);
       z-index: 12;
       border-radius: 5px 5px 0 0;
     }
 
     .time {
       margin-top: 20px;
-      font-size: 1rem;
-      font-weight: 600;
+      font-size: 0.88rem;
+      font-family: var(--mono);
+      font-weight: 400;
       color: var(--text-muted);
-      letter-spacing: 0.05em;
+      letter-spacing: .1em;
     }
 
     /* ── Alarm panel ──────────────────────────── */
@@ -268,9 +296,11 @@
     .alarm-panel.open { display: flex; flex-direction: column; }
 
     .panel-section-title {
-      font-size: 0.7rem;
+      font-size: 9px;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: .18em;
+      font-family: var(--mono);
+      font-weight: 700;
       color: var(--text-muted);
       padding: 16px 16px 8px;
     }
@@ -293,38 +323,41 @@
     .alarm-input {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 6px;
       color: var(--text);
-      font-family: inherit;
-      font-size: 0.85rem;
+      font-family: var(--mono);
+      font-size: 0.78rem;
       padding: 8px 10px;
       outline: none;
-      transition: border-color 0.15s;
+      transition: border-color .2s;
       color-scheme: dark;
     }
 
     body.light .alarm-input { color-scheme: light; }
 
-    .alarm-input:focus { border-color: var(--blue); }
-    .alarm-input::placeholder { color: var(--text-muted); }
+    .alarm-input:focus { border-color: var(--accent); }
+    .alarm-input::placeholder { color: var(--text-muted); opacity: .5; }
 
     #alarm-label { flex: 1; min-width: 120px; }
     #alarm-date  { flex: 1; min-width: 130px; }
     #alarm-time  { flex-shrink: 0; }
 
     .add-alarm-btn {
-      background: var(--blue);
-      color: #0d1117;
+      background: var(--accent);
+      color: var(--bg);
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       padding: 8px 16px;
-      font-size: 0.85rem;
+      font-family: var(--mono);
+      font-size: 9px;
       font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
       cursor: pointer;
       align-self: flex-end;
-      transition: opacity 0.15s;
+      transition: background .15s;
     }
-    .add-alarm-btn:hover { opacity: 0.85; }
+    .add-alarm-btn:hover { background: #d4a862; }
 
     /* Alarms list */
     .alarms-list {
@@ -338,45 +371,48 @@
 
     .no-alarms {
       color: var(--text-muted);
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       text-align: center;
       padding: 16px 0;
+      font-family: var(--mono);
+      opacity: .5;
     }
 
     .alarm-item {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 8px;
       padding: 10px 12px;
       display: flex;
       align-items: flex-start;
       gap: 10px;
     }
 
-    .alarm-item.fired {
-      opacity: 0.4;
-    }
+    .alarm-item.fired { opacity: 0.35; }
 
     .alarm-item-info { flex: 1; min-width: 0; }
 
     .alarm-item-label {
-      font-size: 0.88rem;
-      font-weight: 500;
+      font-size: 0.85rem;
+      font-weight: 400;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
     .alarm-item-time {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
+      font-family: var(--mono);
       color: var(--blue);
       margin-top: 3px;
     }
 
     .alarm-item-source {
-      font-size: 0.68rem;
+      font-size: 0.65rem;
+      font-family: var(--mono);
       color: var(--text-muted);
       margin-top: 2px;
+      opacity: .6;
     }
 
     .alarm-toggle {
@@ -385,10 +421,10 @@
       height: 22px;
       border-radius: 11px;
       border: none;
-      background: rgba(255,255,255,0.15);
+      background: var(--surface2);
       cursor: pointer;
       position: relative;
-      transition: background 0.2s;
+      transition: background .2s;
       margin-top: 3px;
     }
 
@@ -403,7 +439,7 @@
       height: 16px;
       border-radius: 50%;
       background: #fff;
-      transition: transform 0.2s;
+      transition: transform .2s;
     }
 
     .alarm-toggle.on::after { transform: translateX(16px); }
@@ -412,33 +448,34 @@
       background: none;
       border: none;
       color: var(--text-muted);
-      font-size: 1rem;
+      font-size: 0.9rem;
       cursor: pointer;
       padding: 0;
       line-height: 1;
       flex-shrink: 0;
       margin-top: 2px;
-      transition: color 0.15s;
+      transition: color .15s;
+      opacity: .5;
     }
-    .alarm-delete:hover { color: var(--accent); }
+    .alarm-delete:hover { color: #c46a5a; opacity: 1; }
 
     /* ── Firing alert banner ──────────────────── */
     #alarm-alert {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       background: var(--accent);
-      color: #fff;
+      color: var(--bg);
       padding: 14px 20px;
       display: none;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
       z-index: 1000;
-      font-weight: 600;
-      font-size: 0.95rem;
-      box-shadow: 0 4px 20px rgba(255,69,58,0.5);
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      box-shadow: 0 4px 20px rgba(200,160,92,.4);
     }
 
     #alarm-alert.show { display: flex; }
@@ -446,14 +483,17 @@
     #alarm-alert-text { flex: 1; }
 
     #dismiss-alert {
-      background: rgba(255,255,255,0.2);
+      background: rgba(0,0,0,.2);
       border: none;
-      color: #fff;
-      border-radius: 6px;
+      color: var(--bg);
+      border-radius: 4px;
       padding: 5px 12px;
       cursor: pointer;
-      font-size: 0.82rem;
-      font-weight: 600;
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
     }
   </style>
 </head>

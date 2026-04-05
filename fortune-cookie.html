@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0d0b09">
     <title>Fortune Cookie</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"></noscript>
 
     <style>
         *, *::before, *::after {
@@ -13,9 +18,9 @@
         }
 
         body {
-            background-color: #08070f;
+            background-color: #0d0b09;
             color: #d4c9a8;
-            font-family: Georgia, 'Times New Roman', serif;
+            font-family: 'DM Sans', Georgia, sans-serif;
             min-height: 100vh;
             min-height: 100dvh;
             display: flex;
@@ -26,6 +31,36 @@
             position: relative;
             overflow-x: hidden;
         }
+
+        /* ── Home nav ── */
+        .home-nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 20;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            background: rgba(13,11,9,.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(45,41,34,.7);
+        }
+
+        .home-btn {
+            background: transparent;
+            border: 1px solid rgba(45,41,34,.9);
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 10px;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: #9a9390;
+            text-decoration: none;
+            transition: border-color .2s, color .2s;
+        }
+        .home-btn:hover { border-color: #c8a05c; color: #c8a05c; }
 
         /* Star field */
         body::before {
@@ -80,19 +115,20 @@
         h1 {
             font-size: clamp(28px, 7vw, 48px);
             font-weight: 400;
-            letter-spacing: 4px;
+            letter-spacing: 2px;
             color: #e8c96a;
-            text-shadow: 0 0 40px rgba(232, 201, 106, 0.35);
+            text-shadow: 0 0 40px rgba(232, 201, 106, 0.3);
             margin-bottom: 8px;
             font-style: italic;
+            font-family: 'Instrument Serif', Georgia, serif;
         }
 
         .subtitle {
-            font-size: 14px;
-            letter-spacing: 3px;
+            font-size: 10px;
+            letter-spacing: .2em;
             text-transform: uppercase;
-            color: rgba(212, 185, 130, 0.5);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: rgba(212, 185, 130, 0.45);
+            font-family: 'Space Mono', monospace;
         }
 
         /* ── Scroll / quote area ── */
@@ -139,10 +175,10 @@
         }
 
         .empty-hint {
-            font-size: 14px;
-            letter-spacing: 3px;
-            color: rgba(200, 165, 75, 0.3);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 10px;
+            letter-spacing: .2em;
+            color: rgba(200, 165, 75, 0.28);
+            font-family: 'Space Mono', monospace;
             text-transform: uppercase;
         }
 
@@ -151,58 +187,60 @@
             font-size: clamp(15px, 3.5vw, 18px);
             font-style: italic;
             color: #e2d4aa;
-            line-height: 1.8;
+            line-height: 1.85;
             text-align: center;
-            text-shadow: 0 0 20px rgba(232, 201, 106, 0.15);
+            text-shadow: 0 0 20px rgba(232, 201, 106, 0.12);
+            font-family: 'Instrument Serif', Georgia, serif;
         }
 
         /* Attribution */
         #quote-source {
-            font-size: 14px;
+            font-size: 11px;
             font-style: normal;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            color: rgba(200, 165, 75, 0.6);
-            letter-spacing: 0.5px;
+            font-family: 'Space Mono', monospace;
+            color: rgba(200, 165, 75, 0.55);
+            letter-spacing: .04em;
             text-align: center;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         #quote-source strong {
-            color: rgba(232, 201, 106, 0.75);
-            font-weight: 600;
+            color: rgba(232, 201, 106, 0.8);
+            font-weight: 700;
         }
 
         /* ── Button ── */
         button {
             background: transparent;
-            border: 1px solid rgba(200, 165, 75, 0.45);
+            border: 1px solid rgba(200, 165, 75, 0.4);
             color: #c9a84c;
-            font-size: 14px;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            letter-spacing: 3px;
+            font-size: 10px;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            letter-spacing: .14em;
             text-transform: uppercase;
-            padding: 16px 40px;
+            padding: 15px 36px;
             min-height: 52px;
-            border-radius: 3px;
+            border-radius: 4px;
             cursor: pointer;
-            transition: background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
+            transition: background .2s, border-color .2s, color .2s, box-shadow .2s;
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
         }
 
         button:hover {
-            background: rgba(200, 165, 75, 0.1);
-            border-color: rgba(200, 165, 75, 0.7);
+            background: rgba(200, 165, 75, 0.08);
+            border-color: rgba(200, 165, 75, 0.65);
             color: #e8c96a;
-            box-shadow: 0 0 24px rgba(200, 165, 75, 0.2);
+            box-shadow: 0 0 20px rgba(200, 165, 75, 0.14);
         }
 
         button:active {
-            background: rgba(200, 165, 75, 0.18);
+            background: rgba(200, 165, 75, 0.15);
         }
 
         button:focus-visible {
-            outline: 2px solid rgba(200, 165, 75, 0.6);
+            outline: 2px solid rgba(200, 165, 75, 0.5);
             outline-offset: 3px;
         }
 
@@ -223,7 +261,10 @@
     </style>
 </head>
 <body>
-<div class="page-content">
+<nav class="home-nav">
+    <a class="home-btn" href="index.html">← Home</a>
+</nav>
+<div class="page-content" style="padding-top:56px">
     <header>
         <h1>Fortune Cookie</h1>
         <p class="subtitle">famous first lines from great books</p>
