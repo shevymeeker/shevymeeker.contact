@@ -125,7 +125,7 @@
         }
 
         .pool-badge {
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 600;
             color: var(--indigo-mid);
             background: var(--indigo-light);
@@ -376,10 +376,10 @@
     </header>
 
     <!-- Stats -->
-    <div class="stats-bar">
-        <span class="streak" id="streakDisplay">🔥 0 streak</span>
-        <span class="score"  id="scoreDisplay">0 / 0</span>
-        <span class="pool-badge" id="poolDisplay">— left</span>
+    <div class="stats-bar" role="status" aria-label="Game stats">
+        <span class="streak" id="streakDisplay" aria-label="Streak">🔥 0 streak</span>
+        <span class="score"  id="scoreDisplay"  aria-label="Score">0 / 0</span>
+        <span class="pool-badge" id="poolDisplay" aria-label="Problems remaining">— left</span>
     </div>
 
     <!-- Difficulty -->
@@ -390,19 +390,17 @@
     </div>
 
     <!-- Operation -->
-    <nav>
-        <ul id="opSelector" class="selector op-selector" style="list-style:none;">
-            <li style="flex:1"><a class="sel-btn active" id="additionLink"       href="javascript:void(0)">＋</a></li>
-            <li style="flex:1"><a class="sel-btn"        id="subtractionLink"    href="javascript:void(0)">－</a></li>
-            <li style="flex:1"><a class="sel-btn"        id="multiplicationLink" href="javascript:void(0)">×</a></li>
-            <li style="flex:1"><a class="sel-btn"        id="divisionLink"       href="javascript:void(0)">÷</a></li>
-        </ul>
-    </nav>
+    <div id="opSelector" class="selector op-selector" role="group" aria-label="Operation">
+        <button class="sel-btn active" id="additionLink"       type="button" aria-label="Addition">＋</button>
+        <button class="sel-btn"        id="subtractionLink"    type="button" aria-label="Subtraction">－</button>
+        <button class="sel-btn"        id="multiplicationLink" type="button" aria-label="Multiplication">×</button>
+        <button class="sel-btn"        id="divisionLink"       type="button" aria-label="Division">÷</button>
+    </div>
 
     <!-- Equation card -->
     <div class="card" id="displayCard">
         <div class="equation idle" id="displayNumbers">? ○ ?</div>
-        <div class="feedback-msg hint" id="feedbackMsg">tap New Problem to start</div>
+        <div class="feedback-msg hint" id="feedbackMsg" aria-live="polite" aria-atomic="true">tap New Problem to start</div>
     </div>
 
     <!-- Answer input -->

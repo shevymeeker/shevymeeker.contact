@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Fortune Cookie</title>
+
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #08070f;
+            color: #d4c9a8;
+            font-family: Georgia, 'Times New Roman', serif;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px calc(40px + env(safe-area-inset-bottom, 0px));
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Star field */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(1px 1px at 12% 18%, rgba(220, 200, 140, 0.55) 0%, transparent 100%),
+                radial-gradient(1px 1px at 38% 7%,  rgba(220, 200, 140, 0.4)  0%, transparent 100%),
+                radial-gradient(1px 1px at 63% 22%, rgba(220, 200, 140, 0.5)  0%, transparent 100%),
+                radial-gradient(1px 1px at 82% 11%, rgba(220, 200, 140, 0.35) 0%, transparent 100%),
+                radial-gradient(1px 1px at 5%  55%, rgba(220, 200, 140, 0.4)  0%, transparent 100%),
+                radial-gradient(1px 1px at 91% 44%, rgba(220, 200, 140, 0.45) 0%, transparent 100%),
+                radial-gradient(1px 1px at 27% 72%, rgba(220, 200, 140, 0.35) 0%, transparent 100%),
+                radial-gradient(1px 1px at 74% 68%, rgba(220, 200, 140, 0.5)  0%, transparent 100%),
+                radial-gradient(1px 1px at 48% 88%, rgba(220, 200, 140, 0.4)  0%, transparent 100%),
+                radial-gradient(1px 1px at 19% 93%, rgba(220, 200, 140, 0.3)  0%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 55% 50%, rgba(220, 200, 140, 0.6) 0%, transparent 100%),
+                radial-gradient(1px 1px at 88% 82%, rgba(220, 200, 140, 0.4)  0%, transparent 100%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Ambient glow */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(90, 60, 20, 0.12), transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── Page content ── */
+        .page-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            gap: 0;
+        }
+
+        /* ── Header ── */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: clamp(28px, 7vw, 48px);
+            font-weight: 400;
+            letter-spacing: 4px;
+            color: #e8c96a;
+            text-shadow: 0 0 40px rgba(232, 201, 106, 0.35);
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(212, 185, 130, 0.5);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        /* ── Scroll / quote area ── */
+        .scroll-frame {
+            width: 100%;
+            background: rgba(20, 16, 8, 0.85);
+            border: 1px solid rgba(200, 165, 75, 0.25);
+            border-radius: 4px;
+            padding: 40px 36px;
+            position: relative;
+            min-height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 36px;
+            transition: opacity 0.3s;
+        }
+
+        /* Decorative top and bottom lines */
+        .scroll-frame::before,
+        .scroll-frame::after {
+            content: '';
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(200, 165, 75, 0.4), transparent);
+        }
+        .scroll-frame::before { top: 10px; }
+        .scroll-frame::after  { bottom: 10px; }
+
+        .scroll-frame.fading { opacity: 0; }
+
+        .quote-inner {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+        }
+
+        /* Empty state */
+        .quote-inner.empty {
+            align-items: center;
+        }
+
+        .empty-hint {
+            font-size: 14px;
+            letter-spacing: 3px;
+            color: rgba(200, 165, 75, 0.3);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            text-transform: uppercase;
+        }
+
+        /* Quote text */
+        #quote-text {
+            font-size: clamp(15px, 3.5vw, 18px);
+            font-style: italic;
+            color: #e2d4aa;
+            line-height: 1.8;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(232, 201, 106, 0.15);
+        }
+
+        /* Attribution */
+        #quote-source {
+            font-size: 14px;
+            font-style: normal;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: rgba(200, 165, 75, 0.6);
+            letter-spacing: 0.5px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        #quote-source strong {
+            color: rgba(232, 201, 106, 0.75);
+            font-weight: 600;
+        }
+
+        /* ── Button ── */
+        button {
+            background: transparent;
+            border: 1px solid rgba(200, 165, 75, 0.45);
+            color: #c9a84c;
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 16px 40px;
+            min-height: 52px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button:hover {
+            background: rgba(200, 165, 75, 0.1);
+            border-color: rgba(200, 165, 75, 0.7);
+            color: #e8c96a;
+            box-shadow: 0 0 24px rgba(200, 165, 75, 0.2);
+        }
+
+        button:active {
+            background: rgba(200, 165, 75, 0.18);
+        }
+
+        button:focus-visible {
+            outline: 2px solid rgba(200, 165, 75, 0.6);
+            outline-offset: 3px;
+        }
+
+        /* ── Footer ── */
+        footer {
+            margin-top: 44px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(200, 165, 75, 0.2);
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            .scroll-frame { padding: 32px 22px; }
+        }
+    </style>
+</head>
+<body>
+<div class="page-content">
+    <header>
+        <h1>Fortune Cookie</h1>
+        <p class="subtitle">famous first lines from great books</p>
+    </header>
+
+    <main>
+        <div class="scroll-frame" id="scrollFrame" aria-live="polite" aria-atomic="true">
+            <div class="quote-inner empty" id="quoteInner">
+                <span class="empty-hint">tap the button for your fortune</span>
+            </div>
+        </div>
+        <button type="button" onclick="crackCookie()">Crack Open a Cookie 🍪</button>
+    </main>
+
+    <footer>
+        <div>Every great story starts with a single line.</div>
+    </footer>
+</div>
+
+<script>
+    const LINES = [
+        { quote: "Where's Papa going with that ax?", source: "Charlotte's Web", author: "E.B. White" },
+        { quote: "All children, except one, grow up.", source: "Peter Pan", author: "J.M. Barrie" },
+        { quote: "There is no lake at Camp Green Lake.", source: "Holes", author: "Louis Sachar" },
+        { quote: "If you are interested in stories with happy endings, you would be better off reading some other book.", source: "A Series of Unfortunate Events: The Bad Beginning", author: "Lemony Snicket" },
+        { quote: "There was a boy called Eustace Clarence Scrubb, and he almost deserved it.", source: "The Voyage of the Dawn Treader", author: "C.S. Lewis" },
+        { quote: "Mr. and Mrs. Dursley, of number four, Privet Drive, were proud to say that they were perfectly normal, thank you very much.", source: "Harry Potter and the Sorcerer's Stone", author: "J.K. Rowling" },
+        { quote: "Look, I didn't want to be a half-blood.", source: "The Lightning Thief", author: "Rick Riordan" },
+        { quote: "In a hole in the ground there lived a hobbit.", source: "The Hobbit", author: "J.R.R. Tolkien" },
+        { quote: "It was a dark and stormy night.", source: "A Wrinkle in Time", author: "Madeleine L'Engle" },
+        { quote: "Once there were four children whose names were Peter, Susan, Edmund and Lucy.", source: "The Lion, the Witch and the Wardrobe", author: "C.S. Lewis" },
+        { quote: "It's a funny thing about mothers and fathers.", source: "Matilda", author: "Roald Dahl" },
+        { quote: "The first week of August hangs at the very top of summer, the top of the live-long year, like the highest seat of a Ferris wheel when it pauses in its turning.", source: "Tuck Everlasting", author: "Natalie Babbitt" },
+        { quote: "Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it, \u2018and what is the use of a book,\u2019 thought Alice \u2018without pictures or conversation?\u2019", source: "Alice's Adventures in Wonderland", author: "Lewis Carroll" },
+        { quote: "Here is Edward Bear, coming downstairs now, bump, bump, bump, on the back of his head, behind Christopher Robin.", source: "Winnie-the-Pooh", author: "A.A. Milne" },
+        { quote: "When Mary Lennox was sent to Misselthwaite Manor to live with her uncle everybody said she was the most disagreeable-looking child ever seen.", source: "The Secret Garden", author: "Frances Hodgson Burnett" },
+        { quote: "Once upon a time there were four little Rabbits, and their names were\u2014Flopsy, Mopsy, Cotton-tail, and Peter.", source: "The Tale of Peter Rabbit", author: "Beatrix Potter" },
+        { quote: "The night Max wore his wolf suit and made mischief of one kind and another his mother called him \u2018WILD THING!\u2019", source: "Where the Wild Things Are", author: "Maurice Sendak" },
+        { quote: "There was a hand in the darkness, and it held a knife.", source: "The Graveyard Book", author: "Neil Gaiman" },
+        { quote: "Until he was four years old, James Henry Trotter had had a happy life.", source: "James and the Giant Peach", author: "Roald Dahl" },
+        { quote: "These two very old people are the father and mother of Mr. Bucket.", source: "Charlie and the Chocolate Factory", author: "Roald Dahl" },
+        { quote: "Lyra and her d\u00e6mon moved through the darkening Hall, taking care to keep to one side, out of sight of the kitchen.", source: "The Golden Compass", author: "Philip Pullman" },
+        { quote: "Ba-room, ba-room, ba-room, baripity, baripity, baripity, baripity\u2014Good.", source: "Bridge to Terabithia", author: "Katherine Paterson" },
+        { quote: "Mrs. Rachel Lynde lived just where the Avonlea main road dipped down into a little hollow, fringed with alders and ladies\u2019 eardrops and traversed by a brook\u2026", source: "Anne of Green Gables", author: "L.M. Montgomery" },
+        { quote: "Harriet was trying to explain to Sport how to play Town.", source: "Harriet the Spy", author: "Louise Fitzhugh" },
+        { quote: "Squire Trelawney, Dr. Livesey, and the rest of these gentlemen having asked me to write down the whole particulars about Treasure Island\u2026", source: "Treasure Island", author: "Robert Louis Stevenson" },
+        { quote: "The Mole had been working very hard all the morning, spring-cleaning his little home.", source: "The Wind in the Willows", author: "Kenneth Grahame" },
+        { quote: "\u2018Christmas won\u2019t be Christmas without any presents,\u2019 grumbled Jo, lying on the rug.", source: "Little Women", author: "Louisa May Alcott" },
+        { quote: "There was once a boy named Milo who didn\u2019t know what to do with himself\u2014not just sometimes, but always.", source: "The Phantom Tollbooth", author: "Norton Juster" },
+        { quote: "Coraline discovered the door a little while after they moved into the house.", source: "Coraline", author: "Neil Gaiman" },
+        { quote: "Sophie couldn\u2019t sleep.", source: "The BFG", author: "Roald Dahl" },
+        { quote: "The first place that I can well remember was a large pleasant meadow with a pond of clear water in it.", source: "Black Beauty", author: "Anna Sewell" },
+        { quote: "Buck did not read the newspapers, or he would have known that trouble was brewing\u2026", source: "The Call of the Wild", author: "Jack London" },
+        { quote: "My name is India Opal Buloni, and last summer my daddy, the preacher, sent me to the store for a box of macaroni-and-cheese, some white rice, and two tomatoes and I came back with a dog.", source: "Because of Winn-Dixie", author: "Kate DiCamillo" },
+        { quote: "When Mrs. Frederick C. Little\u2019s second son arrived, everybody noticed that he was not much bigger than a mouse.", source: "Stuart Little", author: "E.B. White" },
+        { quote: "There were dragons when I was a boy.", source: "How to Train Your Dragon", author: "Cressida Cowell" },
+        { quote: "When I wake up, the other side of the bed is cold.", source: "The Hunger Games", author: "Suzanne Collins" },
+        { quote: "That fool of a fairy Lucinda did not intend to lay a curse on me.", source: "Ella Enchanted", author: "Gail Carson Levine" },
+        { quote: "If you want to find Cherry Tree Lane all you have to do is ask the Policeman at the cross-roads.", source: "Mary Poppins", author: "P.L. Travers" },
+        { quote: "When I stepped out into the bright sunlight from the darkness of the movie house, I had only two things on my mind: Paul Newman and a ride home.", source: "The Outsiders", author: "S.E. Hinton" },
+        { quote: "Once on a dark winter\u2019s day, when the yellow fog hung so thick and heavy in the streets of London that the lamps were lighted and the shop windows blazed with gas as they do at night, an odd-looking little girl sat in a cab with her father and was driven rather slowly through the big thoroughfares.", source: "A Little Princess", author: "Frances Hodgson Burnett" },
+        { quote: "When he was nearly thirteen, my brother Jem got his arm badly broken at the elbow.", source: "To Kill a Mockingbird", author: "Harper Lee" },
+        { quote: "Way out at the end of a tiny little town was an old overgrown garden, and in the garden was an old house, and in the house lived Pippi Longstocking.", source: "Pippi Longstocking", author: "Astrid Lindgren" },
+        { quote: "This is my favorite book in all the world, though I have never read it.", source: "The Princess Bride", author: "William Goldman" },
+        { quote: "I\u2019ll race you to the corner, Ellen!", source: "Number the Stars", author: "Lois Lowry" },
+        { quote: "It was almost December, and Jonas was beginning to be frightened.", source: "The Giver", author: "Lois Lowry" },
+        { quote: "\u2018Little Man, would you come on? You keep it up and you\u2019re gonna make us late.\u2019", source: "Roll of Thunder, Hear My Cry", author: "Mildred D. Taylor" },
+        { quote: "At the top of the key, I\u2019m moving and grooving, popping and rocking\u2026", source: "The Crossover", author: "Kwame Alexander" },
+        { quote: "In fairy-tales, witches always wear silly black hats and black cloaks, and they ride on broomsticks.", source: "The Witches", author: "Roald Dahl" },
+        { quote: "If there\u2019s any justice in the world, Nick Allen would not be a teacher\u2019s pet.", source: "Frindle", author: "Andrew Clements" },
+        { quote: "Are you there God? It\u2019s me, Margaret.", source: "Are You There God? It's Me, Margaret.", author: "Judy Blume" },
+        { quote: "Claudia knew that she could never pull off the old-fashioned kind of running away.", source: "From the Mixed-Up Files of Mrs. Basil E. Frankweiler", author: "E.L. Konigsburg" },
+        { quote: "Brian Robeson stared out the window of the small plane at the endless green northern wilderness below.", source: "Hatchet", author: "Gary Paulsen" },
+        { quote: "Not every thirteen-year-old girl is accused of murder, brought to trial, and found guilty.", source: "The True Confessions of Charlotte Doyle", author: "Avi" },
+        { quote: "The day Shiloh come, we\u2019re having us a big Sunday dinner.", source: "Shiloh", author: "Phyllis Reynolds Naylor" },
+        { quote: "\u2018Did Mama sing every day?\u2019 asked Caleb.", source: "Sarah, Plain and Tall", author: "Patricia MacLachlan" },
+        { quote: "They say Maniac Magee was born in a dump.", source: "Maniac Magee", author: "Jerry Spinelli" },
+        { quote: "This story begins within the walls of a castle, with the birth of a mouse.", source: "The Tale of Despereaux", author: "Kate DiCamillo" },
+        { quote: "The story I am about to share with you takes place in 1931, under the roofs of Paris.", source: "The Invention of Hugo Cabret", author: "Brian Selznick" },
+        { quote: "Words.", source: "Out of My Mind", author: "Sharon M. Draper" },
+        { quote: "I know I\u2019m not an ordinary ten-year-old kid.", source: "Wonder", author: "R.J. Palacio" },
+        { quote: "A jellyfish, if you watch it long enough, begins to look like a heart beating.", source: "The Thing About Jellyfish", author: "Ali Benjamin" },
+        { quote: "I am born on a Tuesday at University Hospital / Columbus, Ohio, / USA\u2014 / a country caught / between Black and White.", source: "Brown Girl Dreaming", author: "Jacqueline Woodson" },
+        { quote: "\u2018Aguantate tantito y la fruta caera en tu mano,\u2019 he said.", source: "Esperanza Rising", author: "Pam Mu\u00f1oz Ryan" },
+        { quote: "A told B, / and B told C, / \u2018I\u2019ll meet you at the top / of the coconut tree.\u2019", source: "Chicka Chicka Boom Boom", author: "Bill Martin Jr. and John Archambault" },
+        { quote: "Mr. and Mrs. Mallard were looking for a place to live.", source: "Make Way for Ducklings", author: "Robert McCloskey" },
+        { quote: "In the great green room / There was a telephone / And a red balloon / And a picture of\u2014 / The cow jumping over the moon.", source: "Goodnight Moon", author: "Margaret Wise Brown" },
+        { quote: "In the light of the moon a little egg lay on a leaf.", source: "The Very Hungry Caterpillar", author: "Eric Carle" },
+        { quote: "If you give a mouse a cookie, he\u2019s going to ask for a glass of milk.", source: "If You Give a Mouse a Cookie", author: "Laura Numeroff" },
+        { quote: "In an old house in Paris that was covered with vines lived twelve little girls in two straight lines.", source: "Madeline", author: "Ludwig Bemelmans" },
+        { quote: "At the far end of town / where the Grickle-grass grows / and the wind smells slow-and-sour when it blows / and no birds ever sing excepting old crows\u2026 / is the Street of the Lifted Lorax.", source: "The Lorax", author: "Dr. Seuss" },
+        { quote: "I am Sam.", source: "Green Eggs and Ham", author: "Dr. Seuss" },
+        { quote: "The sun did not shine.", source: "The Cat in the Hat", author: "Dr. Seuss" },
+        { quote: "There is a place where the sidewalk ends / And before the street begins\u2026", source: "Where the Sidewalk Ends", author: "Shel Silverstein" },
+        { quote: "Sylvester Duncan lived with his mother and father at Acorn Road in Oatsdale.", source: "Sylvester and the Magic Pebble", author: "William Steig" },
+        { quote: "One winter morning Peter woke up and looked out the window.", source: "The Snowy Day", author: "Ezra Jack Keats" },
+        { quote: "Hi! I\u2019m the bus driver.", source: "Don't Let the Pigeon Drive the Bus!", author: "Mo Willems" },
+        { quote: "Once there was a peddler who sold caps.", source: "Caps for Sale", author: "Esphyr Slobodkina" },
+        { quote: "Frog ran up the path to Toad\u2019s house.", source: "Frog and Toad Are Friends", author: "Arnold Lobel" },
+        { quote: "This is George. He lived in Africa. He was a good little monkey and always very curious.", source: "Curious George", author: "H.A. Rey" },
+        { quote: "Once upon a time in Spain there was a little bull and his name was Ferdinand.", source: "The Story of Ferdinand", author: "Munro Leaf" },
+        { quote: "One evening, after thinking it over for some time, Harold decided to go for a walk in the moonlight.", source: "Harold and the Purple Crayon", author: "Crockett Johnson" },
+        { quote: "\u2018Oh, Amelia Bedelia, your first day of work, and I can\u2019t be here,\u2019 said Mrs. Rogers.", source: "Amelia Bedelia", author: "Peggy Parish" },
+        { quote: "Ramona Quimby was not a slowpoke.", source: "Ramona the Pest", author: "Beverly Cleary" },
+        { quote: "Dear Mr. Henshaw, My teacher read your book about the dog to our class.", source: "Dear Mr. Henshaw", author: "Beverly Cleary" },
+        { quote: "I remember the day the Aleut ship came to our island.", source: "Island of the Blue Dolphins", author: "Scott O'Dell" },
+        { quote: "I am on my mountain in a tree home that people have passed without ever knowing that I am here.", source: "My Side of the Mountain", author: "Jean Craighead George" },
+        { quote: "The sun sets in the west (just about everyone knows that), but Sunset Towers faced east.", source: "The Westing Game", author: "Ellen Raskin" },
+        { quote: "At my house, rules are everywhere.", source: "Rules", author: "Cynthia Lord" },
+        { quote: "Gramps says that I am a country girl at heart, and that is true.", source: "Walk Two Moons", author: "Sharon Creech" },
+        { quote: "I am Ivan. I am a gorilla.", source: "The One and Only Ivan", author: "Katherine Applegate" },
+        { quote: "I noticed several weird things about the surf-boarding cat.", source: "Crenshaw", author: "Katherine Applegate" },
+        { quote: "Raymie Clarke realized that everything, absolutely everything, depended on her.", source: "Raymie Nightingale", author: "Kate DiCamillo" },
+        { quote: "Flora Belle Buckman was in her room at her desk.", source: "Flora & Ulysses", author: "Kate DiCamillo" },
+        { quote: "Here we go again.", source: "Bud, Not Buddy", author: "Christopher Paul Curtis" },
+        { quote: "First the colors.", source: "The Book Thief", author: "Markus Zusak" },
+        { quote: "The island of Gont, a single mountain that lifts its peak a mile above the storm-racked Northeast Sea, is a land famous for wizards.", source: "A Wizard of Earthsea", author: "Ursula K. Le Guin" },
+        { quote: "\u2018Too many,\u2019 James said, and he stamped his feet.", source: "The Dark Is Rising", author: "Susan Cooper" },
+        { quote: "Matthias cut a comical little figure as he wobbled his way along the cloisters, with his large sandals flip-flopping and his tail peeping from beneath the baggy folds of an oversized novice\u2019s habit.", source: "Redwall", author: "Brian Jacques" },
+        { quote: "He began his new life standing up, surrounded by cold darkness and stale, dusty air.", source: "The Maze Runner", author: "James Dashner" },
+        { quote: "There was a ship.", source: "Peter and the Starcatchers", author: "Dave Barry and Ridley Pearson" },
+    ];
+
+    // ── Pool: shuffle and cycle through all lines before repeating ────────────
+    let pool  = [];
+    let poolIndex = 0;
+
+    function shuffle(arr) {
+        const a = arr.slice();
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+
+    function nextLine() {
+        if (poolIndex >= pool.length) {
+            pool = shuffle(LINES);
+            poolIndex = 0;
+        }
+        return pool[poolIndex++];
+    }
+
+    // ── Cookie reveal with brief fade transition ───────────────────────────────
+    const scrollFrame = document.getElementById('scrollFrame');
+    const quoteInner  = document.getElementById('quoteInner');
+
+    function crackCookie() {
+        scrollFrame.classList.add('fading');
+        setTimeout(() => {
+            const line = nextLine();
+
+            quoteInner.classList.remove('empty');
+            quoteInner.innerHTML =
+                `<p id="quote-text">\u201c${line.quote}\u201d</p>` +
+                `<p id="quote-source">\u2014 <strong>${line.source}</strong> by ${line.author}</p>`;
+
+            scrollFrame.classList.remove('fading');
+        }, 250);
+    }
+</script>
+</body>
+</html>
