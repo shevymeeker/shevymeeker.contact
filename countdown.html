@@ -3,30 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#0d1117">
+  <meta name="theme-color" content="#0d0b09">
   <title>Countdown Timers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"></noscript>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:      #0d1117;
-      --surface: #161b22;
-      --surface2:#21262d;
-      --border:  #30363d;
-      --text:    #e6edf3;
-      --muted:   #8b949e;
-      --accent:  #FF453A;
-      --blue:    #58a6ff;
-      --green:   #3fb950;
-      --yellow:  #d29922;
-      --safe-b:  env(safe-area-inset-bottom, 0px);
+      --bg:    #0d0b09;
+      --s1:    #141210;
+      --s2:    #1c1916;
+      --s3:    #231f1b;
+      --b:     #2d2922;
+      --a:     #c8a05c;
+      --a2:    #5f9ea8;
+      --t:     #ede9e2;
+      --m:     #9a9390;
+      --mono:  'Space Mono', 'Courier New', monospace;
+      --serif: 'Instrument Serif', Georgia, serif;
+      --sans:  'DM Sans', system-ui, sans-serif;
+      --safe-b: env(safe-area-inset-bottom, 0px);
     }
 
     html, body {
       height: 100%;
       background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      color: var(--t);
+      font-family: var(--sans);
       -webkit-font-smoothing: antialiased;
     }
 
@@ -43,9 +49,15 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--b);
       flex-shrink: 0;
+      background: rgba(13,11,9,.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
     .topbar-left {
@@ -55,78 +67,90 @@
     }
 
     .home-btn {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.11);
-      border-radius: 8px;
+      background: transparent;
+      border: 1px solid var(--b);
+      border-radius: 4px;
       padding: 5px 10px;
-      font-size: 0.75rem;
-      color: var(--muted);
+      font-size: 10px;
+      font-family: var(--mono);
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--m);
       text-decoration: none;
-      transition: background 0.15s;
+      transition: border-color .2s, color .2s;
     }
-    .home-btn:hover { background: rgba(255,255,255,0.14); }
+    .home-btn:hover { border-color: var(--a); color: var(--a); }
 
-    .page-title { font-size: 1rem; font-weight: 600; }
+    .page-title {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--t);
+    }
 
     .add-btn {
-      background: var(--blue);
+      background: var(--a);
       border: none;
-      border-radius: 8px;
-      color: #0d1117;
-      font-family: inherit;
-      font-size: 0.82rem;
+      border-radius: 4px;
+      color: var(--bg);
+      font-family: var(--mono);
+      font-size: 9px;
       font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
       padding: 7px 14px;
       cursor: pointer;
-      transition: opacity 0.15s;
+      transition: background .15s;
       white-space: nowrap;
+      min-height: 34px;
     }
-    .add-btn:hover { opacity: 0.85; }
+    .add-btn:hover { background: #d4a862; }
 
     /* ── Add form (slide down) ───────────────────────────────── */
     .add-form-wrap {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.3s ease;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
+      transition: max-height .3s ease;
+      background: var(--s1);
+      border-bottom: 1px solid var(--b);
     }
 
-    .add-form-wrap.open {
-      max-height: 400px;
-    }
+    .add-form-wrap.open { max-height: 420px; }
 
     .add-form {
-      padding: 16px;
+      padding: 16px 20px;
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
     .form-label {
-      font-size: 0.67rem;
+      font-size: 9px;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      margin-bottom: 4px;
+      letter-spacing: .15em;
+      font-family: var(--mono);
+      font-weight: 700;
+      color: var(--m);
+      margin-bottom: 5px;
       display: block;
     }
 
     .form-input {
-      background: var(--surface2);
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 0.95rem;
+      background: var(--s2);
+      border: 1px solid var(--b);
+      border-radius: 6px;
+      color: var(--t);
+      font-family: var(--sans);
+      font-size: 0.9rem;
       padding: 10px 12px;
       outline: none;
       width: 100%;
-      transition: border-color 0.15s;
+      transition: border-color .2s;
       color-scheme: dark;
     }
-    .form-input:focus { border-color: var(--blue); }
-    .form-input::placeholder { color: rgba(255,255,255,0.2); }
+    .form-input:focus { border-color: var(--a); }
+    .form-input::placeholder { color: rgba(154,147,144,.3); }
 
     .form-row {
       display: flex;
@@ -143,77 +167,86 @@
     }
 
     .color-label-text {
-      font-size: 0.67rem;
+      font-size: 9px;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
+      letter-spacing: .12em;
+      font-family: var(--mono);
+      color: var(--m);
       margin-right: 4px;
     }
 
     .color-swatch {
-      width: 28px;
-      height: 28px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
       border: 2px solid transparent;
       cursor: pointer;
-      transition: transform 0.15s, border-color 0.15s;
+      transition: transform .15s, border-color .15s;
       -webkit-tap-highlight-color: transparent;
     }
     .color-swatch:hover { transform: scale(1.15); }
-    .color-swatch.selected { border-color: #fff; transform: scale(1.15); }
+    .color-swatch.selected { border-color: var(--t); transform: scale(1.15); }
 
     .form-actions {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       justify-content: flex-end;
     }
 
     .save-btn {
-      background: var(--blue);
+      background: var(--a);
       border: none;
-      border-radius: 8px;
-      color: #0d1117;
-      font-family: inherit;
-      font-size: 0.85rem;
+      border-radius: 4px;
+      color: var(--bg);
+      font-family: var(--mono);
+      font-size: 9px;
       font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
       padding: 9px 20px;
       cursor: pointer;
-      transition: opacity 0.15s;
+      transition: background .15s;
     }
-    .save-btn:hover { opacity: 0.85; }
+    .save-btn:hover { background: #d4a862; }
 
     .cancel-btn {
       background: none;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--muted);
-      font-family: inherit;
-      font-size: 0.85rem;
+      border: 1px solid var(--b);
+      border-radius: 4px;
+      color: var(--m);
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
       padding: 9px 16px;
       cursor: pointer;
-      transition: background 0.15s;
+      transition: border-color .2s, color .2s;
     }
-    .cancel-btn:hover { background: var(--surface2); }
+    .cancel-btn:hover { border-color: var(--m); color: var(--t); }
 
     /* ── Import from Calendar ────────────────────────────────── */
     .import-section {
-      padding: 12px 16px 0;
+      padding: 12px 20px 0;
     }
 
     .import-btn {
       background: none;
-      border: 1px dashed var(--border);
-      border-radius: 10px;
-      color: var(--muted);
-      font-family: inherit;
-      font-size: 0.8rem;
+      border: 1px dashed var(--b);
+      border-radius: 6px;
+      color: var(--m);
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
       padding: 10px 16px;
       cursor: pointer;
       width: 100%;
       text-align: left;
-      transition: border-color 0.15s, color 0.15s;
+      transition: border-color .2s, color .2s;
     }
-    .import-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .import-btn:hover { border-color: var(--a2); color: var(--a2); }
 
     .import-chips {
       display: flex;
@@ -223,22 +256,26 @@
     }
 
     .import-chip {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 6px 12px;
-      font-size: 0.78rem;
+      background: var(--s1);
+      border: 1px solid var(--b);
+      border-radius: 100px;
+      padding: 5px 12px;
+      font-size: 0.75rem;
       cursor: pointer;
-      transition: border-color 0.15s, background 0.15s;
-      color: var(--text);
+      transition: border-color .2s, background .15s;
+      color: var(--t);
     }
-    .import-chip:hover { border-color: var(--blue); background: var(--surface2); }
-    .import-chip .chip-time { color: var(--blue); font-size: 0.7rem; }
+    .import-chip:hover { border-color: var(--a); background: var(--s2); }
+    .import-chip .chip-time {
+      color: var(--a2);
+      font-size: 0.65rem;
+      font-family: var(--mono);
+    }
 
     /* ── Countdown list ──────────────────────────────────────── */
     .list-section {
       flex: 1;
-      padding: 14px 16px;
+      padding: 16px 20px;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -251,37 +288,40 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      padding: 40px 20px;
-      color: var(--muted);
+      padding: 48px 20px;
+      color: var(--m);
       text-align: center;
     }
 
-    .empty-state .emoji { font-size: 2.5rem; }
-    .empty-state p { font-size: 0.85rem; }
+    .empty-state .emoji { font-size: 2.2rem; opacity: .5; }
+    .empty-state p {
+      font-size: 0.78rem;
+      font-family: var(--mono);
+      letter-spacing: .05em;
+      opacity: .4;
+    }
 
     /* ── Countdown card ──────────────────────────────────────── */
     .cd-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
+      background: var(--s1);
+      border: 1px solid var(--b);
+      border-radius: 12px;
       padding: 16px;
       border-left-width: 3px;
-      transition: border-color 0.2s;
+      transition: border-color .2s;
       position: relative;
       overflow: hidden;
     }
 
-    .cd-card.expired {
-      opacity: 0.55;
-    }
+    .cd-card.expired { opacity: .45; }
 
     .cd-card.today-glow {
-      animation: glowPulse 1.5s ease-in-out infinite;
+      animation: glowPulse 1.6s ease-in-out infinite;
     }
 
     @keyframes glowPulse {
-      0%, 100% { box-shadow: 0 0 0 rgba(88,166,255,0); }
-      50% { box-shadow: 0 0 18px rgba(88,166,255,0.25); }
+      0%, 100% { box-shadow: 0 0 0 rgba(200,160,92,0); }
+      50%       { box-shadow: 0 0 20px rgba(200,160,92,.2); }
     }
 
     .cd-top {
@@ -293,29 +333,34 @@
     }
 
     .cd-label {
-      font-size: 0.95rem;
-      font-weight: 600;
+      font-size: 0.92rem;
+      font-weight: 400;
       line-height: 1.2;
+      font-family: var(--serif);
+      font-style: italic;
     }
 
     .cd-date {
-      font-size: 0.72rem;
-      color: var(--muted);
-      margin-top: 2px;
+      font-size: 0.65rem;
+      font-family: var(--mono);
+      color: var(--m);
+      margin-top: 3px;
+      letter-spacing: .04em;
     }
 
     .cd-delete {
       background: none;
       border: none;
-      color: var(--muted);
-      font-size: 1rem;
+      color: var(--m);
+      font-size: 0.9rem;
       cursor: pointer;
       padding: 0;
       flex-shrink: 0;
       line-height: 1;
-      transition: color 0.15s;
+      transition: color .15s;
+      opacity: .4;
     }
-    .cd-delete:hover { color: var(--accent); }
+    .cd-delete:hover { color: #c46a5a; opacity: 1; }
 
     /* Digits row */
     .cd-digits {
@@ -333,37 +378,39 @@
 
     .cd-num {
       font-size: 1.9rem;
-      font-weight: 200;
-      font-variant-numeric: tabular-nums;
-      letter-spacing: -0.02em;
+      font-family: var(--mono);
+      font-weight: 400;
+      letter-spacing: -.03em;
       line-height: 1;
       min-width: 2.2ch;
       text-align: center;
-      transition: transform 0.15s;
+      transition: transform .15s;
     }
 
     .cd-num.tick {
-      animation: tickPop 0.25s ease;
+      animation: tickPop .25s ease;
     }
 
     @keyframes tickPop {
-      0%  { transform: scale(1); }
-      50% { transform: scale(1.12); }
-      100%{ transform: scale(1); }
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.12); }
+      100% { transform: scale(1); }
     }
 
     .cd-unit-label {
-      font-size: 0.62rem;
+      font-size: 9px;
+      font-family: var(--mono);
       text-transform: uppercase;
-      letter-spacing: 0.07em;
-      color: var(--muted);
-      margin-top: 3px;
+      letter-spacing: .1em;
+      color: var(--m);
+      margin-top: 4px;
+      opacity: .55;
     }
 
     .cd-sep {
-      font-size: 1.5rem;
-      font-weight: 200;
-      color: rgba(255,255,255,0.2);
+      font-size: 1.4rem;
+      font-family: var(--mono);
+      color: rgba(154,147,144,.2);
       padding-bottom: 14px;
       flex-shrink: 0;
     }
@@ -371,10 +418,12 @@
     /* Today / expired states */
     .cd-today-msg {
       display: none;
-      font-size: 1.5rem;
-      font-weight: 300;
+      font-size: 1.4rem;
+      font-family: var(--serif);
+      font-style: italic;
       text-align: center;
       padding: 8px 0;
+      color: var(--a);
     }
     .cd-today-msg.show { display: block; }
   </style>
