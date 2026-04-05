@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta charset="UTF-8">
+    <title>Prism</title>
+
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0c0f1a;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: #cdd6e8;
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        /* ── Layout shell ── */
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            padding: 0 20px;
+        }
+
+        .container-inner {
+            width: 100%;
+            max-width: 540px;
+        }
+
+        .vertical-space-manager {
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 1rem;
+            padding: 24px 0 calc(24px + env(safe-area-inset-bottom, 0px));
+        }
+
+        /* ── Game card ── */
+        .game-player {
+            background: #111520;
+            border: 1px solid #1c2236;
+            border-radius: 22px;
+            padding: 36px 28px 40px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Decorative top border shimmer */
+        .game-player::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.6), transparent);
+        }
+
+        /* ── Headings ── */
+        .game-title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #f0f4ff;
+            margin-bottom: 8px;
+        }
+
+        #game-description {
+            text-align: center;
+            font-size: 15px;
+            line-height: 1.7;
+            color: #4e5c7a;
+            margin-bottom: 0;
+        }
+
+        /* ── Start button ── */
+        #start-button-container {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-top: 28px;
+        }
+
+        .start-button-container-disabled {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #start-button {
+            background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+            color: #fff;
+            padding: 13px 36px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            min-height: 48px;
+            transition: opacity 0.2s, transform 0.15s;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.35);
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #start-button:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
+        }
+
+        #start-button:focus-visible {
+            outline: 3px solid #8b5cf6;
+            outline-offset: 3px;
+        }
+
+        /* ── Level info ── */
+        #current-level-info {
+            margin-top: 28px;
+        }
+
+        #current-level-number-display {
+            text-align: center;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #8b5cf6;
+            margin-bottom: 20px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .current-level-number-display-enabled {
+            opacity: 1 !important;
+        }
+
+        #current-level-guesses-message {
+            text-align: center;
+            font-size: 15px;
+            color: #4e5c7a;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            min-height: 1.5em;
+        }
+
+        /* Progress dots row */
+        #current-level-guesses-display {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            min-height: 24px;
+        }
+
+        .current-correct-guess-panel {
+            width: 18px;
+            height: 18px;
+            border-radius: 5px;
+            transition: all 0.15s;
+            flex-shrink: 0;
+        }
+
+        /* ── Central flash panel ── */
+        #random-panel-container {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-top: 28px;
+        }
+
+        #random-panel {
+            width: 160px;
+            height: 160px;
+            border-radius: 22px;
+            background: #191e2e;
+            border: 2px solid #1c2236;
+            transition: background 0.08s, box-shadow 0.08s;
+        }
+
+        .random-panel-none {
+            display: none !important;
+        }
+
+        /* Color glow states for the flash panel */
+        #random-panel.bg-red {
+            box-shadow: 0 0 40px rgba(244, 63, 94, 0.55);
+        }
+        #random-panel.bg-yellow {
+            box-shadow: 0 0 40px rgba(245, 158, 11, 0.55);
+        }
+        #random-panel.bg-green {
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.55);
+        }
+        #random-panel.bg-purple {
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.55);
+        }
+
+        /* ── Controls ── */
+        #controls {
+            margin-top: 32px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .controls-enabled {
+            opacity: 1 !important;
+            pointer-events: all !important;
+        }
+
+        #controls-instructions {
+            text-align: center;
+            font-size: 15px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #3d4e6a;
+            margin-bottom: 20px;
+        }
+
+        #controls-btns-row {
+            margin-top: 8px;
+            display: flex;
+            flex-direction: row;
+            gap: 12px;
+        }
+
+        .controls-btn {
+            flex: 1;
+            aspect-ratio: 1;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: opacity 0.15s, transform 0.12s, box-shadow 0.15s;
+            border: none;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .controls-btn:hover {
+            opacity: 0.82;
+            transform: translateY(-2px);
+        }
+
+        .controls-btn:active {
+            transform: scale(0.93);
+            opacity: 1;
+        }
+
+        .controls-btn:focus-visible {
+            outline: 3px solid #fff;
+            outline-offset: 3px;
+        }
+
+        /* ── Game over ── */
+        #game-over-container {
+            margin-top: 28px;
+            display: none;
+        }
+
+        .game-over-container-visible {
+            display: block !important;
+        }
+
+        #game-over-message {
+            text-align: center;
+            font-size: 15px;
+            line-height: 1.9;
+            color: #f43f5e;
+            margin-bottom: 16px;
+        }
+
+        #game-over-correct-solution {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        /* ── Four signal colors ── */
+        .bg-red    { background-color: #f43f5e; }
+        .bg-yellow { background-color: #f59e0b; }
+        .bg-green  { background-color: #10b981; }
+        .bg-purple { background-color: #8b5cf6; }
+
+        /* Glow on the control buttons */
+        #controls-btn-red    { box-shadow: 0 4px 18px rgba(244, 63, 94, 0.3);  }
+        #controls-btn-yellow { box-shadow: 0 4px 18px rgba(245, 158, 11, 0.3); }
+        #controls-btn-green  { box-shadow: 0 4px 18px rgba(16, 185, 129, 0.3); }
+        #controls-btn-purple { box-shadow: 0 4px 18px rgba(139, 92, 246, 0.3); }
+
+        #controls-btn-red:hover    { box-shadow: 0 6px 28px rgba(244, 63, 94, 0.55);  }
+        #controls-btn-yellow:hover { box-shadow: 0 6px 28px rgba(245, 158, 11, 0.55); }
+        #controls-btn-green:hover  { box-shadow: 0 6px 28px rgba(16, 185, 129, 0.55); }
+        #controls-btn-purple:hover { box-shadow: 0 6px 28px rgba(139, 92, 246, 0.55); }
+    </style>
+</head>
+
+<body>
+<div>
+    <div class="container">
+        <div class="container-inner">
+            <div class="vertical-space-manager">
+                <div class="game-player">
+                    <h1 class="game-title">Prism</h1>
+                    <p id="game-description">
+                        Watch the sequence. Lock it in.<br><br>
+                        Each round adds one more signal — and they come faster.
+                    </p>
+
+                    <div id="start-button-container">
+                        <button id="start-button" type="button">Begin Sequence</button>
+                    </div>
+
+                    <div id="current-level-info">
+                        <p id="current-level-number-display" aria-live="polite" aria-atomic="true"></p>
+                        <p id="current-level-guesses-message" aria-live="polite" aria-atomic="true"></p>
+                        <div id="current-level-guesses-display" aria-hidden="true"></div>
+                    </div>
+
+                    <div id="random-panel-container" aria-hidden="true">
+                        <div id="random-panel"></div>
+                    </div>
+
+                    <div id="controls" role="group" aria-label="Color buttons">
+                        <p id="controls-instructions">Replay the sequence</p>
+
+                        <div id="controls-btns-row">
+                            <button id="controls-btn-red"    class="controls-btn bg-red"    type="button" aria-label="Red"></button>
+                            <button id="controls-btn-yellow" class="controls-btn bg-yellow" type="button" aria-label="Yellow"></button>
+                            <button id="controls-btn-green"  class="controls-btn bg-green"  type="button" aria-label="Green"></button>
+                            <button id="controls-btn-purple" class="controls-btn bg-purple" type="button" aria-label="Purple"></button>
+                        </div>
+                    </div>
+
+                    <div id="game-over-container" role="alert" aria-live="assertive">
+                        <p id="game-over-message">
+                            Sequence broken.<br><br>
+                            Hit Begin to try again.<br><br>
+                            Correct order:
+                        </p>
+                        <div id="game-over-correct-solution"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let levelFlashingInProgress = false;
+    let level = 0;
+    const baseRounds = 4;
+    const baseTime   = 1000;
+    const levelSpeedMod = 65;
+    const minIntervalMs = 180; // floor so it never goes negative or instant
+
+    let currentBg;
+    let currentLevelBgs    = [];
+    let currentLevelGuesses = [];
+    let currentIteration    = 0;
+
+    const startButtonContainer          = document.getElementById("start-button-container");
+    const startButton                   = document.getElementById("start-button");
+    const currentLevelNumberDisplay     = document.getElementById("current-level-number-display");
+    const currentLevelGuessesMessage    = document.getElementById("current-level-guesses-message");
+    const currentLevelGuessesDisplay    = document.getElementById("current-level-guesses-display");
+    const randomPanel                   = document.getElementById("random-panel");
+    const controls                      = document.getElementById("controls");
+    const gameOverContainer             = document.getElementById("game-over-container");
+    const gameOverCorrectSolution       = document.getElementById("game-over-correct-solution");
+
+    const controlsBtnRed    = document.getElementById("controls-btn-red");
+    const controlsBtnYellow = document.getElementById("controls-btn-yellow");
+    const controlsBtnGreen  = document.getElementById("controls-btn-green");
+    const controlsBtnPurple = document.getElementById("controls-btn-purple");
+
+    startButton.addEventListener("click", startLevel);
+
+    // Curried handlers — guessColor returns the click callback bound to each color
+    controlsBtnRed.addEventListener("click",    guessColor("bg-red"));
+    controlsBtnYellow.addEventListener("click", guessColor("bg-yellow"));
+    controlsBtnGreen.addEventListener("click",  guessColor("bg-green"));
+    controlsBtnPurple.addEventListener("click", guessColor("bg-purple"));
+
+    // ── Random color (iterative, no recursion risk) ──────────────────────────
+    const colorClasses = ["bg-red", "bg-yellow", "bg-green", "bg-purple"];
+
+    function getNewClass() {
+        let candidate;
+        let tries = 0;
+        do {
+            candidate = colorClasses[Math.floor(Math.random() * colorClasses.length)];
+            tries++;
+        } while (candidate === currentBg && tries < 10);
+        return candidate;
+    }
+
+    // ── Speed — clamped so it never drops below minIntervalMs ────────────────
+    function getIntervalSpeed(lvl) {
+        const raw = baseTime - (lvl * levelSpeedMod * (((lvl * 100) / 1000) + 1));
+        return Math.max(minIntervalMs, raw);
+    }
+
+    // ── Game start ────────────────────────────────────────────────────────────
+    function startLevel() {
+        if (levelFlashingInProgress) return;
+
+        levelFlashingInProgress = true;
+        currentLevelGuessesMessage.textContent = "";
+        currentLevelGuessesDisplay.innerHTML   = "";
+        startButtonContainer.classList.add("start-button-container-disabled");
+        gameOverContainer.classList.remove("game-over-container-visible");
+        randomPanel.classList.remove("random-panel-none");
+        currentLevelNumberDisplay.textContent  = `Level ${level + 1}`;
+        currentLevelNumberDisplay.classList.add("current-level-number-display-enabled");
+
+        const intervalSpeed = getIntervalSpeed(level);
+        let workingClassName;
+
+        const flashingInterval = setInterval(() => {
+            if (workingClassName) {
+                randomPanel.classList.remove(workingClassName);
+            }
+
+            workingClassName = getNewClass();
+            currentBg = workingClassName;
+            currentLevelBgs.push(currentBg);
+            randomPanel.classList.add(workingClassName);
+            currentIteration++;
+
+            if (currentIteration === level + baseRounds) {
+                clearInterval(flashingInterval);
+                setTimeout(() => {
+                    levelFlashingInProgress = false;
+                    preparePlayingFieldForLevel();
+                }, intervalSpeed);
+            }
+        }, intervalSpeed);
+    }
+
+    function preparePlayingFieldForLevel() {
+        // Safe classList clear — spread to avoid live-list mutation
+        [...randomPanel.classList].forEach(c => randomPanel.classList.remove(c));
+        randomPanel.classList.add("random-panel-none");
+        controls.classList.add("controls-enabled");
+        currentLevelGuessesMessage.textContent = getCurrentCorrectGuessesMessage();
+    }
+
+    // ── Guess handler ─────────────────────────────────────────────────────────
+    function guessColor(color) {
+        return () => {
+            if (color === currentLevelBgs[currentLevelGuesses.length]) {
+                currentLevelGuesses.push(color);
+                currentLevelGuessesMessage.textContent = getCurrentCorrectGuessesMessage();
+                appendGuessPanel(color, currentLevelGuessesDisplay);
+
+                if (currentLevelGuesses.length === currentLevelBgs.length) {
+                    // Round complete — advance level
+                    controls.classList.remove("controls-enabled");
+                    setTimeout(() => {
+                        currentBg              = null;
+                        currentLevelBgs        = [];
+                        currentLevelGuesses    = [];
+                        currentIteration       = 0;
+                        currentLevelGuessesMessage.textContent = "";
+                        currentLevelGuessesDisplay.innerHTML   = "";
+                        level++;
+                        startLevel();
+                    }, 1000);
+                }
+            } else {
+                // Wrong — game over
+                gameOverContainer.classList.add("game-over-container-visible");
+                randomPanel.classList.add("random-panel-none");
+                currentLevelBgs.forEach(c => appendGuessPanel(c, gameOverCorrectSolution));
+                controls.classList.remove("controls-enabled");
+                startButtonContainer.classList.remove("start-button-container-disabled");
+                currentBg           = null;
+                currentLevelBgs     = [];
+                currentLevelGuesses = [];
+                currentIteration    = 0;
+                level               = 0;
+            }
+        };
+    }
+
+    function getCurrentCorrectGuessesMessage() {
+        return `${currentLevelGuesses.length} / ${currentLevelBgs.length} correct`;
+    }
+
+    function appendGuessPanel(className, parent) {
+        const panel = document.createElement("div");
+        panel.classList.add("current-correct-guess-panel", className);
+        parent.append(panel);
+    }
+</script>
+</body>
+</html>
