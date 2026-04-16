@@ -35,9 +35,9 @@
     Cache-Control = "no-cache"
     Service-Worker-Allowed = "/"
 
-# ── Web app manifest: cache for 1 day ────────────────────────────────
+# ── Web app manifests: cache for 1 day ───────────────────────────────
 [[headers]]
-  for = "/manifest.json"
+  for = "/manifest*.json"
   [headers.values]
     Cache-Control = "public, max-age=86400"
 
