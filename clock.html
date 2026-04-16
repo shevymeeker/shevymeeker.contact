@@ -8,6 +8,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0d0b09">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
   <title>Clock & Alarms</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -482,19 +487,28 @@
 
     #alarm-alert-text { flex: 1; }
 
-    #dismiss-alert {
+    .alert-actions {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    #snooze-5-btn, #snooze-10-btn, #dismiss-alert {
       background: rgba(0,0,0,.2);
       border: none;
       color: var(--bg);
       border-radius: 4px;
-      padding: 5px 12px;
+      padding: 5px 10px;
       cursor: pointer;
       font-family: var(--mono);
       font-size: 9px;
       font-weight: 700;
       letter-spacing: .1em;
       text-transform: uppercase;
+      white-space: nowrap;
     }
+    #snooze-5-btn:hover, #snooze-10-btn:hover { background: rgba(0,0,0,.3); }
+    #dismiss-alert { background: rgba(0,0,0,.35); }
   </style>
 </head>
 <body class="dark">
@@ -502,7 +516,11 @@
 <div id="alarm-alert">
   <span>🔔</span>
   <span id="alarm-alert-text">Alarm!</span>
-  <button id="dismiss-alert">Dismiss</button>
+  <div class="alert-actions">
+    <button id="snooze-5-btn">Snooze 5m</button>
+    <button id="snooze-10-btn">Snooze 10m</button>
+    <button id="dismiss-alert">Dismiss</button>
+  </div>
 </div>
 
 <div class="topbar">
@@ -513,6 +531,7 @@
   <div class="topbar-right">
     <button class="icon-btn" id="toggle-alarms">🔔 Alarms</button>
     <button class="icon-btn" id="toggle-theme">☀️ Light</button>
+    <button id="pwa-install-btn" class="home-btn" style="display:none;border-color:rgba(200,160,92,.4);color:var(--accent);">↓ Install</button>
   </div>
 </div>
 
@@ -545,6 +564,14 @@
       <div class="form-row">
         <input class="alarm-input" type="date" id="alarm-date">
         <input class="alarm-input" type="time" id="alarm-time">
+      </div>
+      <div class="form-row" style="align-items:center;gap:8px;">
+        <label style="font-size:9px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);white-space:nowrap;">Repeat</label>
+        <select class="alarm-input" id="alarm-repeat" style="flex:1;">
+          <option value="none">No repeat</option>
+          <option value="daily">Daily</option>
+          <option value="weekdays">Weekdays only</option>
+        </select>
       </div>
       <button class="add-alarm-btn" id="add-alarm-btn">+ Add Alarm</button>
     </div>
@@ -683,7 +710,34 @@
     } catch(e) {}
   }
 
+  let currentFiringAlarm = null;
+
+  function snoozeAlarm(minutes) {
+    document.getElementById('alarm-alert').classList.remove('show');
+    if (!currentFiringAlarm) return;
+    const snoozeTime = new Date(Date.now() + minutes * 60 * 1000);
+    const pad2 = n => String(n).padStart(2, '0');
+    const dateStr = `${snoozeTime.getFullYear()}-${pad2(snoozeTime.getMonth()+1)}-${pad2(snoozeTime.getDate())}`;
+    const timeStr = `${pad2(snoozeTime.getHours())}:${pad2(snoozeTime.getMinutes())}`;
+    const alarms = getAlarms();
+    alarms.push({
+      id: uuid(),
+      datetime: `${dateStr}T${timeStr}`,
+      label: `${currentFiringAlarm.label} (snoozed)`,
+      active: true,
+      fired: false,
+      repeat: 'none',
+    });
+    saveAlarms(alarms);
+    renderAlarmsList();
+    currentFiringAlarm = null;
+  }
+
+  document.getElementById('snooze-5-btn').addEventListener('click', () => snoozeAlarm(5));
+  document.getElementById('snooze-10-btn').addEventListener('click', () => snoozeAlarm(10));
+
   function fireAlarm(alarm) {
+    currentFiringAlarm = alarm;
     // In-app banner
     const alertEl = document.getElementById('alarm-alert');
     document.getElementById('alarm-alert-text').textContent = '🔔 ' + alarm.label;
@@ -709,6 +763,17 @@
     }
   }
 
+  function nextOccurrence(alarm) {
+    const dt = new Date(alarm.datetime);
+    if (alarm.repeat === 'daily') {
+      dt.setDate(dt.getDate() + 1);
+    } else if (alarm.repeat === 'weekdays') {
+      do { dt.setDate(dt.getDate() + 1); } while (dt.getDay() === 0 || dt.getDay() === 6);
+    }
+    const pad2 = n => String(n).padStart(2, '0');
+    return `${dt.getFullYear()}-${pad2(dt.getMonth()+1)}-${pad2(dt.getDate())}T${pad2(dt.getHours())}:${pad2(dt.getMinutes())}`;
+  }
+
   function checkAlarms(now) {
     const alarms = getAlarms();
     let changed = false;
@@ -718,12 +783,17 @@
       if (firedIds.has(alarm.id)) return;
 
       const alarmTime = new Date(alarm.datetime);
-      // Fire within a 59-second window (catches the minute regardless of what second we check)
       const diffSec = (now - alarmTime) / 1000;
       if (diffSec >= 0 && diffSec < 60) {
         firedIds.add(alarm.id);
-        alarm.fired = true;
         changed = true;
+        if (alarm.repeat && alarm.repeat !== 'none') {
+          // Advance to next occurrence instead of marking fired
+          alarm.datetime = nextOccurrence(alarm);
+          firedIds.delete(alarm.id); // allow it to fire again
+        } else {
+          alarm.fired = true;
+        }
         fireAlarm(alarm);
       }
     });
@@ -773,7 +843,12 @@
 
       info.appendChild(label);
       info.appendChild(timeEl);
-      if (alarm.fired) {
+      if (alarm.repeat && alarm.repeat !== 'none') {
+        const rep = document.createElement('div');
+        rep.className = 'alarm-item-source';
+        rep.textContent = alarm.repeat === 'daily' ? '↻ Daily' : '↻ Weekdays';
+        info.appendChild(rep);
+      } else if (alarm.fired) {
         const src = document.createElement('div');
         src.className = 'alarm-item-source';
         src.textContent = 'Fired';
@@ -823,19 +898,22 @@
       return;
     }
 
+    const repeat = document.getElementById('alarm-repeat').value;
     const alarms = getAlarms();
     alarms.push({
       id: uuid(),
       datetime: `${date}T${time}`,
       label,
       active: true,
-      fired: false
+      fired: false,
+      repeat,
     });
     saveAlarms(alarms);
 
     document.getElementById('alarm-label').value = '';
-    document.getElementById('alarm-date').value = '';
+    document.getElementById('alarm-date').value = today;
     document.getElementById('alarm-time').value = '';
+    document.getElementById('alarm-repeat').value = 'none';
     renderAlarmsList();
   });
 
@@ -846,6 +924,7 @@
   // Dismiss alert
   document.getElementById('dismiss-alert').addEventListener('click', () => {
     document.getElementById('alarm-alert').classList.remove('show');
+    currentFiringAlarm = null;
   });
 
   // ── Panel toggle ─────────────────────────────────────────
@@ -897,7 +976,7 @@
         checkAlarms(new Date());
       }
     });
-    navigator.serviceWorker.register('./sw.js').then(reg => {
+    navigator.serviceWorker.register('/sw.js').then(reg => {
       // Register periodic background sync so alarms can fire without this page open
       if ('periodicSync' in reg) {
         navigator.permissions.query({ name: 'periodic-background-sync' }).then(status => {
@@ -913,6 +992,33 @@
   renderAlarmsList();
   syncAlarmsToIDB(getAlarms()); // ensure IDB is in sync with localStorage on startup
   mergeIDBFiredStatus();        // pull back any alarms the SW fired while page was closed
+
+  // ── PWA Install Prompt ───────────────────────────────────────
+  (function() {
+    var DISMISS_KEY = 'pwaInstallDismissed';
+    if (localStorage.getItem(DISMISS_KEY)) return;
+    var deferredPrompt = null;
+    var btn = document.getElementById('pwa-install-btn');
+    if (!btn) return;
+    window.addEventListener('beforeinstallprompt', function(e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      btn.style.display = '';
+    });
+    btn.addEventListener('click', function() {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(r) {
+        deferredPrompt = null;
+        btn.style.display = 'none';
+        if (r.outcome === 'dismissed') localStorage.setItem(DISMISS_KEY, '1');
+      });
+    });
+    window.addEventListener('appinstalled', function() {
+      btn.style.display = 'none';
+      deferredPrompt = null;
+    });
+  })();
 </script>
 </body>
 </html>

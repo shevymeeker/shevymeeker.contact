@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0d0b09">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
   <title>Unit Converter</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -299,6 +304,32 @@
 
     /* Error state */
     .conv-input.error { border-color: rgba(196,106,90,.6); }
+
+    /* ── Recent conversions ──────────────────────── */
+    .recent-section {
+      width: 100%;
+      margin-top: 12px;
+      background: var(--s1);
+      border: 1px solid var(--b);
+      border-radius: 10px;
+      overflow: hidden;
+      display: none;
+    }
+    .recent-section.visible { display: block; }
+    .recent-toggle {
+      padding: 10px 16px;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      color: var(--m);
+      border-bottom: 1px solid var(--b);
+      font-family: var(--mono);
+      cursor: pointer;
+      user-select: none;
+      transition: color .15s;
+    }
+    .recent-toggle:hover { color: var(--a); }
+    .recent-list { display: block; }
   </style>
 </head>
 <body>
@@ -306,7 +337,7 @@
 <div class="topbar">
   <a class="home-btn" href="index.html">← Home</a>
   <span class="page-title">Unit Converter</span>
-  <div style="width:60px"></div>
+  <button id="pwa-install-btn" class="home-btn" style="display:none;border-color:rgba(200,160,92,.4);color:var(--a);">↓ Install</button>
 </div>
 
 <div class="cat-bar" id="cat-bar"></div>
@@ -342,6 +373,11 @@
   <div class="ref-table" id="ref-table">
     <div class="ref-table-title">Quick Reference</div>
     <div id="ref-rows"></div>
+  </div>
+
+  <div class="recent-section" id="recent-section">
+    <div class="recent-toggle" id="recent-toggle">▾ Recent</div>
+    <div class="recent-list" id="recent-list"></div>
   </div>
 </div>
 
@@ -388,6 +424,8 @@
       units: {
         mL:    { label: 'mL (milliliter)', factor: 0.001 },
         L:     { label: 'L (liter)',        factor: 1 },
+        tsp:   { label: 'tsp (teaspoon)',   factor: 0.004929 },
+        tbsp:  { label: 'tbsp (tablespoon)',factor: 0.014787 },
         floz:  { label: 'fl oz (US)',       factor: 0.029573530 },
         cup:   { label: 'cup (US)',          factor: 0.2365882 },
         pt:    { label: 'pt (pint US)',      factor: 0.473176 },
@@ -469,21 +507,78 @@
 
   function selectCategory(cat) {
     activeCat = cat;
-    // Update chips
     document.querySelectorAll('.cat-chip').forEach(c => {
       c.classList.toggle('active', c.textContent === cat);
     });
-    // Repopulate selects
     populateUnits('from-unit', cat);
     populateUnits('to-unit', cat);
-    // Default to second unit in TO
     const keys = Object.keys(CATEGORIES[cat].units);
     if (keys.length > 1) document.getElementById('to-unit').value = keys[1];
-    // Clear inputs
     document.getElementById('from-input').value = '';
     document.getElementById('to-input').value = '';
     buildRefTable();
+    saveConverterState();
   }
+
+  // ── State persistence ────────────────────────────────────────────
+  const CONV_STATE_KEY = 'converterState';
+  const CONV_HIST_KEY  = 'converterHistory';
+
+  function saveConverterState() {
+    localStorage.setItem(CONV_STATE_KEY, JSON.stringify({
+      cat:   activeCat,
+      fromU: fromSel.value,
+      toU:   toSel.value,
+    }));
+  }
+
+  function saveConvHistory(fromVal, fromU, toVal, toU) {
+    if (!fromVal || !toVal) return;
+    let h = [];
+    try { h = JSON.parse(localStorage.getItem(CONV_HIST_KEY) || '[]'); } catch {}
+    // Dedupe: remove if same pair already exists at top
+    if (h.length && h[0].fromU === fromU && h[0].toU === toU && h[0].fromVal === fromVal) return;
+    h.unshift({ fromVal, fromU, toVal, toU, cat: activeCat });
+    if (h.length > 5) h.splice(5);
+    localStorage.setItem(CONV_HIST_KEY, JSON.stringify(h));
+    renderRecentHistory();
+  }
+
+  function renderRecentHistory() {
+    let h = [];
+    try { h = JSON.parse(localStorage.getItem(CONV_HIST_KEY) || '[]'); } catch {}
+    const sec = document.getElementById('recent-section');
+    const list = document.getElementById('recent-list');
+    if (!h.length) { sec.classList.remove('visible'); return; }
+    sec.classList.add('visible');
+    list.innerHTML = '';
+    h.forEach(entry => {
+      const row = document.createElement('div');
+      row.className = 'ref-row';
+      row.style.cursor = 'pointer';
+      row.title = 'Restore this conversion';
+      row.innerHTML = `<span class="ref-from">${entry.fromVal} ${entry.fromU}</span>
+                       <span class="ref-eq">=</span>
+                       <span class="ref-to">${entry.toVal} ${entry.toU}</span>`;
+      row.addEventListener('click', () => {
+        if (CATEGORIES[entry.cat]) selectCategory(entry.cat);
+        if (fromSel.querySelector(`option[value="${entry.fromU}"]`)) fromSel.value = entry.fromU;
+        if (toSel.querySelector(`option[value="${entry.toU}"]`))     toSel.value   = entry.toU;
+        fromInput.value = entry.fromVal;
+        runConvert('from');
+      });
+      list.appendChild(row);
+    });
+  }
+
+  // Toggle recent list
+  document.getElementById('recent-toggle').addEventListener('click', () => {
+    const list = document.getElementById('recent-list');
+    const tog  = document.getElementById('recent-toggle');
+    const open = list.style.display !== 'none';
+    list.style.display = open ? 'none' : '';
+    tog.textContent = (open ? '▸' : '▾') + ' Recent';
+  });
 
   // ── Conversion logic ─────────────────────────────────────────────
   const fromInput = document.getElementById('from-input');
@@ -506,12 +601,17 @@
       fromInput.value = isNaN(result) ? '' : fmtNum(result);
     }
     buildRefTable();
+    // Save state and history after a valid conversion
+    saveConverterState();
+    if (fromInput.value && toInput.value) {
+      saveConvHistory(fromInput.value, fromSel.value, toInput.value, toSel.value);
+    }
   }
 
   fromInput.addEventListener('input', () => { lastChanged = 'from'; runConvert('from'); });
   toInput.addEventListener('input',   () => { lastChanged = 'to';   runConvert('to'); });
-  fromSel.addEventListener('change',  () => runConvert(lastChanged));
-  toSel.addEventListener('change',    () => runConvert(lastChanged));
+  fromSel.addEventListener('change',  () => { saveConverterState(); runConvert(lastChanged); });
+  toSel.addEventListener('change',    () => { saveConverterState(); runConvert(lastChanged); });
 
   // ── Swap button ──────────────────────────────────────────────────
   document.getElementById('swap-btn').addEventListener('click', () => {
@@ -524,6 +624,7 @@
     toSel.value   = fv;
     runConvert(lastChanged);
     buildRefTable();
+    saveConverterState();
   });
 
   // ── Quick reference table ────────────────────────────────────────
@@ -554,13 +655,56 @@
   }
 
   // ── Init ─────────────────────────────────────────────────────────
-  buildCatChips();
-  populateUnits('from-unit', activeCat);
-  populateUnits('to-unit', activeCat);
-  // Default TO to 2nd unit (km → mi)
-  const firstKeys = Object.keys(CATEGORIES[activeCat].units);
-  if (firstKeys.length > 1) toSel.value = firstKeys[1];
-  buildRefTable();
+  (function() {
+    // Restore saved state if available
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(CONV_STATE_KEY)); } catch {}
+    if (saved && CATEGORIES[saved.cat]) activeCat = saved.cat;
+
+    buildCatChips();
+    populateUnits('from-unit', activeCat);
+    populateUnits('to-unit', activeCat);
+
+    if (saved) {
+      if (fromSel.querySelector(`option[value="${saved.fromU}"]`)) fromSel.value = saved.fromU;
+      if (toSel.querySelector(`option[value="${saved.toU}"]`))     toSel.value   = saved.toU;
+    } else {
+      const firstKeys = Object.keys(CATEGORIES[activeCat].units);
+      if (firstKeys.length > 1) toSel.value = firstKeys[1];
+    }
+
+    buildRefTable();
+    renderRecentHistory();
+  })();
+</script>
+<script>
+  // ── PWA Install Prompt ────────────────────────────────────────
+  (function() {
+    var DISMISS_KEY = 'pwaInstallDismissed';
+    if (localStorage.getItem(DISMISS_KEY)) return;
+    var deferredPrompt = null;
+    var btn = document.getElementById('pwa-install-btn');
+    if (!btn) return;
+    window.addEventListener('beforeinstallprompt', function(e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      btn.style.display = '';
+    });
+    btn.addEventListener('click', function() {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(r) {
+        deferredPrompt = null;
+        btn.style.display = 'none';
+        if (r.outcome === 'dismissed') localStorage.setItem(DISMISS_KEY, '1');
+      });
+    });
+    window.addEventListener('appinstalled', function() {
+      btn.style.display = 'none';
+      deferredPrompt = null;
+    });
+  })();
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(function(){});
 </script>
 </body>
 </html>

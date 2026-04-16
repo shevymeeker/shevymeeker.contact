@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0d0b09">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
   <title>Stopwatch</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -304,6 +309,68 @@
       letter-spacing: .05em;
     }
 
+    /* ── Session restore banner ─────────────────────────── */
+    .session-banner {
+      background: var(--s2);
+      border-bottom: 1px solid var(--b);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--m);
+      flex-shrink: 0;
+    }
+    .session-actions { display: flex; gap: 8px; }
+
+    /* ── Target time ─────────────────────────────────────── */
+    .sw-extras {
+      width: 100%;
+      max-width: 420px;
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .target-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .target-input {
+      background: var(--s1);
+      border: 1px solid var(--b);
+      border-radius: 6px;
+      color: var(--t);
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      padding: 7px 12px;
+      width: 90px;
+      outline: none;
+      text-align: center;
+      transition: border-color .2s;
+    }
+    .target-input:focus { border-color: var(--a); }
+    .time-display.target-passed { color: var(--a); }
+
+    /* Keyboard hint (pointer-device only) */
+    @media (pointer: fine) {
+      .kb-hint {
+        font-family: var(--mono);
+        font-size: 9px;
+        letter-spacing: .1em;
+        color: var(--m);
+        opacity: .35;
+        text-align: center;
+        text-transform: uppercase;
+        margin-top: 12px;
+      }
+    }
+    @media (pointer: coarse) { .kb-hint { display: none; } }
+
     /* ── Popup mode ──────────────────────────────────────── */
     body.popup-mode {
       padding: 0;
@@ -319,7 +386,15 @@
   <div class="topbar">
     <a class="home-btn" href="index.html">← Home</a>
     <span class="page-title">Stopwatch</span>
-    <div class="spacer"></div>
+    <button id="pwa-install-btn" class="home-btn" style="display:none;border-color:rgba(200,160,92,.4);color:var(--a);">↓ Install</button>
+  </div>
+
+  <div class="session-banner" id="session-banner" style="display:none">
+    <span id="session-msg">Restore previous session?</span>
+    <div class="session-actions">
+      <button class="ctrl-btn" id="btn-restore" style="flex:none;padding:0 14px;height:34px;font-size:9px;">Restore</button>
+      <button class="ctrl-btn" id="btn-discard" style="flex:none;padding:0 14px;height:34px;font-size:9px;">Discard</button>
+    </div>
   </div>
 
   <main>
@@ -346,6 +421,16 @@
     <div class="empty-laps" id="empty-laps" style="display:none">
       — no laps recorded —
     </div>
+
+    <div class="sw-extras">
+      <div class="target-row">
+        <span class="lap-header-label">Target (MM:SS)</span>
+        <input id="target-input" class="target-input" type="text" placeholder="e.g. 01:30" maxlength="5" inputmode="numeric">
+      </div>
+      <button id="btn-export" class="ctrl-btn" style="display:none;">⎘ Copy Laps</button>
+    </div>
+
+    <div class="kb-hint">Space start/stop · L lap · R reset</div>
   </main>
 
   <script>
@@ -466,6 +551,8 @@
       laps.push({ total: elapsed, split });
       lapStart = elapsed;
       renderLaps();
+      document.getElementById('btn-export').style.display = '';
+      saveSwState();
     });
 
     btnReset.addEventListener('click', () => {
@@ -482,11 +569,134 @@
       btnLap.classList.remove('teal');
       statusEl.textContent = '';
       displayEl.classList.remove('running');
+      displayEl.classList.remove('target-passed');
+      document.getElementById('btn-export').style.display = 'none';
+      localStorage.removeItem('stopwatchState');
       render();
       renderLaps();
     });
 
+    // ── Session persistence ────────────────────────────────
+    const SW_KEY = 'stopwatchState';
+
+    function saveSwState() {
+      if (elapsed === 0) { localStorage.removeItem(SW_KEY); return; }
+      localStorage.setItem(SW_KEY, JSON.stringify({ elapsed, lapStart, laps }));
+    }
+
+    // Save on visibility change (iOS doesn't fire beforeunload reliably)
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && elapsed > 0) saveSwState();
+    });
+    window.addEventListener('beforeunload', () => { if (elapsed > 0) saveSwState(); });
+    // Save every 5s while running
+    setInterval(() => { if (running && elapsed > 0) saveSwState(); }, 5000);
+
+    // Check for saved state on load
+    (function() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(SW_KEY));
+        if (!saved || saved.elapsed <= 0) return;
+        const { main, cs } = fmtTime(saved.elapsed);
+        document.getElementById('session-msg').textContent =
+          `Restore session? (${main}${cs} elapsed, ${(saved.laps || []).length} laps)`;
+        document.getElementById('session-banner').style.display = 'flex';
+
+        document.getElementById('btn-restore').addEventListener('click', () => {
+          elapsed  = saved.elapsed;
+          lapStart = saved.lapStart;
+          laps     = saved.laps || [];
+          render();
+          renderLaps();
+          if (laps.length) document.getElementById('btn-export').style.display = '';
+          btnStart.textContent = 'Resume';
+          btnStart.classList.add('primary');
+          statusEl.textContent = 'paused';
+          document.getElementById('session-banner').style.display = 'none';
+        });
+        document.getElementById('btn-discard').addEventListener('click', () => {
+          localStorage.removeItem(SW_KEY);
+          document.getElementById('session-banner').style.display = 'none';
+        });
+      } catch(e) {}
+    })();
+
+    // ── Keyboard shortcuts ─────────────────────────────────
+    document.addEventListener('keydown', e => {
+      if (e.target.tagName === 'INPUT') return;
+      if (e.key === ' ' || e.code === 'Space') {
+        e.preventDefault();
+        btnStart.click();
+      } else if ((e.key === 'l' || e.key === 'L') && running) {
+        btnLap.click();
+      } else if ((e.key === 'r' || e.key === 'R') && !running) {
+        btnReset.click();
+      }
+    });
+
+    // ── Export laps ────────────────────────────────────────
+    document.getElementById('btn-export').addEventListener('click', () => {
+      if (!laps.length) return;
+      const lines = laps.map((lap, i) => {
+        const { main: sm, cs: sc } = fmtTime(lap.split);
+        const { main: tm, cs: tc } = fmtTime(lap.total);
+        return `LAP ${pad2(i+1)}  Split: ${sm}${sc}  Total: ${tm}${tc}`;
+      });
+      navigator.clipboard.writeText(lines.join('\n')).then(() => {
+        const btn = document.getElementById('btn-export');
+        const orig = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = orig, 1500);
+      });
+    });
+
+    // ── Target time ────────────────────────────────────────
+    let targetCs = 0;
+    document.getElementById('target-input').addEventListener('input', e => {
+      const m = e.target.value.match(/^(\d{1,2}):(\d{2})$/);
+      targetCs = m ? (parseInt(m[1]) * 60 + parseInt(m[2])) * 100 : 0;
+    });
+
+    // Redefine tick to also check target (overrides earlier declaration)
+    function tick() {
+      elapsed++;
+      render();
+      if (targetCs > 0) {
+        if (elapsed >= targetCs) displayEl.classList.add('target-passed');
+        else displayEl.classList.remove('target-passed');
+      }
+    }
+
     render();
   </script>
+<script>
+  // ── PWA Install Prompt ────────────────────────────────────────
+  (function() {
+    var DISMISS_KEY = 'pwaInstallDismissed';
+    if (localStorage.getItem(DISMISS_KEY)) return;
+    var deferredPrompt = null;
+    var btn = document.getElementById('pwa-install-btn');
+    if (!btn) return;
+    window.addEventListener('beforeinstallprompt', function(e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      btn.style.display = '';
+    });
+    btn.addEventListener('click', function() {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(r) {
+        deferredPrompt = null;
+        btn.style.display = 'none';
+        if (r.outcome === 'dismissed') localStorage.setItem(DISMISS_KEY, '1');
+      });
+    });
+    window.addEventListener('appinstalled', function() {
+      btn.style.display = 'none';
+      deferredPrompt = null;
+    });
+  })();
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(function(){});
+</script>
 </body>
 </html>
