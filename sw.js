@@ -1,6 +1,6 @@
 // SM Utilities Service Worker
 // Cache-first for app shells, network-first for everything else
-const CACHE_NAME = 'sm-utils-v1';
+const CACHE_NAME = 'sm-utils-v2';
 
 const PRECACHE_URLS = [
   '/',
@@ -12,6 +12,12 @@ const PRECACHE_URLS = [
   '/clock.html',
   '/countdown.html',
   '/manifest.json',
+  '/manifest-calculator.json',
+  '/manifest-stopwatch.json',
+  '/manifest-percentage.json',
+  '/manifest-converter.json',
+  '/manifest-clock.json',
+  '/manifest-countdown.json',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
 ];
