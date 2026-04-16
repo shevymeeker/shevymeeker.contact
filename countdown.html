@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0d0b09">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
   <title>Countdown Timers</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -426,6 +431,153 @@
       color: var(--a);
     }
     .cd-today-msg.show { display: block; }
+
+    /* Make cards clickable for fullscreen */
+    .cd-card { cursor: pointer; }
+
+    /* Annual badge */
+    .cd-annual-badge {
+      font-size: 9px;
+      font-family: var(--mono);
+      color: var(--a);
+      opacity: .7;
+      letter-spacing: .05em;
+    }
+
+    /* Annual checkbox row */
+    .annual-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .annual-row input[type="checkbox"] {
+      accent-color: var(--a);
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+
+    /* Notification banner */
+    .notif-banner {
+      background: var(--s2);
+      border-bottom: 1px solid var(--b);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .notif-banner-text {
+      font-size: 0.78rem;
+      font-family: var(--mono);
+      color: var(--m);
+      line-height: 1.4;
+    }
+    .notif-enable-btn {
+      background: none;
+      border: 1px solid rgba(200,160,92,.4);
+      border-radius: 4px;
+      color: var(--a);
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background .15s;
+    }
+    .notif-enable-btn:hover { background: rgba(200,160,92,.08); }
+
+    /* ── Fullscreen overlay ──────────────────────────────────── */
+    .cd-fullscreen {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 1000;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      border-top: 3px solid var(--a);
+    }
+    .cd-fullscreen.open { display: flex; }
+    .cd-fs-close {
+      position: absolute;
+      top: 18px; right: 18px;
+      background: var(--s2);
+      border: 1px solid var(--b);
+      border-radius: 4px;
+      color: var(--m);
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 7px 14px;
+      cursor: pointer;
+      transition: color .15s, border-color .15s;
+    }
+    .cd-fs-close:hover { color: var(--t); border-color: var(--m); }
+    .cd-fs-label {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(1.8rem, 8vw, 3.5rem);
+      color: var(--t);
+      text-align: center;
+      padding: 0 24px;
+    }
+    .cd-fs-date {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--m);
+      letter-spacing: .04em;
+    }
+    .cd-fs-digits {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 0 16px;
+    }
+    .cd-fs-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .cd-fs-num {
+      font-size: clamp(3rem, 14vw, 7rem);
+      font-family: var(--mono);
+      font-weight: 400;
+      letter-spacing: -.04em;
+      line-height: 1;
+      color: var(--t);
+    }
+    .cd-fs-sep {
+      font-size: clamp(2rem, 8vw, 4.5rem);
+      font-family: var(--mono);
+      color: rgba(154,147,144,.2);
+      padding-bottom: 24px;
+    }
+    .cd-fs-unit-label {
+      font-size: 10px;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--m);
+      opacity: .5;
+      margin-top: 6px;
+    }
+    .cd-fs-today {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(2rem, 10vw, 4rem);
+      color: var(--a);
+    }
   </style>
 </head>
 <body>
@@ -435,7 +587,10 @@
     <a class="home-btn" href="index.html">← Home</a>
     <span class="page-title">Countdown Timers</span>
   </div>
-  <button class="add-btn" id="add-btn">+ Add</button>
+  <div style="display:flex;gap:6px;align-items:center;">
+    <button id="pwa-install-btn" class="home-btn" style="display:none;border-color:rgba(200,160,92,.4);color:var(--a);">↓ Install</button>
+    <button class="add-btn" id="add-btn">+ Add</button>
+  </div>
 </div>
 
 <!-- Add form -->
@@ -463,11 +618,23 @@
       <div class="color-swatch" data-color="#d29922"  style="background:#d29922;"  title="Yellow"></div>
       <div class="color-swatch" data-color="#a371f7"  style="background:#a371f7;"  title="Purple"></div>
     </div>
-    <div class="form-actions">
-      <button class="cancel-btn" id="cancel-btn">Cancel</button>
-      <button class="save-btn" id="save-btn">Save</button>
+    <div class="form-actions" style="justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+      <label class="annual-row">
+        <input type="checkbox" id="cd-annual">
+        <span class="form-label" style="margin:0;cursor:pointer;">↻ Annual (repeats yearly)</span>
+      </label>
+      <div style="display:flex;gap:8px;">
+        <button class="cancel-btn" id="cancel-btn">Cancel</button>
+        <button class="save-btn" id="save-btn">Save</button>
+      </div>
     </div>
   </div>
+</div>
+
+<!-- Notification permission banner -->
+<div class="notif-banner" id="notif-banner" style="display:none;">
+  <span class="notif-banner-text">Enable notifications to get alerted when countdowns expire</span>
+  <button class="notif-enable-btn" id="notif-enable-btn">Enable</button>
 </div>
 
 <!-- Import from calendar -->
@@ -475,6 +642,15 @@
 
 <!-- Countdown list -->
 <div class="list-section" id="cd-list"></div>
+
+<!-- Fullscreen overlay -->
+<div class="cd-fullscreen" id="cd-fullscreen">
+  <button class="cd-fs-close" id="cd-fs-close">✕ Close</button>
+  <div class="cd-fs-label" id="cd-fs-label"></div>
+  <div class="cd-fs-date" id="cd-fs-date"></div>
+  <div class="cd-fs-digits" id="cd-fs-digits"></div>
+  <div class="cd-fs-today" id="cd-fs-today" style="display:none;">🎉 It's today!</div>
+</div>
 
 <script>
   // ── Popup mode: hide topbar ───────────────────────────────────
@@ -523,6 +699,7 @@
     document.getElementById('cd-label-input').value = '';
     document.getElementById('cd-date-input').value = '';
     document.getElementById('cd-time-input').value = '';
+    document.getElementById('cd-annual').checked = false;
   }
 
   document.getElementById('add-btn').addEventListener('click', () => {
@@ -533,20 +710,39 @@
   document.getElementById('cancel-btn').addEventListener('click', closeForm);
 
   document.getElementById('save-btn').addEventListener('click', () => {
-    const label = document.getElementById('cd-label-input').value.trim();
-    const date  = document.getElementById('cd-date-input').value;
-    const time  = document.getElementById('cd-time-input').value || '00:00';
+    const label  = document.getElementById('cd-label-input').value.trim();
+    const date   = document.getElementById('cd-date-input').value;
+    const time   = document.getElementById('cd-time-input').value || '00:00';
+    const annual = document.getElementById('cd-annual').checked;
 
     if (!label) { document.getElementById('cd-label-input').focus(); return; }
     if (!date)  { document.getElementById('cd-date-input').focus(); return; }
 
     const items = getCountdowns();
-    items.push({ id: uuid(), label, datetime: `${date}T${time}`, color: selectedColor });
+    items.push({ id: uuid(), label, datetime: `${date}T${time}`, color: selectedColor, annual });
     saveCountdowns(items);
     closeForm();
     renderList();
     buildImportSection();
+
+    // Request notification permission after first save (triggered by user action)
+    if (!localStorage.getItem('cdNotifAsked') && 'Notification' in window && Notification.permission === 'default') {
+      document.getElementById('notif-banner').style.display = 'flex';
+    }
   });
+
+  // Notification permission banner
+  document.getElementById('notif-enable-btn').addEventListener('click', () => {
+    Notification.requestPermission().then(() => {
+      document.getElementById('notif-banner').style.display = 'none';
+      localStorage.setItem('cdNotifAsked', '1');
+    });
+  });
+
+  // Hide banner if already asked
+  if (localStorage.getItem('cdNotifAsked') || ('Notification' in window && Notification.permission !== 'default')) {
+    document.getElementById('notif-banner').style.display = 'none';
+  }
 
   // ── Calendar import ────────────────────────────────────────
   function buildImportSection() {
@@ -671,6 +867,7 @@
           <div>
             <div class="cd-label">${escHtml(item.label)}</div>
             <div class="cd-date">${dateLabel}</div>
+            ${item.annual ? '<div class="cd-annual-badge">↻ Annual</div>' : ''}
           </div>
           <button class="cd-delete" data-id="${item.id}" title="Delete">×</button>
         </div>
@@ -704,7 +901,8 @@
 
     // Delete handlers
     list.querySelectorAll('.cd-delete').forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation(); // don't open fullscreen
         const id = btn.dataset.id;
         const items = getCountdowns().filter(c => c.id !== id);
         saveCountdowns(items);
@@ -712,11 +910,85 @@
         buildImportSection();
       });
     });
+
+    // Fullscreen on card click
+    list.querySelectorAll('.cd-card').forEach(card => {
+      card.addEventListener('click', e => {
+        if (e.target.closest('.cd-delete')) return;
+        const id = card.id.replace('card-', '');
+        openFullscreen(id);
+      });
+    });
   }
 
   function escHtml(str) {
     return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
+
+  // ── Fullscreen ─────────────────────────────────────────────
+  let fsItemId = null;
+  let fsInterval = null;
+
+  function openFullscreen(id) {
+    const items = getCountdowns();
+    const item = items.find(c => c.id === id);
+    if (!item) return;
+
+    fsItemId = id;
+    document.getElementById('cd-fs-label').textContent = item.label;
+    const targetDate = new Date(item.datetime);
+    const dateLabel = targetDate.toLocaleString('en-US', {
+      weekday: 'short', month: 'short', day: 'numeric', year: 'numeric',
+      ...(item.datetime.endsWith('T00:00') ? {} : { hour: '2-digit', minute: '2-digit' })
+    });
+    document.getElementById('cd-fs-date').textContent = dateLabel;
+    document.getElementById('cd-fullscreen').style.borderTopColor = item.color;
+
+    updateFullscreen();
+    document.getElementById('cd-fullscreen').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    fsInterval = setInterval(updateFullscreen, 1000);
+  }
+
+  function updateFullscreen() {
+    if (!fsItemId) return;
+    const items = getCountdowns();
+    const item = items.find(c => c.id === fsItemId);
+    if (!item) { closeFullscreen(); return; }
+
+    const diff = timeDiff(item.datetime);
+    const digitsEl = document.getElementById('cd-fs-digits');
+    const todayEl  = document.getElementById('cd-fs-today');
+
+    if (!diff) {
+      digitsEl.style.display = 'none';
+      todayEl.style.display  = '';
+    } else {
+      todayEl.style.display = 'none';
+      digitsEl.style.display = '';
+      digitsEl.innerHTML = `
+        <div class="cd-fs-unit"><div class="cd-fs-num">${pad(diff.d, 3)}</div><div class="cd-fs-unit-label">days</div></div>
+        <div class="cd-fs-sep">:</div>
+        <div class="cd-fs-unit"><div class="cd-fs-num">${pad(diff.h)}</div><div class="cd-fs-unit-label">hrs</div></div>
+        <div class="cd-fs-sep">:</div>
+        <div class="cd-fs-unit"><div class="cd-fs-num">${pad(diff.m)}</div><div class="cd-fs-unit-label">min</div></div>
+        <div class="cd-fs-sep">:</div>
+        <div class="cd-fs-unit"><div class="cd-fs-num">${pad(diff.s)}</div><div class="cd-fs-unit-label">sec</div></div>`;
+    }
+  }
+
+  function closeFullscreen() {
+    clearInterval(fsInterval);
+    fsInterval = null;
+    fsItemId = null;
+    document.getElementById('cd-fullscreen').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('cd-fs-close').addEventListener('click', closeFullscreen);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && fsItemId) closeFullscreen();
+  });
 
   function updateTicks() {
     const items = getCountdowns();
@@ -726,8 +998,28 @@
       if (!card) return;
 
       if (!diff) {
-        // Just expired — re-render to move to expired state
-        if (!card.classList.contains('expired')) renderList();
+        // Just expired — handle annual recurrence and notifications
+        if (!card.classList.contains('expired')) {
+          if (item.annual) {
+            // Advance year by 1 and save
+            const all = getCountdowns();
+            const idx = all.findIndex(c => c.id === item.id);
+            if (idx !== -1) {
+              const dt = new Date(all[idx].datetime);
+              dt.setFullYear(dt.getFullYear() + 1);
+              all[idx].datetime = dt.toISOString().slice(0, 16);
+              saveCountdowns(all);
+              renderList();
+              return;
+            }
+          } else if ('Notification' in window && Notification.permission === 'granted') {
+            new Notification(item.label + ' — countdown expired!', {
+              body: 'Your countdown has reached zero.',
+              icon: '/icons/icon-192.png'
+            });
+          }
+          renderList();
+        }
         return;
       }
 
@@ -778,6 +1070,35 @@
     if (e.key === 'utilityNotes') buildImportSection();
     if (e.key === 'utilityCountdowns') renderList();
   });
+</script>
+<script>
+  // ── PWA Install Prompt ────────────────────────────────────────
+  (function() {
+    var DISMISS_KEY = 'pwaInstallDismissed';
+    if (localStorage.getItem(DISMISS_KEY)) return;
+    var deferredPrompt = null;
+    var btn = document.getElementById('pwa-install-btn');
+    if (!btn) return;
+    window.addEventListener('beforeinstallprompt', function(e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      btn.style.display = '';
+    });
+    btn.addEventListener('click', function() {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(r) {
+        deferredPrompt = null;
+        btn.style.display = 'none';
+        if (r.outcome === 'dismissed') localStorage.setItem(DISMISS_KEY, '1');
+      });
+    });
+    window.addEventListener('appinstalled', function() {
+      btn.style.display = 'none';
+      deferredPrompt = null;
+    });
+  })();
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(function(){});
 </script>
 </body>
 </html>

@@ -27,3 +27,22 @@
   [headers.values]
     Cache-Control = "public, max-age=86400"
     Content-Disposition = "inline"
+
+# ── Service worker: never cache, must always be fresh ────────────────
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+    Service-Worker-Allowed = "/"
+
+# ── Web app manifest: cache for 1 day ────────────────────────────────
+[[headers]]
+  for = "/manifest.json"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# ── Icons: cache for 30 days (immutable after deploy) ────────────────
+[[headers]]
+  for = "/icons/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000, immutable"

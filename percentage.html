@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0d0b09">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
   <title>Percentage Calculator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -87,7 +92,7 @@
     /* ── Mode tabs ────────────────────────── */
     .tab-bar {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 0;
       margin: 16px 20px 0;
       background: var(--s1);
@@ -301,6 +306,68 @@
       font-size: 1.1rem;
       margin-right: 4px;
     }
+
+    /* ── Tip presets ─────────────────────────────────────── */
+    .tip-presets {
+      display: flex;
+      gap: 6px;
+    }
+    .tip-preset {
+      flex: 1;
+      background: var(--s2);
+      border: 1px solid var(--b);
+      border-radius: 6px;
+      color: var(--m);
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      padding: 8px 0;
+      cursor: pointer;
+      transition: background .15s, border-color .2s, color .2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tip-preset:hover { border-color: var(--a); color: var(--a); }
+    .tip-preset.active { background: rgba(200,160,92,.1); border-color: var(--a); color: var(--a); }
+
+    /* ── Copy result button ─────────────────────────────── */
+    .copy-result-btn {
+      background: none;
+      border: 1px solid rgba(154,147,144,.2);
+      border-radius: 4px;
+      color: var(--m);
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      cursor: pointer;
+      transition: border-color .2s, color .2s;
+    }
+    .copy-result-btn:hover { border-color: var(--a); color: var(--a); }
+
+    /* Tip result rows */
+    .tip-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      width: 100%;
+      padding: 3px 0;
+    }
+    .tip-row-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--m);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+    .tip-row-val {
+      font-family: var(--mono);
+      font-size: 1.2rem;
+      color: var(--t);
+    }
+    .tip-row.highlight .tip-row-val { color: var(--a); font-size: 1.5rem; }
   </style>
 </head>
 <body>
@@ -308,13 +375,14 @@
 <div class="topbar">
   <a class="home-btn" href="index.html">← Home</a>
   <span class="page-title">Percentage</span>
-  <div style="width:60px"></div>
+  <button id="pwa-install-btn" class="home-btn" style="display:none;border-color:rgba(200,160,92,.4);color:var(--a);">↓ Install</button>
 </div>
 
 <div class="tab-bar">
   <button class="tab-btn active" data-panel="0">X% of Y</button>
   <button class="tab-btn" data-panel="1">X of Y as %</button>
   <button class="tab-btn" data-panel="2">% Change</button>
+  <button class="tab-btn" data-panel="3">Tip/Split</button>
 </div>
 
 <main>
@@ -380,6 +448,46 @@
     <button class="clear-btn" id="p2-clear">Clear</button>
   </div>
 
+  <!-- Mode 3: Tip & Split -->
+  <div class="panel" id="panel-3">
+    <div class="input-row">
+      <div class="input-group">
+        <span class="input-label">Bill Total</span>
+        <input class="num-input" id="p3-bill" type="number" inputmode="decimal" placeholder="80.00">
+      </div>
+      <span class="suffix">$</span>
+    </div>
+
+    <div>
+      <div class="input-row" style="margin-bottom:8px;">
+        <div class="input-group">
+          <span class="input-label">Tip %</span>
+          <input class="num-input" id="p3-tip" type="number" inputmode="decimal" placeholder="20">
+        </div>
+        <span class="suffix">%</span>
+      </div>
+      <div class="tip-presets">
+        <button class="tip-preset" data-pct="15">15%</button>
+        <button class="tip-preset" data-pct="18">18%</button>
+        <button class="tip-preset" data-pct="20">20%</button>
+        <button class="tip-preset" data-pct="25">25%</button>
+      </div>
+    </div>
+
+    <div class="input-row">
+      <div class="input-group">
+        <span class="input-label">Split between</span>
+        <input class="num-input" id="p3-people" type="number" inputmode="numeric" placeholder="2" min="1">
+      </div>
+      <span class="connector">people</span>
+    </div>
+
+    <div class="result-card" id="p3-result-card">
+      <span class="result-placeholder">Enter values above</span>
+    </div>
+    <button class="clear-btn" id="p3-clear">Clear</button>
+  </div>
+
 </main>
 
 <script>
@@ -441,6 +549,20 @@
       h.textContent = hint;
       card.appendChild(h);
     }
+
+    // Copy button
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'copy-result-btn';
+    copyBtn.textContent = '⎘ Copy';
+    copyBtn.style.marginTop = '8px';
+    const copyText = label ? `${label} ${value}` : value;
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(copyText).then(() => {
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => copyBtn.textContent = '⎘ Copy', 1500);
+      });
+    });
+    card.appendChild(copyBtn);
   }
 
   function showClear(btnId, show) {
@@ -559,6 +681,109 @@
     document.getElementById('p2-to').value = '';
     computeMode2();
   });
+
+  // ── Mode 3: Tip & Split ───────────────────────────────────
+  function computeMode3() {
+    const bill   = parseFloat(document.getElementById('p3-bill').value);
+    const tipPct = parseFloat(document.getElementById('p3-tip').value);
+    const people = Math.max(1, parseInt(document.getElementById('p3-people').value) || 1);
+    const hasInput = !isNaN(bill) || !isNaN(tipPct);
+
+    const card = document.getElementById('p3-result-card');
+    showClear('p3-clear', hasInput);
+
+    if (isNaN(bill) || isNaN(tipPct)) {
+      card.innerHTML = '<span class="result-placeholder">Enter values above</span>';
+      card.className = 'result-card';
+      return;
+    }
+
+    const tipAmt    = bill * (tipPct / 100);
+    const total     = bill + tipAmt;
+    const perPerson = total / people;
+
+    card.className = 'result-card has-result';
+    card.innerHTML = '';
+
+    const rows = [
+      { label: 'Tip Amount', value: `$${fmt(tipAmt)}`, highlight: false },
+      { label: 'Total',      value: `$${fmt(total)}`,  highlight: false },
+      ...(people > 1 ? [{ label: `Each (${people}×)`, value: `$${fmt(perPerson)}`, highlight: true }] : []),
+    ];
+
+    rows.forEach(row => {
+      const div = document.createElement('div');
+      div.className = 'tip-row' + (row.highlight ? ' highlight' : '');
+      div.innerHTML = `<span class="tip-row-label">${row.label}</span><span class="tip-row-val">${row.value}</span>`;
+      card.appendChild(div);
+    });
+
+    // Copy button
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'copy-result-btn';
+    copyBtn.textContent = '⎘ Copy';
+    copyBtn.style.marginTop = '10px';
+    copyBtn.addEventListener('click', () => {
+      const text = rows.map(r => `${r.label}: ${r.value}`).join('\n');
+      navigator.clipboard.writeText(text).then(() => {
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => copyBtn.textContent = '⎘ Copy', 1500);
+      });
+    });
+    card.appendChild(copyBtn);
+  }
+
+  // Tip preset buttons
+  document.querySelectorAll('.tip-preset').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tip-preset').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('p3-tip').value = btn.dataset.pct;
+      computeMode3();
+    });
+  });
+
+  ['p3-bill', 'p3-tip', 'p3-people'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => {
+      document.querySelectorAll('.tip-preset').forEach(b => b.classList.remove('active'));
+      computeMode3();
+    });
+  });
+
+  document.getElementById('p3-clear').addEventListener('click', () => {
+    ['p3-bill','p3-tip','p3-people'].forEach(id => document.getElementById(id).value = '');
+    document.querySelectorAll('.tip-preset').forEach(b => b.classList.remove('active'));
+    computeMode3();
+  });
+</script>
+<script>
+  // ── PWA Install Prompt ────────────────────────────────────────
+  (function() {
+    var DISMISS_KEY = 'pwaInstallDismissed';
+    if (localStorage.getItem(DISMISS_KEY)) return;
+    var deferredPrompt = null;
+    var btn = document.getElementById('pwa-install-btn');
+    if (!btn) return;
+    window.addEventListener('beforeinstallprompt', function(e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      btn.style.display = '';
+    });
+    btn.addEventListener('click', function() {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(r) {
+        deferredPrompt = null;
+        btn.style.display = 'none';
+        if (r.outcome === 'dismissed') localStorage.setItem(DISMISS_KEY, '1');
+      });
+    });
+    window.addEventListener('appinstalled', function() {
+      btn.style.display = 'none';
+      deferredPrompt = null;
+    });
+  })();
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(function(){});
 </script>
 </body>
 </html>

@@ -6,6 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0d0b09">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
   <title>Calculator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -101,7 +106,7 @@
       letter-spacing: .01em;
     }
 
-    .spacer { width: 60px; }
+    .topbar-right { display: flex; gap: 6px; align-items: center; }
 
     /* ── Display ─────────────────────────────────────────────── */
     .calc-display {
@@ -111,6 +116,99 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
+      position: relative;
+    }
+
+    .copy-feedback {
+      position: absolute;
+      top: 10px; right: 10px;
+      background: var(--a);
+      color: var(--bg);
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 4px;
+      opacity: 0;
+      transition: opacity .2s;
+      pointer-events: none;
+    }
+    .copy-feedback.show { opacity: 1; }
+
+    /* ── History Drawer ──────────────────────────────────────── */
+    .history-drawer {
+      background: var(--s1);
+      border-top: 1px solid var(--b);
+      display: none;
+    }
+    .history-drawer.open { display: block; }
+    .history-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--b);
+    }
+    .history-title {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--m);
+    }
+    .history-clear {
+      background: none;
+      border: none;
+      color: var(--m);
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 2px 6px;
+      transition: color .2s;
+    }
+    .history-clear:hover { color: var(--a); }
+    .history-list {
+      list-style: none;
+      max-height: 220px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--b) transparent;
+    }
+    .history-item {
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(45,41,34,.5);
+      cursor: pointer;
+      transition: background .1s;
+      text-align: right;
+    }
+    .history-item:last-child { border-bottom: none; }
+    .history-item:hover { background: var(--s2); }
+    .history-expr {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--m);
+      letter-spacing: .02em;
+    }
+    .history-result {
+      font-family: var(--mono);
+      font-size: 1.25rem;
+      color: var(--t);
+      letter-spacing: -.02em;
+      margin-top: 2px;
+    }
+    .history-empty {
+      padding: 20px 16px;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--m);
+      opacity: .4;
     }
 
     #expr {
@@ -220,12 +318,25 @@
     <div class="calc-topbar">
       <a class="home-btn" href="index.html">← Home</a>
       <span class="calc-label">Calculator</span>
-      <div class="spacer"></div>
+      <div class="topbar-right">
+        <button id="btn-history" class="home-btn" title="History">▤</button>
+        <button id="btn-copy" class="home-btn" title="Copy result">⎘</button>
+        <button id="pwa-install-btn" class="home-btn" style="display:none;border-color:rgba(200,160,92,.4);color:var(--a);">↓ Install</button>
+      </div>
     </div>
 
     <div class="calc-display">
       <div id="expr"></div>
       <div id="result">0</div>
+      <div class="copy-feedback" id="copy-feedback">Copied</div>
+    </div>
+
+    <div class="history-drawer" id="history-drawer">
+      <div class="history-header">
+        <span class="history-title">History</span>
+        <button class="history-clear" id="history-clear">Clear</button>
+      </div>
+      <ul class="history-list" id="history-list"></ul>
     </div>
 
     <div class="calc-grid">
@@ -305,6 +416,68 @@
       render();
     }
 
+    // ── History ───────────────────────────────────────────────
+    const HIST_KEY = 'calcHistory';
+    const MAX_HIST = 20;
+
+    function getHistory() {
+      try { return JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); }
+      catch { return []; }
+    }
+
+    function saveToHistory(expr, result) {
+      if (!expr || result === 'Error') return;
+      const h = getHistory();
+      h.unshift({ expr, result });
+      if (h.length > MAX_HIST) h.splice(MAX_HIST);
+      localStorage.setItem(HIST_KEY, JSON.stringify(h));
+      renderHistory();
+    }
+
+    function renderHistory() {
+      const list = document.getElementById('history-list');
+      const h = getHistory();
+      list.innerHTML = '';
+      if (!h.length) {
+        list.innerHTML = '<li class="history-empty">No history yet</li>';
+        return;
+      }
+      h.forEach(entry => {
+        const li = document.createElement('li');
+        li.className = 'history-item';
+        li.innerHTML = `<div class="history-expr">${entry.expr}</div><div class="history-result">${entry.result}</div>`;
+        li.addEventListener('click', () => {
+          state.value = entry.result.replace(/,/g, '');
+          state.expr = '';
+          state.op = null;
+          state.prev = null;
+          state.newInput = false;
+          render();
+          flash();
+        });
+        list.appendChild(li);
+      });
+    }
+
+    document.getElementById('btn-history').addEventListener('click', () => {
+      const drawer = document.getElementById('history-drawer');
+      drawer.classList.toggle('open');
+      if (drawer.classList.contains('open')) renderHistory();
+    });
+
+    document.getElementById('history-clear').addEventListener('click', () => {
+      localStorage.removeItem(HIST_KEY);
+      renderHistory();
+    });
+
+    document.getElementById('btn-copy').addEventListener('click', () => {
+      navigator.clipboard.writeText(resultEl.textContent).then(() => {
+        const fb = document.getElementById('copy-feedback');
+        fb.classList.add('show');
+        setTimeout(() => fb.classList.remove('show'), 1200);
+      });
+    });
+
     function compute(showExpr = true) {
       if (!state.op || state.prev === null) return;
       const a = parseFloat(state.prev), b = parseFloat(state.value);
@@ -322,7 +495,10 @@
       state.prev     = null;
       state.newInput = true;
       render();
-      if (showExpr) flash();
+      if (showExpr) {
+        flash();
+        if (r !== 'Error') saveToHistory(state.expr, fmt(parseFloat(state.value)));
+      }
     }
 
     document.querySelector('.calc-grid').addEventListener('click', e => {
@@ -372,5 +548,34 @@
 
     render();
   </script>
+<script>
+  // ── PWA Install Prompt ────────────────────────────────────────
+  (function() {
+    var DISMISS_KEY = 'pwaInstallDismissed';
+    if (localStorage.getItem(DISMISS_KEY)) return;
+    var deferredPrompt = null;
+    var btn = document.getElementById('pwa-install-btn');
+    if (!btn) return;
+    window.addEventListener('beforeinstallprompt', function(e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      btn.style.display = '';
+    });
+    btn.addEventListener('click', function() {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(r) {
+        deferredPrompt = null;
+        btn.style.display = 'none';
+        if (r.outcome === 'dismissed') localStorage.setItem(DISMISS_KEY, '1');
+      });
+    });
+    window.addEventListener('appinstalled', function() {
+      btn.style.display = 'none';
+      deferredPrompt = null;
+    });
+  })();
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(function(){});
+</script>
 </body>
 </html>
