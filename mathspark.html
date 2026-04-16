@@ -1,19 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#0d0b09">
     <title>Math Spark</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"></noscript>
     <style>
-        /* ─── Reset ─── */
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* ─── Tokens ─── */
         :root {
             --bg:    #0d0b09;
             --s1:    #141210;
@@ -31,7 +26,6 @@
             --sans:  'DM Sans', system-ui, sans-serif;
         }
 
-        /* ─── Base ─── */
         html { font-size: 16px; }
 
         body {
@@ -45,7 +39,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* ─── Topbar ─── */
         .topbar {
             display: flex;
             align-items: center;
@@ -84,7 +77,6 @@
             color: var(--t);
         }
 
-        /* ─── Shell ─── */
         .shell {
             width: 100%;
             max-width: 420px;
@@ -96,7 +88,6 @@
             padding: 28px 20px calc(32px + env(safe-area-inset-bottom));
         }
 
-        /* ─── Stats bar ─── */
         .stats-bar {
             width: 100%;
             background: var(--s1);
@@ -135,7 +126,6 @@
             border-radius: 100px;
         }
 
-        /* ─── Selectors ─── */
         .selector {
             width: 100%;
             background: var(--s1);
@@ -179,10 +169,8 @@
 
         .sel-btn:active { transform: scale(.96); }
 
-        /* Op selector — larger symbols */
         .op-selector .sel-btn { font-size: 14px; text-transform: none; }
 
-        /* ─── Equation card ─── */
         .card {
             width: 100%;
             background: var(--s1);
@@ -195,7 +183,6 @@
             overflow: hidden;
         }
 
-        /* Accent shimmer */
         .card::before {
             content: '';
             position: absolute;
@@ -263,7 +250,6 @@
         .feedback-msg.correct { color: var(--green); animation: popIn .2s ease; }
         .feedback-msg.wrong   { color: var(--red);   animation: popIn .2s ease; }
 
-        /* ─── Answer input row ─── */
         .input-row {
             width: 100%;
             display: flex;
@@ -329,7 +315,6 @@
         #checkButton:hover  { background: #d4a862; }
         #checkButton:active { transform: scale(.95); }
 
-        /* ─── Primary action button ─── */
         .action-btn {
             width: 100%;
             padding: 17px;
@@ -361,7 +346,6 @@
             border-color: var(--green);
         }
 
-        /* ─── Responsive ─── */
         @media (max-width: 380px) {
             .shell { padding: 20px 12px calc(24px + env(safe-area-inset-bottom)); }
             .equation { font-size: 42px; }
@@ -377,21 +361,18 @@
 </div>
 <div class="shell">
 
-    <!-- Stats -->
     <div class="stats-bar" role="status" aria-label="Game stats">
         <span class="streak" id="streakDisplay" aria-label="Streak">🔥 0 streak</span>
         <span class="score"  id="scoreDisplay"  aria-label="Score">0 / 0</span>
         <span class="pool-badge" id="poolDisplay" aria-label="Problems remaining">— left</span>
     </div>
 
-    <!-- Difficulty -->
     <div class="selector" id="diffSelector">
         <button class="sel-btn active" data-diff="easy">Easy</button>
         <button class="sel-btn"        data-diff="medium">Medium</button>
         <button class="sel-btn"        data-diff="hard">Hard</button>
     </div>
 
-    <!-- Operation -->
     <div id="opSelector" class="selector op-selector" role="group" aria-label="Operation">
         <button class="sel-btn active" id="additionLink"       type="button" aria-label="Addition">＋</button>
         <button class="sel-btn"        id="subtractionLink"    type="button" aria-label="Subtraction">－</button>
@@ -399,13 +380,11 @@
         <button class="sel-btn"        id="divisionLink"       type="button" aria-label="Division">÷</button>
     </div>
 
-    <!-- Equation card -->
     <div class="card" id="displayCard">
         <div class="equation idle" id="displayNumbers">? ○ ?</div>
         <div class="feedback-msg hint" id="feedbackMsg" aria-live="polite" aria-atomic="true">tap New Problem to start</div>
     </div>
 
-    <!-- Answer input -->
     <div class="input-row" id="inputZone">
         <input
             id="answerInput"
@@ -418,13 +397,11 @@
         <button id="checkButton">Check ✓</button>
     </div>
 
-    <!-- New / Next -->
     <button class="action-btn" id="actionButton">New Problem</button>
 
 </div>
 
 <script>
-// ─── State ───────────────────────────────────────────────────────────────────
 const state = {
     phase:      'idle',
     op:         'addition',
@@ -439,7 +416,6 @@ const state = {
     lastKey:    null,
 };
 
-// ─── Operations ──────────────────────────────────────────────────────────────
 const ops = {
     addition:       { symbol: '+', compute: (a, b) => a + b                          },
     subtraction:    { symbol: '−', compute: (a, b) => a - b                          },
@@ -447,14 +423,12 @@ const ops = {
     division:       { symbol: '÷', compute: (a, b) => parseFloat((a / b).toFixed(2)) },
 };
 
-// ─── Difficulty ranges ────────────────────────────────────────────────────────
 const ranges = {
     easy:   { a: [2, 12],   b: [2, 12]  },
     medium: { a: [10, 50],  b: [2, 20]  },
     hard:   { a: [50, 200], b: [10, 50] },
 };
 
-// ─── DOM ─────────────────────────────────────────────────────────────────────
 const els = {
     equation:      document.getElementById('displayNumbers'),
     feedbackMsg:   document.getElementById('feedbackMsg'),
@@ -468,7 +442,6 @@ const els = {
     poolDisplay:   document.getElementById('poolDisplay'),
 };
 
-// ─── Pool ─────────────────────────────────────────────────────────────────────
 function shuffle(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -512,17 +485,14 @@ function nextFromPool() {
     return pair;
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
 function correctAnswer() {
     return ops[state.op].compute(state.num1, state.num2);
 }
 
-// ─── Render ───────────────────────────────────────────────────────────────────
 function render() {
     const { phase, streak, correct, total } = state;
     const op = ops[state.op];
 
-    // Equation
     if (phase === 'idle') {
         els.equation.textContent = '? ○ ?';
         els.equation.className   = 'equation idle';
@@ -531,12 +501,10 @@ function render() {
         els.equation.className   = 'equation';
     }
 
-    // Card state
     els.card.className = 'card';
     if (phase === 'feedback-correct') els.card.classList.add('correct');
     if (phase === 'feedback-wrong')   els.card.classList.add('wrong');
 
-    // Feedback message
     const msgs = {
         'idle':             ['tap New Problem to start', 'hint'],
         'answering':        ['', ''],
@@ -547,15 +515,12 @@ function render() {
     els.feedbackMsg.textContent = msg;
     els.feedbackMsg.className   = cls ? `feedback-msg ${cls}` : 'feedback-msg';
 
-    // Input
     els.inputZone.classList.toggle('visible', phase === 'answering');
 
-    // Action button
     const inFeedback = phase === 'feedback-correct' || phase === 'feedback-wrong';
     els.actionButton.textContent = inFeedback ? 'Next Problem →' : 'New Problem';
     els.actionButton.className   = inFeedback ? 'action-btn next' : 'action-btn';
 
-    // Stats
     els.streakDisplay.textContent = `🔥 ${streak} streak`;
     els.streakDisplay.className   = streak >= 5 ? 'streak hot' : 'streak';
     els.scoreDisplay.textContent  = `${correct} / ${total}`;
@@ -563,7 +528,6 @@ function render() {
     els.poolDisplay.textContent   = `${left} left`;
 }
 
-// ─── Actions ─────────────────────────────────────────────────────────────────
 function startNewProblem() {
     const [n1, n2] = nextFromPool();
     state.num1  = n1;
@@ -600,9 +564,6 @@ function handleAction() {
     if (state.phase !== 'answering') startNewProblem();
 }
 
-// ─── Event wiring ─────────────────────────────────────────────────────────────
-
-// Operation tabs
 Object.keys(ops).forEach(opKey => {
     document.getElementById(`${opKey}Link`).addEventListener('click', () => {
         if (state.op === opKey) return;
@@ -615,7 +576,6 @@ Object.keys(ops).forEach(opKey => {
     });
 });
 
-// Difficulty
 document.querySelectorAll('#diffSelector .sel-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         if (state.difficulty === btn.dataset.diff) return;
@@ -635,7 +595,6 @@ els.actionButton.addEventListener('keydown', e => {
     if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); handleAction(); }
 });
 
-// ─── Init ─────────────────────────────────────────────────────────────────────
 resetPool();
 render();
 </script>
