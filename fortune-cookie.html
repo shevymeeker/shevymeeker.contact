@@ -131,25 +131,81 @@
             font-family: 'Space Mono', monospace;
         }
 
-        /* ── Scroll / quote area ── */
-        .scroll-frame {
+        /* ── Section tabs ── */
+        .section-tabs {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            margin: 14px 0 10px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid rgba(45, 41, 34, 0.9);
+            border-radius: 3px;
+            padding: 5px 14px;
+            font-size: 9px;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: rgba(154, 147, 144, 0.6);
+            cursor: pointer;
+            transition: border-color .2s, color .2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .tab-btn:hover {
+            border-color: rgba(200, 165, 75, 0.35);
+            color: rgba(200, 165, 75, 0.7);
+        }
+
+        .tab-btn.active {
+            border-color: rgba(200, 165, 75, 0.55);
+            color: #c9a84c;
+        }
+
+        /* ── Flip card ── */
+        .flip-card-wrapper {
+            width: 100%;
+            perspective: 1200px;
+            margin-bottom: 36px;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            min-height: 140px;
+            transform-style: preserve-3d;
+            transition: transform 0.65s cubic-bezier(0.4, 0.2, 0.2, 1);
+        }
+
+        .flip-card-inner.has-content { cursor: pointer; }
+        .flip-card-inner.is-flipped  { transform: rotateY(180deg); }
+
+        /* ── Card faces (shared) ── */
+        .card-face {
             width: 100%;
             background: rgba(20, 16, 8, 0.85);
             border: 1px solid rgba(200, 165, 75, 0.25);
             border-radius: 4px;
-            padding: 40px 36px;
+            padding: 40px 36px 44px;
             position: relative;
             min-height: 140px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 36px;
-            transition: opacity 0.3s;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            transition: border-color .25s, opacity .25s;
         }
 
-        /* Decorative top and bottom lines */
-        .scroll-frame::before,
-        .scroll-frame::after {
+        .flip-card-inner.has-content:hover .card-face {
+            border-color: rgba(200, 165, 75, 0.38);
+        }
+
+        .card-face::before,
+        .card-face::after {
             content: '';
             position: absolute;
             left: 20px;
@@ -157,22 +213,27 @@
             height: 1px;
             background: linear-gradient(90deg, transparent, rgba(200, 165, 75, 0.4), transparent);
         }
-        .scroll-frame::before { top: 10px; }
-        .scroll-frame::after  { bottom: 10px; }
+        .card-face::before { top: 10px; }
+        .card-face::after  { bottom: 10px; }
 
-        .scroll-frame.fading { opacity: 0; }
+        .card-face.fading { opacity: 0; }
 
-        .quote-inner {
+        /* Back face sits behind the front until flipped */
+        .card-back {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            transform: rotateY(180deg);
+        }
+
+        /* ── Front face content ── */
+        .card-content {
             display: flex;
             flex-direction: column;
             gap: 20px;
             width: 100%;
         }
 
-        /* Empty state */
-        .quote-inner.empty {
-            align-items: center;
-        }
+        .card-content.empty { align-items: center; }
 
         .empty-hint {
             font-size: 10px;
@@ -182,7 +243,6 @@
             text-transform: uppercase;
         }
 
-        /* Quote text */
         #quote-text {
             font-size: clamp(15px, 3.5vw, 18px);
             font-style: italic;
@@ -193,21 +253,59 @@
             font-family: 'Instrument Serif', Georgia, serif;
         }
 
-        /* Attribution */
-        #quote-source {
-            font-size: 11px;
-            font-style: normal;
-            font-family: 'Space Mono', monospace;
-            color: rgba(200, 165, 75, 0.55);
-            letter-spacing: .04em;
-            text-align: center;
-            line-height: 1.6;
+        /* ── Back face content ── */
+        .back-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
         }
 
-        #quote-source strong {
-            color: rgba(232, 201, 106, 0.8);
-            font-weight: 700;
+        .back-book {
+            font-size: clamp(17px, 4vw, 22px);
+            font-style: italic;
+            font-family: 'Instrument Serif', Georgia, serif;
+            color: #e8c96a;
+            text-align: center;
+            text-shadow: 0 0 30px rgba(232, 201, 106, 0.25);
+            line-height: 1.4;
         }
+
+        .back-by {
+            font-size: 9px;
+            font-family: 'Space Mono', monospace;
+            letter-spacing: .25em;
+            text-transform: uppercase;
+            color: rgba(200, 165, 75, 0.3);
+            margin-top: 4px;
+        }
+
+        .back-author {
+            font-size: 12px;
+            font-family: 'Space Mono', monospace;
+            color: rgba(200, 165, 75, 0.65);
+            letter-spacing: .06em;
+            text-align: center;
+        }
+
+        /* ── Flip hints ── */
+        .flip-hint {
+            position: absolute;
+            bottom: 14px;
+            right: 18px;
+            font-size: 8px;
+            font-family: 'Space Mono', monospace;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: rgba(200, 165, 75, 0.22);
+            opacity: 0;
+            transition: opacity .4s;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .flip-card-inner.has-content .flip-hint { opacity: 1; }
 
         /* ── Button ── */
         button {
@@ -256,7 +354,7 @@
         }
 
         @media (max-width: 480px) {
-            .scroll-frame { padding: 32px 22px; }
+            .card-face { padding: 32px 22px 42px; }
         }
     </style>
 </head>
@@ -267,13 +365,26 @@
 <div class="page-content" style="padding-top:56px">
     <header>
         <h1>Fortune Cookie</h1>
-        <p class="subtitle">famous first lines from great books</p>
+        <div class="section-tabs">
+            <button class="tab-btn active" data-section="first-impressions" onclick="setSection('first-impressions')">First Impressions</button>
+            <button class="tab-btn" data-section="timeless-advice" onclick="setSection('timeless-advice')">Timeless Advice</button>
+        </div>
+        <p class="subtitle" id="subtitle">famous first lines from great books</p>
     </header>
 
     <main>
-        <div class="scroll-frame" id="scrollFrame" aria-live="polite" aria-atomic="true">
-            <div class="quote-inner empty" id="quoteInner">
-                <span class="empty-hint">tap the button for your fortune</span>
+        <div class="flip-card-wrapper">
+            <div class="flip-card-inner" id="flipInner" onclick="handleCardClick()">
+                <div class="card-face card-front" id="cardFront" aria-live="polite" aria-atomic="true">
+                    <div class="card-content empty" id="cardContent">
+                        <span class="empty-hint">tap the button for your fortune</span>
+                    </div>
+                    <span class="flip-hint" aria-hidden="true">flip for source ↺</span>
+                </div>
+                <div class="card-face card-back" id="cardBack">
+                    <div class="back-content" id="backContent"></div>
+                    <span class="flip-hint" aria-hidden="true">↺ flip back</span>
+                </div>
             </div>
         </div>
         <button type="button" onclick="crackCookie()">Crack Open a Cookie 🍪</button>
@@ -285,6 +396,118 @@
 </div>
 
 <script>
+    /* ── Timeless Advice: parsed at runtime from raw text ── */
+    const ADVICE_RAW = `Do not leave your nose unattended in a barbershop. — The Nose by Nikolai Gogol
+Do not follow a rabbit down a hole, regardless of its tailoring. — Alice's Adventures in Wonderland by Lewis Carroll
+Do not bury your wife in the cellar if you have not secured the cat. — The Black Cat by Edgar Allan Poe
+If your dinner host keeps offering you meat pies, eat the vegetables. — The String of Pearls (Sweeney Todd) by James Malcolm Rymer and Thomas Peckett Prest
+Do not invite a pig to manage your farm. — Animal Farm by George Orwell
+Avoid staring at yellow wallpaper for extended periods. — The Yellow Wallpaper by Charlotte Perkins Gilman
+Never let a talking raven dictate your interior decor. — The Raven by Edgar Allan Poe
+Avoid eating Turkish Delight offered by strangers in sleighs. — The Lion, the Witch and the Wardrobe by C.S. Lewis
+The most dangerous women are the ones knitting near the guillotine. — A Tale of Two Cities by Charles Dickens
+A sudden transformation into a giant bug is a valid reason to miss work. — The Metamorphosis by Franz Kafka
+Never duel a man who eats cherries while you take your aim. — The Shot by Alexander Pushkin
+A successful marriage requires checking the attic for hidden relatives. — Jane Eyre by Charlotte Brontë
+If the local villagers invite you to a midsummer gathering with a wicker statue, leave. — The Wicker Man by Robin Hardy and Anthony Shaffer
+Avoid accepting an invitation to a house party on a secluded island with nine other strangers. — And Then There Were None by Agatha Christie
+Do not sleep in a house where the architecture leans naturally away from the sun. — The Haunting of Hill House by Shirley Jackson
+If your older sister poisons the sugar bowl, learn to drink your coffee black. — We Have Always Lived in the Castle by Shirley Jackson
+Never accept a winter caretaking job in a hotel that requires you to check the boiler. — The Shining by Stephen King
+Burying your dead cat in the rocky soil past the deadfall will not yield the results you want. — Pet Sematary by Stephen King
+If your biggest fan rescues you from a car crash, secure all heavy blunt objects. — Misery by Stephen King
+A clown waiting in a storm drain is never a municipal employee. — It by Stephen King
+Ignore the geometry of the sunken city, even if it hurts your eyes. — The Call of Cthulhu by H.P. Lovecraft
+Do not insist on hearing the heartbeat under the floorboards if the police are already leaving. — The Tell-Tale Heart by Edgar Allan Poe
+A crack in the family estate's masonry is best solved by moving out immediately. — The Fall of the House of Usher by Edgar Allan Poe
+Never trust a scientist who requires fresh graves to complete his coursework. — Frankenstein by Mary Shelley
+A charming foreign count who refuses to use a mirror is a terrible houseguest. — Dracula by Bram Stoker
+Do not consume potions mixed by a doctor who has recently changed his posture and voice. — The Strange Case of Dr. Jekyll and Mr. Hyde by Robert Louis Stevenson
+Storing your rotting, murderous portrait in the attic only delays the inevitable. — The Picture of Dorian Gray by Oscar Wilde
+If the previous wife drowned in the bay, do not wear her old raincoat. — Rebecca by Daphne du Maurier
+Flocks of aggressive seagulls are not a weather anomaly, they are an eviction notice. — The Birds by Daphne du Maurier
+The children you are nannying do not need to commune with the previous staff. — The Turn of the Screw by Henry James
+Do not attend a court hearing for a crime no one will explain to you. — The Trial by Franz Kafka
+An execution machine that tattoos the sentence into your skin is a poor mechanism for justice. — In the Penal Colony by Franz Kafka
+A ghost who complains about his missing overcoat just wants you to freeze. — The Overcoat by Nikolai Gogol
+A library containing every possible combination of letters is a terrible place to find a specific answer. — The Library of Babel by Jorge Luis Borges
+A traveling carnival arriving in October always charges more than the price of admission. — Something Wicked This Way Comes by Ray Bradbury
+Firemen who start fires instead of putting them out should not be allowed near your bookshelves. — Fahrenheit 451 by Ray Bradbury
+Do not drink the vitamin smoothies provided by your overly helpful, elderly neighbors. — Rosemary's Baby by Ira Levin
+If the women in your new neighborhood are flawless and never blink, pack your bags. — The Stepford Wives by Ira Levin
+Solving a mysterious puzzle box will not summon friendly local locksmiths. — The Hellbound Heart by Clive Barker
+Do not blow the conch shell if the choir boys have already sharpened their spears. — Lord of the Flies by William Golding
+A scientist swathed in bandages wearing dark glasses indoors is hiding terrible table manners. — The Invisible Man by H.G. Wells
+Avoid islands where the local wildlife recites the law to you. — The Island of Dr. Moreau by H.G. Wells
+Do not read the second act of the play if you wish to retain your sanity. — The King in Yellow by Robert W. Chambers
+A handsome Wall Street executive with a predilection for Huey Lewis and plastic tarps is not a good dinner date. — American Psycho by Bret Easton Ellis
+A treasure hunt organized by your missing wife is a trap. — Gone Girl by Gillian Flynn
+Do not start a bare-knuckle boxing ring with a man who does not exist. — Fight Club by Chuck Palahniuk
+Asking a cannibalistic psychiatrist for profiling advice will cost you a few organs. — The Silence of the Lambs by Thomas Harris
+A school field trip that begins with explosive collars is not strictly educational. — Battle Royale by Koushun Takami
+Fortifying your house against the nocturnal undead is useless if you forget to check the basement. — I Am Legend by Richard Matheson
+Be suspicious of small towns that insist you draw a slip of paper from a black wooden box. — The Lottery by Shirley Jackson
+A key that bleeds when you drop it means the locked room should remain locked. — The Bloody Chamber by Angela Carter
+Do not trade your voice to a sea witch in exchange for legs that feel like walking on glass. — The Little Mermaid by Hans Christian Andersen
+If your husband's former wives all disappeared, do not ask what is in the tower. — Bluebeard by Charles Perrault
+A frozen club of lamb makes an excellent murder weapon and a terrible dinner. — Lamb to the Slaughter by Roald Dahl
+Do not attend a convention of women who despise children and wear itchy wigs. — The Witches by Roald Dahl
+A mysterious stranger who buys your shadow will not return it. — Peter Schlemihl by Adelbert von Chamisso
+Do not build an artificial woman out of sand and magic to replace your deceased lover. — The Sandman by E.T.A. Hoffmann
+When navigating a labyrinth, bring your own string so you do not have to rely on a monster. — The House of Asterion by Jorge Luis Borges
+Do not trust an automated nursery to properly discipline your children. — The Veldt by Ray Bradbury
+Avoid taking a job at a company that strictly monitors how often you use the bathroom and what you think about. — 1984 by George Orwell
+A beautiful woman living alone in a decrepit castle is rarely just lonely. — Carmilla by Sheridan Le Fanu
+Do not accept a monkey's paw from an old soldier who warns you it is cursed. — The Monkey's Paw by W.W. Jacobs
+A ship sailing without a crew should be left to drift. — The Narrative of Arthur Gordon Pym of Nantucket by Edgar Allan Poe
+Walking carnivorous plants should not be kept as garden novelties. — The Day of the Triffids by John Wyndham
+Do not board a train run entirely by the ghosts of dead passengers. — The Signal-Man by Charles Dickens
+A doctor who experiments with reviving the dead will eventually need your parts. — Herbert West–Reanimator by H.P. Lovecraft
+Avoid hiring a rat-catcher whose flute music appeals heavily to local children. — The Pied Piper of Hamelin by Robert Browning
+A man offering to cure your sickness by replacing your organs with machinery is not a licensed physician. — The Man That Was Used Up by Edgar Allan Poe
+Do not sign a ledger in blood for a man claiming to represent your darkest desires. — The Monk by Matthew G. Lewis
+A portrait gallery of your ancestors is a poor place to hide during a thunderstorm. — The Castle of Otranto by Horace Walpole
+Do not volunteer to watch over a dead body for three nights in a rural church. — The Viy by Nikolai Gogol
+A mysterious epidemic that causes blindness is best avoided by not looking at anyone. — Blindness by José Saramago
+If your village suddenly decides a giant rhinoceros is a normal neighbor, pack your bags. — Rhinoceros by Eugène Ionesco
+Do not accept an invitation to a hunting party where the prey runs on two legs. — The Most Dangerous Game by Richard Connell
+A swamp creature composed of mud and revenge is not a reliable security system. — The Golem by Gustav Meyrink
+Do not read the diary of a madman out loud if you wish to remain calm. — Diary of a Madman by Nikolai Gogol
+A beautiful, ruined abbey is a terrible place to hide from an inquisitive monk. — The Italian by Ann Radcliffe
+Do not trust a sentient ocean to accurately recreate your dead wife. — Solaris by Stanisław Lem
+A mysterious color that falls from the sky and mutates the farm animals should not be treated as fertilizer. — The Colour Out of Space by H.P. Lovecraft
+Avoid exploring ancient, subterranean ruins guarded by albino penguins. — At the Mountains of Madness by H.P. Lovecraft
+Do not steal a ruby from the forehead of a cursed idol, no matter the resale value. — The Moonstone by Wilkie Collins
+A hospital where the patients never seem to get better or leave is not a place for convalescence. — The Magic Mountain by Thomas Mann
+Do not trust a totalitarian government that insists two and two make five. — 1984 by George Orwell
+Do not accept a glass of rare wine from a man holding a trowel. — The Cask of Amontillado by Edgar Allan Poe
+Avoid coastal towns where the locals have unusually wide mouths and unblinking eyes. — The Shadow Over Innsmouth by H.P. Lovecraft
+Do not bury stolen treasure under a tree marked with a skull, expecting to dig it up peacefully. — Treasure Island by Robert Louis Stevenson
+A man who claims he has discovered a way to travel to the fourth dimension usually forgets how to get back. — The Time Machine by H.G. Wells
+If the local reverend starts wearing a black veil over his face permanently, do not ask him for a blessing. — The Minister's Black Veil by Nathaniel Hawthorne
+Do not trust a beautiful woman who turns into a fox when the moon is full. — Lady into Fox by David Garnett
+Avoid staying in a room where the previous occupant was mysteriously crushed by the ceiling. — The Pit and the Pendulum by Edgar Allan Poe
+If the wax figures in the museum resemble the victims of recent murders, do not work the night shift. — The Wax Works by Charles Belden
+Do not gamble with a Russian officer who aims a gun at his own head for sport. — The Fatalist by Mikhail Lermontov
+A boarding school that harvests organs from its students is not providing a standard education. — Never Let Me Go by Kazuo Ishiguro
+Do not ignore the omens when the family dog suddenly refuses to enter the nursery. — The Omen by David Seltzer
+If your toddler intentionally destroys your home office, lock up the archery equipment. — We Need to Talk About Kevin by Lionel Shriver
+A mechanical hound programmed to track your scent is not a suitable pet. — Fahrenheit 451 by Ray Bradbury
+Do not trust a religious sect that forces women to wear red cloaks and white bonnets. — The Handmaid's Tale by Margaret Atwood
+Avoid scientific expeditions into an anomaly that warps DNA and mimics human voices. — Annihilation by Jeff VanderMeer
+Do not attempt to murder your exact double, as you share the same vital organs. — William Wilson by Edgar Allan Poe`;
+
+    const TIMELESS_ADVICE = ADVICE_RAW.trim().split('\n').filter(l => l.trim()).map(line => {
+        const sep = ' \u2014 ';
+        const sepIdx = line.indexOf(sep);
+        if (sepIdx === -1) return null;
+        const advice = line.substring(0, sepIdx);
+        const attribution = line.substring(sepIdx + sep.length);
+        const byIdx = attribution.lastIndexOf(' by ');
+        if (byIdx === -1) return { quote: advice, source: attribution, author: '' };
+        return { quote: advice, source: attribution.substring(0, byIdx), author: attribution.substring(byIdx + 4) };
+    }).filter(Boolean);
+
     const LINES = [
         { quote: "Where's Papa going with that ax?", source: "Charlotte's Web", author: "E.B. White" },
         { quote: "All children, except one, grow up.", source: "Peter Pan", author: "J.M. Barrie" },
@@ -388,10 +611,19 @@
         { quote: "There was a ship.", source: "Peter and the Starcatchers", author: "Dave Barry and Ridley Pearson" },
     ];
 
-    // ── Pool: shuffle and cycle through all lines before repeating ────────────
-    let pool  = [];
-    let poolIndex = 0;
+    // ── State ──────────────────────────────────────────────────────────────────
+    let activeSection = 'first-impressions';
+    let pool          = [];
+    let poolIndex     = 0;
+    let cardState     = 'empty'; // 'empty' | 'front' | 'back'
+    let isAnimating   = false;
 
+    const flipInner   = document.getElementById('flipInner');
+    const cardFront   = document.getElementById('cardFront');
+    const cardContent = document.getElementById('cardContent');
+    const backContent = document.getElementById('backContent');
+
+    // ── Helpers ────────────────────────────────────────────────────────────────
     function shuffle(arr) {
         const a = arr.slice();
         for (let i = a.length - 1; i > 0; i--) {
@@ -402,29 +634,73 @@
     }
 
     function nextLine() {
-        if (poolIndex >= pool.length) {
-            pool = shuffle(LINES);
-            poolIndex = 0;
-        }
+        const dataset = activeSection === 'first-impressions' ? LINES : TIMELESS_ADVICE;
+        if (poolIndex >= pool.length) { pool = shuffle(dataset); poolIndex = 0; }
         return pool[poolIndex++];
     }
 
-    // ── Cookie reveal with brief fade transition ───────────────────────────────
-    const scrollFrame = document.getElementById('scrollFrame');
-    const quoteInner  = document.getElementById('quoteInner');
+    // ── Section switching ──────────────────────────────────────────────────────
+    function setSection(section) {
+        if (section === activeSection) return;
+        activeSection = section;
+        pool = []; poolIndex = 0;
 
+        flipInner.classList.remove('is-flipped', 'has-content');
+        cardState = 'empty';
+        cardContent.classList.add('empty');
+        cardContent.innerHTML = '<span class="empty-hint">tap the button for your fortune</span>';
+        backContent.innerHTML = '';
+
+        document.querySelectorAll('.tab-btn').forEach(btn =>
+            btn.classList.toggle('active', btn.dataset.section === section)
+        );
+        document.getElementById('subtitle').textContent =
+            section === 'first-impressions'
+                ? 'famous first lines from great books'
+                : 'cautionary wisdom from great books';
+    }
+
+    // ── Cookie reveal ──────────────────────────────────────────────────────────
     function crackCookie() {
-        scrollFrame.classList.add('fading');
+        if (isAnimating) return;
+        if (cardState === 'back') {
+            isAnimating = true;
+            flipInner.classList.remove('is-flipped');
+            cardState = 'front';
+            setTimeout(() => { isAnimating = false; showNewCookie(); }, 680);
+        } else {
+            showNewCookie();
+        }
+    }
+
+    function showNewCookie() {
+        cardFront.classList.add('fading');
         setTimeout(() => {
             const line = nextLine();
+            cardContent.classList.remove('empty');
+            cardContent.innerHTML = `<p id="quote-text">\u201c${line.quote}\u201d</p>`;
+            backContent.innerHTML =
+                `<div class="back-book">${line.source}</div>` +
+                `<div class="back-by">by</div>` +
+                `<div class="back-author">${line.author}</div>`;
+            flipInner.classList.add('has-content');
+            cardState = 'front';
+            requestAnimationFrame(() => cardFront.classList.remove('fading'));
+        }, 260);
+    }
 
-            quoteInner.classList.remove('empty');
-            quoteInner.innerHTML =
-                `<p id="quote-text">\u201c${line.quote}\u201d</p>` +
-                `<p id="quote-source">\u2014 <strong>${line.source}</strong> by ${line.author}</p>`;
-
-            scrollFrame.classList.remove('fading');
-        }, 250);
+    // ── Card flip on click ─────────────────────────────────────────────────────
+    function handleCardClick() {
+        if (cardState === 'empty' || isAnimating) return;
+        isAnimating = true;
+        if (cardState === 'front') {
+            flipInner.classList.add('is-flipped');
+            cardState = 'back';
+        } else {
+            flipInner.classList.remove('is-flipped');
+            cardState = 'front';
+        }
+        setTimeout(() => { isAnimating = false; }, 680);
     }
 </script>
 </body>
