@@ -1,0 +1,17 @@
+{
+  "name": "Fortune Cookie",
+  "short_name": "Fortune Cookie",
+  "description": "Offline literary fortune cookie — famous first lines and timeless advice from great books.",
+  "start_url": "/fortune-cookie.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#0d0b09",
+  "background_color": "#0d0b09",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-192-maskable.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
