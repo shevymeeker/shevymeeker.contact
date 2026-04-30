@@ -864,13 +864,12 @@ function showFallback(url){mif.style.display='none';mfallext.href=url;mfall.clas
 function hideFallback(){mfall.classList.remove('show');mif.style.display=''}
 
 function openModal(name, url) {
+  if (url.startsWith('http')) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+    return;
+  }
   mt.textContent = name; mext.href = url;
   hideFallback(); clearTimeout(fbt);
-  if (url.startsWith('http')) {
-    const t0=Date.now();
-    mif.addEventListener('load',function h(){mif.removeEventListener('load',h);clearTimeout(fbt);if(Date.now()-t0<150)showFallback(url)});
-    fbt=setTimeout(()=>showFallback(url),10000);
-  }
   mif.src=url; modal.classList.add('open'); document.body.style.overflow='hidden';
 }
 function closeModal(){modal.classList.remove('open');document.body.style.overflow='';clearTimeout(fbt);setTimeout(()=>{mif.src='';hideFallback()},300)}
