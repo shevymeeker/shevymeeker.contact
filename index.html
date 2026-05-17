@@ -470,6 +470,21 @@ footer{border-top:1px solid var(--b);padding:3rem 2rem;display:flex;justify-cont
 .svc-cta-text{color:var(--m);font-size:14px;line-height:1.85;max-width:520px}
 .svc-cta-text strong{color:var(--t);font-weight:500}
 .svc-cta-actions{display:flex;gap:.45rem;flex-wrap:wrap;flex-shrink:0}
+/* ── Service rate-card list ─────────────────────────────── */
+.svc-list{margin-bottom:2.5rem}
+.svc-row{display:grid;grid-template-columns:1fr;gap:.4rem;padding:1.4rem 0;border-bottom:1px solid var(--b)}
+.svc-row:first-child{border-top:1px solid var(--b)}
+.svc-row-name{font-family:var(--serif);font-style:italic;font-size:1.25rem;color:var(--t);line-height:1.1}
+.svc-row-body{font-size:14px;color:var(--m);line-height:1.72}
+@media(min-width:640px){.svc-row{grid-template-columns:220px 1fr;gap:2rem;align-items:baseline}}
+/* ── Notary block ───────────────────────────────────────── */
+.notary-block{background:var(--s2);border:1px solid var(--b);border-left:4px solid var(--a);border-radius:0 var(--r) var(--r) 0;padding:2rem 1.75rem;margin-top:3rem}
+.notary-cred{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--a);margin-bottom:1rem}
+.notary-title{font-family:var(--serif);font-style:italic;font-size:clamp(1.6rem,5vw,2.4rem);color:var(--t);line-height:1.05;margin-bottom:1.5rem}
+.notary-details{display:grid;gap:.9rem;margin-bottom:1.75rem}
+.notary-detail{font-size:15px;color:var(--m);line-height:1.65}
+.notary-detail strong{color:var(--t);font-weight:500}
+.notary-actions{display:flex;gap:.65rem;flex-wrap:wrap}
 /* ── Apps CTA (after app grid) ──────────────────────────── */
 .apps-cta{margin-top:2.75rem;padding:1.75rem 2rem;border:1px solid var(--b);border-left:3px solid var(--a2);border-radius:0 4px 4px 0;background:rgba(42,77,26,.04);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.5rem}
 .apps-cta-text{color:var(--m);font-size:14px;line-height:1.85;max-width:520px}
@@ -552,72 +567,69 @@ footer{border-top:1px solid var(--b);padding:3rem 2rem;display:flex;justify-cont
 </section>
 
 <section class="sec fade" id="services">
-  <h2 class="h">Owensboro, KY.</h2>
+  <h2 class="h">Services</h2>
 
-  <div class="svc-intro">
-    <p>it's the little things that provide a foundation for the big things. be prepared for that right moment at the right time.</p>
-  </div>
+  <div class="svc-list">
 
-  <div class="svc-grid">
-
-    <div class="svc-card">
-      <div class="svc-icon">🌐</div>
-      <div class="svc-name">Business Webpage</div>
-      <p class="svc-body">Clients will never see you on Google without a website.</p>
+    <div class="svc-row">
+      <div class="svc-row-name">Business Webpage</div>
+      <p class="svc-row-body">Hand-coded HTML, CSS, and JavaScript — no templates, no WordPress. Clients can't find you on Google without one.</p>
     </div>
 
-    <div class="svc-card">
-      <div class="svc-icon">📍</div>
-      <div class="svc-name">Local SEO</div>
-      <p class="svc-body">No matter where your business operates, it's local SEO that helps Google know when to show your business to searchers.</p>
+    <div class="svc-row">
+      <div class="svc-row-name">Local SEO</div>
+      <p class="svc-row-body">Written by hand, optimized for every service you offer. Tells Google when and where to show your business to local searchers.</p>
     </div>
 
-    <div class="svc-card">
-      <div class="svc-icon">🗺️</div>
-      <div class="svc-name">Google Business Profile</div>
-      <p class="svc-body">One of the many things that factor into where your business ranks on Google searches.</p>
+    <div class="svc-row">
+      <div class="svc-row-name">Google Business Profile</div>
+      <p class="svc-row-body">One of the primary factors in where your business ranks locally. Full setup and optimization included.</p>
     </div>
 
-    <div class="svc-card">
-      <div class="svc-icon">📋</div>
-      <div class="svc-name">Kentucky Business Formation</div>
-      <p class="svc-body">Let me help make your business legally compliant in the state of Kentucky.</p>
+    <div class="svc-row">
+      <div class="svc-row-name">Kentucky Business Formation</div>
+      <p class="svc-row-body">LLC setup and state compliance. Get your business registered and operating legally in Kentucky.</p>
     </div>
 
-    <div class="svc-card">
-      <div class="svc-icon">🖨️</div>
-      <div class="svc-name">Print Design</div>
-      <p class="svc-body">Physical face-to-face contact with potential clients is still one of the best ways to advertise. Business cards, flyers, car and truck stickers.</p>
+    <div class="svc-row">
+      <div class="svc-row-name">Print Design</div>
+      <p class="svc-row-body">Business cards, flyers, vehicle stickers. Face-to-face is still one of the most effective ways to advertise.</p>
     </div>
 
-    <div class="svc-card">
-      <div class="svc-icon">📊</div>
-      <div class="svc-name">Excel Dashboards</div>
-      <p class="svc-body">Spreadsheets are great, they manage troves of data. Let us turn that data into visuals you understand.</p>
+    <div class="svc-row">
+      <div class="svc-row-name">Excel Dashboards</div>
+      <p class="svc-row-body">Turn your spreadsheet data into visuals that tell you something. Built around your numbers, not a template.</p>
     </div>
 
-    <div class="svc-card">
-      <div class="svc-icon">📄</div>
-      <div class="svc-name">Business Documents</div>
-      <p class="svc-body">Handbooks, SOPs, onboarding, white papers.</p>
-    </div>
-
-    <div class="svc-card">
-      <div class="svc-icon">✍️</div>
-      <div class="svc-name">Mobile Notary Public — Owensboro, KY</div>
-      <p class="svc-body">Commissioned by the Commonwealth of Kentucky.</p>
+    <div class="svc-row">
+      <div class="svc-row-name">Business Documents</div>
+      <p class="svc-row-body">Handbooks, SOPs, onboarding materials, white papers. Written for the people who actually have to read them.</p>
     </div>
 
   </div>
 
   <div class="svc-cta">
-    <div class="svc-cta-text"><strong>Ready to get started?</strong> Whether it's a website, notary service, or business setup, reach out and let's make it happen.</div>
+    <div class="svc-cta-text"><strong>Questions about any of these?</strong> I work with small businesses across Kentucky. No retainer, no agency markup.</div>
     <div class="svc-cta-actions">
-      <a class="nav-btn nav-sms" href="sms:2702316442">Message</a>
-      <a class="nav-btn nav-call" href="tel:2702316442">Call</a>
+      <a class="nav-btn nav-sms" href="sms:2702316442">Text</a>
       <a class="nav-btn nav-email" href="mailto:askshevy@outlook.com">Email</a>
     </div>
   </div>
+
+  <div class="notary-block" id="notary">
+    <p class="notary-cred">Mobile Notary Public — Commissioned by the Commonwealth of Kentucky</p>
+    <h3 class="notary-title">Need a notary<br>in Owensboro?</h3>
+    <div class="notary-details">
+      <p class="notary-detail"><strong>Coverage</strong> — Owensboro and Daviess County, KY</p>
+      <p class="notary-detail"><strong>Availability</strong> — After hours and weekends. Call or text to confirm.</p>
+      <p class="notary-detail"><strong>Documents</strong> — Loan signings, affidavits, power of attorney, deeds, and general notarizations.</p>
+    </div>
+    <div class="notary-actions">
+      <a class="nav-btn nav-call" href="tel:2702316442">Call 270-231-6442</a>
+      <a class="nav-btn nav-sms" href="sms:2702316442">Text instead</a>
+    </div>
+  </div>
+
 </section>
 
 <section class="sec fade" id="portfolio">
