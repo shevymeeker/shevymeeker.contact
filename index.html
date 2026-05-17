@@ -287,20 +287,27 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content
 .nav-email{background:transparent;border-color:rgba(201,59,26,.45);color:var(--a)}
 .nav-email:hover{background:rgba(201,59,26,.08);border-color:var(--a)}
 
-.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:7rem 2rem 6rem;overflow:hidden}
-.orb{display:none}
-.hero-in{position:relative;z-index:1;text-align:center;max-width:880px}
-.hero-name{font-family:var(--serif);font-style:italic;font-size:clamp(4rem,13vw,9.5rem);line-height:.88;color:var(--t);margin-bottom:2.25rem}
-.hero-links{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;padding-top:1.5rem;border-top:1px solid var(--b)}
-.hero-links a,.hero-links span{color:var(--m);text-decoration:none;font-size:14px;letter-spacing:.04em;transition:color .2s;font-family:var(--mono)}
-.hero-links a:hover{color:var(--a)}
-.hero-btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem}
-.scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.4rem;opacity:0;animation:sh-in 1s ease 2s forwards, sh-bob 2.2s ease-in-out 3s infinite;pointer-events:none}
-.scroll-hint span{font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-family:var(--mono);color:var(--m);opacity:.55}
-.scroll-hint svg{width:14px;height:14px;stroke:var(--m);fill:none;stroke-width:1.75;opacity:.55}
-@keyframes sh-in{from{opacity:0;transform:translateX(-50%) translateY(6px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-@keyframes sh-bob{0%,100%{transform:translateX(-50%) translateY(0)}55%{transform:translateX(-50%) translateY(5px)}}
-@media(prefers-reduced-motion:reduce){.scroll-hint{animation:none;opacity:.35}}
+/* ── Hero ────────────────────────────────────────────── */
+.hero{padding:calc(var(--nav-h) + 2.75rem) 1.25rem 3rem;max-width:1320px;margin:0 auto}
+.hero-in{max-width:680px}
+.hero-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--m);margin-bottom:1.75rem}
+.hero-headline{font-family:var(--serif);font-style:italic;font-size:clamp(2.75rem,11vw,6.5rem);line-height:.95;color:var(--t);margin-bottom:1.5rem}
+.hero-body{font-size:1.05rem;color:var(--m);line-height:1.75;max-width:52ch;margin-bottom:2rem}
+.hero-actions{display:flex;flex-direction:column;gap:.75rem}
+.hero-btn-primary{display:inline-flex;align-items:center;justify-content:center;background:var(--a);color:#fff;font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;padding:.9rem 1.75rem;min-height:52px;border:2px solid var(--a);border-radius:var(--r);transition:background .2s,color .2s;width:100%}
+.hero-btn-primary:hover{background:transparent;color:var(--a)}
+.hero-btn-secondary{display:inline-flex;align-items:center;justify-content:center;background:transparent;color:var(--t);font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-decoration:none;padding:.9rem 1.75rem;min-height:52px;border:2px solid var(--b);border-radius:var(--r);transition:border-color .2s,color .2s;width:100%}
+.hero-btn-secondary:hover{border-color:var(--t)}
+@media(min-width:480px){.hero-actions{flex-direction:row}.hero-btn-primary,.hero-btn-secondary{width:auto}}
+@media(min-width:640px){.hero{padding:calc(var(--nav-h) + 4rem) 2rem 4rem}}
+
+/* ── Three differentiators ───────────────────────────── */
+.pillars-wrap{border-top:2px solid var(--t);max-width:1320px;margin:0 auto;padding:0 1.25rem}
+.pillar{padding:2rem 0 2rem 1.25rem;border-left:3px solid var(--a);margin:1.75rem 0}
+.pillar:last-child{margin-bottom:0;padding-bottom:2.5rem}
+.pillar-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:var(--a);margin-bottom:.6rem}
+.pillar-txt{font-size:15px;color:var(--t);line-height:1.72;max-width:38ch}
+@media(min-width:640px){.pillars-wrap{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2.5rem;padding:0 2rem}.pillar{margin:2.25rem 0}.pillar:last-child{padding-bottom:2.25rem}}
 
 .sec{padding:6.5rem 2rem;max-width:1320px;margin:0 auto;position:relative;z-index:1}
 .sec+.sec{border-top:1px solid var(--b)}
@@ -486,40 +493,43 @@ footer{border-top:1px solid var(--b);padding:3rem 2rem;display:flex;justify-cont
   <div class="nav-links">
     <a href="#work">Apps</a>
     <a href="#services">Services</a>
-    <a href="#services">Notary</a>
     <a href="#portfolio">Portfolio</a>
   </div>
   <div class="nav-contact">
-    <a class="nav-btn nav-email" href="mailto:askshevy@outlook.com">Email</a>
     <a class="nav-btn nav-call" href="tel:2702316442">Call</a>
     <a class="nav-btn nav-sms" href="sms:2702316442">Text</a>
+    <a class="nav-btn nav-email" href="mailto:askshevy@outlook.com">Email</a>
   </div>
 </nav>
 
 <section class="hero" id="top">
-  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
   <div class="hero-in">
-    <h1 class="hero-name">Shevy<br>Meeker</h1>
-    <div class="hero-links">
-      <a href="mailto:askshevy@outlook.com">askshevy@outlook.com</a>
-      <span>·</span>
-      <a href="tel:2702316442">270.231.6442</a>
-      <span>·</span>
-      <span>Owensboro, KY</span>
+    <p class="hero-eyebrow">Shevy Meeker — Owensboro, KY</p>
+    <h1 class="hero-headline">Your tools.<br>Your brand.</h1>
+    <p class="hero-body">I build custom apps for small businesses — your logo, your workflow, your data stays on your device. One price. No subscription. No ads.</p>
+    <div class="hero-actions">
+      <a class="hero-btn-primary" href="#work">See what I build</a>
+      <a class="hero-btn-secondary" href="tel:2702316442">270-231-6442</a>
     </div>
-    <div class="hero-btns">
-      <a class="nav-btn nav-call" href="#work">Apps</a>
-      <a class="nav-btn nav-email" href="#services">Services</a>
-      <a class="nav-btn nav-sms" href="sms:2702316442">Contact</a>
-    </div>
-  </div>
-  <div class="scroll-hint" aria-hidden="true">
-    <span>Scroll</span>
-    <svg viewBox="0 0 16 16"><polyline points="2,5 8,11 14,5"/></svg>
   </div>
 </section>
 
 <main>
+
+<div class="pillars-wrap">
+  <div class="pillar">
+    <p class="pillar-lbl">Your Brand</p>
+    <p class="pillar-txt">Every app I build gets your logo, your colors, your business name — not mine. Your clients see your brand, not an app store.</p>
+  </div>
+  <div class="pillar">
+    <p class="pillar-lbl">One Price</p>
+    <p class="pillar-txt">Pay once. Use it forever. No subscription, no renewal emails, no ads. It's yours outright.</p>
+  </div>
+  <div class="pillar">
+    <p class="pillar-lbl">Your Data</p>
+    <p class="pillar-txt">Nothing leaves your device. I run no backend servers. I can't sell what I don't have — and I don't have any of it.</p>
+  </div>
+</div>
 
 <section class="sec fade" id="work">
   <h2 class="h">Apps, minus the ads</h2>
