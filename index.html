@@ -422,11 +422,12 @@ footer{border-top:1px solid var(--b);padding:3rem 2rem;display:flex;justify-cont
 .fl span{color:var(--m);font-size:13px;font-family:var(--mono)}
 
 /* ── Modal ───────────────────────────────────────────── */
-.modal{position:fixed;inset:0;z-index:150;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .25s}
+.modal{position:fixed;inset:0;z-index:150;display:flex;justify-content:flex-end;opacity:0;pointer-events:none;transition:opacity .25s}
 .modal.open{opacity:1;pointer-events:all}
-.mbg{position:absolute;inset:0;background:rgba(28,24,20,.97)}
-.min{position:relative;z-index:1;display:flex;flex-direction:column;height:100%;margin:1rem;border:1px solid var(--b);border-radius:10px;overflow:hidden;background:var(--s1);transform:scale(.97);transition:transform .25s}
-.modal.open .min{transform:scale(1)}
+.mbg{position:absolute;inset:0;background:rgba(28,24,20,.55)}
+.min{position:relative;z-index:1;display:flex;flex-direction:column;height:100%;width:100%;background:var(--s1);transform:translateX(105%);transition:transform .3s cubic-bezier(.22,.68,0,1.1)}
+.modal.open .min{transform:translateX(0)}
+@media(min-width:640px){.min{width:500px;border-left:2px solid var(--b)}}
 .mbar{display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.25rem;border-bottom:1px solid var(--b);background:var(--s2)}
 .mt{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--t)}
 .ma{display:flex;gap:1rem;align-items:center}
@@ -483,6 +484,9 @@ footer{border-top:1px solid var(--b);padding:3rem 2rem;display:flex;justify-cont
 .port-link:hover{border-color:var(--a);background:rgba(201,59,26,.06)}
 
 @media(max-width:640px){.svc-grid{grid-template-columns:1fr}.port-grid{grid-template-columns:1fr}}
+/* ── Brand-for-business link inside app card ─────────────── */
+.app-brand-link{display:block;text-align:center;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--a2);text-decoration:none;padding:.5rem;border:1px solid rgba(42,77,26,.3);border-radius:var(--r);transition:border-color .2s,color .2s;margin-top:4px}
+.app-brand-link:hover,.app-brand-link:focus{border-color:var(--a2)}
 </style>
 </head>
 <body>
@@ -532,14 +536,14 @@ footer{border-top:1px solid var(--b);padding:3rem 2rem;display:flex;justify-cont
 </div>
 
 <section class="sec fade" id="work">
-  <h2 class="h">Apps, minus the ads</h2>
-  <p class="sec-sub">Download once and its yours forever, no passwords, no monthly fees, and no signal required.</p>
+  <h2 class="h">What I build</h2>
+  <p class="sec-sub">These are working demos — try any of them. Every one can be customized with your business name, logo, and colors. You own it outright.</p>
 
   <div class="filter-bar" id="filter-bar"></div>
   <div class="app-grid" id="app-grid"></div>
 
   <div class="apps-cta">
-    <div class="apps-cta-text"><strong>Want a branded version?</strong> lets talk and see what app I can make for you..</div>
+    <div class="apps-cta-text"><strong>Don't see what you need?</strong> I build from scratch. Every project starts with your actual workflow, not a template.</div>
     <div class="apps-cta-actions">
       <a class="nav-btn nav-sms" href="sms:2702316442">Message</a>
       <a class="nav-btn nav-email" href="mailto:askshevy@outlook.com">Email</a>
@@ -776,10 +780,10 @@ footer{border-top:1px solid var(--b);padding:3rem 2rem;display:flex;justify-cont
 <script>
 // ── App data ──────────────────────────────────────────────────────
 const CATS = {
-  Education:   { color:'#1e8498', label:'Education'   },
-  Productivity:{ color:'#d4a830', label:'Productivity' },
-  Contractor:  { color:'#b05c35', label:'Contractor'   },
-  Utility:     { color:'#6e5ec0', label:'Utility'      },
+  Education:   { color:'#1e6a7a', label:'Education'   },
+  Productivity:{ color:'#C93B1A', label:'Productivity' },
+  Contractor:  { color:'#7A3010', label:'Contractor'   },
+  Utility:     { color:'#4B3D9A', label:'Utility'      },
 };
 
 const APPS = [
@@ -816,7 +820,7 @@ function isLight(hex) {
 // ── Build filter tabs ─────────────────────────────────────────────
 const filterBar = document.getElementById('filter-bar');
 const filters = ['All', ...Object.keys(CATS)];
-const filterColors = { All: '#d4a830', ...Object.fromEntries(Object.entries(CATS).map(([k,v])=>[k,v.color])) };
+const filterColors = { All: '#C93B1A', ...Object.fromEntries(Object.entries(CATS).map(([k,v])=>[k,v.color])) };
 
 filters.forEach(f => {
   const btn = document.createElement('button');
@@ -851,10 +855,14 @@ APPS.forEach(app => {
     </div>
     <div class="app-card-body">
       <p class="app-desc">${app.d}</p>
-      <button class="${btnClass}">Launch App →</button>
+      <button class="${btnClass}">Try it →</button>
+      <a class="app-brand-link" href="mailto:askshevy@outlook.com?subject=Custom app: ${encodeURIComponent(app.f)}">Get this for your business →</a>
     </div>`;
 
-  card.addEventListener('click', () => openModal(app.f, app.url));
+  card.addEventListener('click', e => {
+    if (e.target.classList.contains('app-brand-link')) return;
+    openModal(app.f, app.url);
+  });
   grid.appendChild(card);
 });
 
@@ -882,25 +890,10 @@ mx.addEventListener('click',closeModal);
 mbg.addEventListener('click',closeModal);
 document.addEventListener('keydown',e=>e.key==='Escape'&&closeModal());
 
-// ── Progress bar + fade-in + orbs ─────────────────────────────────
+// ── Progress bar + fade-in ────────────────────────────────────────
 window.addEventListener('scroll',()=>{document.getElementById('prog').style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%'},{passive:true});
 const io2=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.1});
 document.querySelectorAll('.fade').forEach(el=>io2.observe(el));
-// rAF-throttled orb parallax — desktop/hover-capable devices only
-const o1=document.querySelector('.o1'),o2=document.querySelector('.o2'),o3=document.querySelector('.o3');
-if(window.matchMedia('(hover:hover)').matches){
-  let _mx=0,_my=0,_orbRaf=false;
-  document.addEventListener('mousemove',e=>{
-    _mx=e.clientX;_my=e.clientY;
-    if(!_orbRaf){_orbRaf=true;requestAnimationFrame(()=>{
-      const x=(_mx/window.innerWidth-.5)*18,y=(_my/window.innerHeight-.5)*18;
-      o1.style.transform=`translate(${x*.6}px,${y*.6}px)`;
-      o2.style.transform=`translate(${-x*.4}px,${-y*.4}px)`;
-      o3.style.transform=`translate(${x*.9}px,${y*.9}px)`;
-      _orbRaf=false;
-    });}
-  },{passive:true});
-}
 </script>
 </body>
 </html>
