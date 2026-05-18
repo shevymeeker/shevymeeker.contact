@@ -414,8 +414,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content
 .eb li::before{content:'—';position:absolute;left:0;color:var(--a);opacity:.6}
 
 /* ── Footer ─────────────────────────────────────────── */
-footer{border-top:1px solid var(--b);padding:3rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;max-width:1320px;margin:0 auto}
-.fn{font-family:var(--serif);font-style:italic;font-size:1.7rem;color:var(--t)}
+footer{border-top:2px solid var(--t);padding:1.75rem 1.25rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;max-width:1320px;margin:0 auto}
+.fn{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--m)}
+@media(min-width:640px){footer{padding:1.75rem 2rem}}
 .fl{display:flex;gap:2rem;flex-wrap:wrap}
 .fl a{color:var(--m);text-decoration:none;font-size:13px;transition:color .2s;font-family:var(--mono)}
 .fl a:hover{color:var(--a)}
@@ -499,6 +500,13 @@ footer{border-top:1px solid var(--b);padding:3rem 2rem;display:flex;justify-cont
 .port-link:hover{border-color:var(--a);background:rgba(201,59,26,.06)}
 
 @media(max-width:640px){.svc-grid{grid-template-columns:1fr}.port-grid{grid-template-columns:1fr}}
+/* ── Portfolio rows ─────────────────────────────────────── */
+.port-list{margin-top:1.25rem}
+.port-row{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;padding:1.4rem 0;border-bottom:1px solid var(--b)}
+.port-row:first-child{border-top:1px solid var(--b)}
+.port-info{min-width:0}
+.port-name{font-family:var(--serif);font-style:italic;font-size:1.25rem;color:var(--t);line-height:1.1;margin-bottom:.3rem}
+.port-type{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--m)}
 /* ── Brand-for-business link inside app card ─────────────── */
 .app-brand-link{display:block;text-align:center;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--a2);text-decoration:none;padding:.5rem;border:1px solid rgba(42,77,26,.3);border-radius:var(--r);transition:border-color .2s,color .2s;margin-top:4px}
 .app-brand-link:hover,.app-brand-link:focus{border-color:var(--a2)}
@@ -633,37 +641,49 @@ footer{border-top:1px solid var(--b);padding:3rem 2rem;display:flex;justify-cont
 </section>
 
 <section class="sec fade" id="portfolio">
-  <h2 class="h">Custom Sites</h2>
+  <h2 class="h">Portfolio</h2>
 
+  <div class="port-list">
 
-  <div class="port-grid">
-
-    <div class="port-card">
-      <div class="port-title">Owensboro Mowing Company</div>
+    <div class="port-row">
+      <div class="port-info">
+        <div class="port-name">Owensboro Mowing Company</div>
+        <div class="port-type">Lawn &amp; landscaping — Owensboro, KY</div>
+      </div>
       <a class="port-link" href="https://owensboromowingcompany.com" target="_blank" rel="noopener">View ↗</a>
     </div>
 
-    <div class="port-card">
-      <div class="port-title">Notta Trace Tree Service</div>
+    <div class="port-row">
+      <div class="port-info">
+        <div class="port-name">Notta Trace Tree Service</div>
+        <div class="port-type">Tree service — Owensboro, KY</div>
+      </div>
       <a class="port-link" href="https://nottatrace.com" target="_blank" rel="noopener">View ↗</a>
     </div>
 
-    <div class="port-card">
-      <div class="port-title">Dismantle Demo Solutions</div>
+    <div class="port-row">
+      <div class="port-info">
+        <div class="port-name">Dismantle Demo Solutions</div>
+        <div class="port-type">Demolition contractor</div>
+      </div>
       <a class="port-link" href="https://shevymeeker.github.io/disclaimed/" target="_blank" rel="noopener">View ↗</a>
     </div>
 
-    <div class="port-card">
-      <div class="port-title">Contractor Command Center</div>
+    <div class="port-row">
+      <div class="port-info">
+        <div class="port-name">Contractor Command Center</div>
+        <div class="port-type">Contractor business tools</div>
+      </div>
       <a class="port-link" href="https://shevymeeker.github.io/onebusinessapp/" target="_blank" rel="noopener">View ↗</a>
     </div>
 
-     <div class="port-card">
-      <div class="port-title">Sugar & Grace</div>
+    <div class="port-row">
+      <div class="port-info">
+        <div class="port-name">Sugar &amp; Grace</div>
+        <div class="port-type">Bakery — Owensboro, KY</div>
+      </div>
       <a class="port-link" href="https://shevymeeker.github.io/owensborocakery/" target="_blank" rel="noopener">View ↗</a>
     </div>
-
-    
 
   </div>
 </section>
@@ -762,7 +782,7 @@ footer{border-top:1px solid var(--b);padding:3rem 2rem;display:flex;justify-cont
   <div class="fn">Shevy Meeker</div>
   <div class="fl">
     <a href="mailto:askshevy@outlook.com">askshevy@outlook.com</a>
-    <a href="tel:2702316442">270.231.6442</a>
+    <a href="tel:2702316442">270-231-6442</a>
     <span>Owensboro, KY</span>
     <a href="https://github.com/shevymeeker" target="_blank" rel="noopener">GitHub ↗</a>
   </div>
