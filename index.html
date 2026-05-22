@@ -260,28 +260,12 @@ nav {
 }
 
 .hero-eyebrow {
-  display: flex;
-  align-items: center;
-  gap: .75rem;
-  margin-bottom: 2.25rem;
-}
-.hero-eyebrow-text {
   font-family: var(--mono);
   font-size: 10px;
   letter-spacing: .32em;
   text-transform: uppercase;
   color: var(--m);
-}
-.hero-eyebrow-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--a);
-  flex-shrink: 0;
-  animation: pulse 2.6s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%,100% { opacity: 1; transform: scale(1); }
-  50%      { opacity: .5; transform: scale(.7); }
+  margin-bottom: 2.25rem;
 }
 
 .hero-headline {
@@ -317,7 +301,6 @@ nav {
   flex-wrap: wrap;
   gap: .7rem;
   align-items: center;
-  margin-bottom: 4.5rem;
 }
 
 /* ── Buttons ─────────────────────────────────────────────────── */
@@ -380,59 +363,6 @@ nav {
 }
 .btn-inverted-ghost:hover { border-color: var(--bg); color: var(--bg); }
 
-/* ── Hero stat strip ─────────────────────────────────────────── */
-.hero-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2.5rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid rgba(204,196,180,.6);
-}
-.hero-stat {}
-.hero-stat-val {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: clamp(1.7rem, 4vw, 2.5rem);
-  color: var(--t);
-  line-height: 1;
-  margin-bottom: .25rem;
-}
-.hero-stat-lbl {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--m);
-}
-
-/* ── Trust strip ─────────────────────────────────────────────── */
-.trust-strip {
-  background: var(--s1);
-  border-top: 1px solid var(--b);
-  border-bottom: 1px solid var(--b);
-}
-.trust-strip-inner {
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 1.35rem 1.5rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: .5rem 2.5rem;
-  align-items: center;
-  justify-content: flex-start;
-}
-@media(min-width:640px) { .trust-strip-inner { justify-content: center; } }
-.trust-item {
-  display: flex;
-  align-items: center;
-  gap: .55rem;
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: .15em;
-  text-transform: uppercase;
-  color: var(--m);
-}
-.trust-icon { font-size: .85rem; line-height: 1; }
 
 /* ── What I do pillars ───────────────────────────────────────── */
 .pillars {
@@ -463,13 +393,6 @@ nav {
   }
   .pillar:last-child { border-right: none; }
   .pillar:first-child { padding-left: 0; }
-}
-.pillar-num {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: .35em;
-  color: var(--a);
-  opacity: .8;
 }
 .pillar-title {
   font-family: var(--serif);
@@ -764,13 +687,12 @@ footer {
   .app-short-name { font-size: 1.15rem; }
   .app-glyph { font-size: 1.25rem; }
   .app-card-body { padding: 12px 13px 14px; }
-  .hero-stats { gap: 1.75rem; }
+
 }
 @media(max-width:380px) { .app-grid { grid-template-columns: 1fr; } }
 @media(prefers-reduced-motion:reduce) {
   .fade { opacity:1; transform:none; }
   .app-card { transition:none; }
-  .hero-eyebrow-dot { animation:none; }
 }
 </style>
 </head>
@@ -793,10 +715,7 @@ footer {
 
 <!-- ── Hero ───────────────────────────────────────────────── -->
 <section class="hero" id="top" aria-label="Introduction">
-  <div class="hero-eyebrow">
-    <span class="hero-eyebrow-dot" aria-hidden="true"></span>
-    <span class="hero-eyebrow-text">Owensboro, KY &nbsp;·&nbsp; Available now</span>
-  </div>
+  <p class="hero-eyebrow">Owensboro, KY</p>
 
   <h1 class="hero-headline">Think hard,<br>Work easy.</h1>
 
@@ -812,54 +731,24 @@ footer {
     <a class="btn btn-ghost" href="tel:2702316442">270-231-6442</a>
   </div>
 
-  <div class="hero-stats" aria-label="At a glance">
-    <div class="hero-stat">
-      <div class="hero-stat-val">22+</div>
-      <div class="hero-stat-lbl">Apps built</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-val">5</div>
-      <div class="hero-stat-lbl">Client sites live</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-val">No fees</div>
-      <div class="hero-stat-lbl">Monthly subscriptions</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-val">After hours</div>
-      <div class="hero-stat-lbl">Notary availability</div>
-    </div>
-  </div>
-</section>
 
-<!-- ── Trust strip ─────────────────────────────────────────── -->
-<div class="trust-strip" aria-label="Credentials">
-  <div class="trust-strip-inner">
-    <div class="trust-item"><span class="trust-icon">✦</span> Commissioned Notary Public — Commonwealth of Kentucky</div>
-    <div class="trust-item"><span class="trust-icon">✦</span> No templates, ever</div>
-    <div class="trust-item"><span class="trust-icon">✦</span> Privacy-first — your data stays on your device</div>
-    <div class="trust-item"><span class="trust-icon">✦</span> Same-day response</div>
-  </div>
-</div>
+</section>
 
 <!-- ── What I do ───────────────────────────────────────────── -->
 <div class="pillars">
   <div class="pillars-grid">
 
     <div class="pillar">
-      <div class="pillar-num">01</div>
       <div class="pillar-title">Custom Apps</div>
       <p class="pillar-body">Offline-first tools built around your exact workflow. No subscription, no third party collecting your data. Download it and it's yours.</p>
     </div>
 
     <div class="pillar">
-      <div class="pillar-num">02</div>
       <div class="pillar-title">Websites &amp; Local SEO</div>
       <p class="pillar-body">Hand-coded HTML, CSS, and JavaScript. I write every line of SEO by hand so Google shows you to the right people in the right place.</p>
     </div>
 
     <div class="pillar">
-      <div class="pillar-num">03</div>
       <div class="pillar-title">Mobile Notary</div>
       <p class="pillar-body">Commission-certified notary public in Owensboro and Daviess County. I come to you — available after 4pm weekdays and all day weekends.</p>
     </div>
@@ -921,12 +810,12 @@ footer {
 
     <div class="svc-row">
       <div class="svc-row-name">Excel Dashboards</div>
-      <p class="svc-row-body">Turn your spreadsheet data into visuals that actually tell you something actionable. Built around your numbers and your questions, not a generic template.</p>
+      <p class="svc-row-body">Turn your spreadsheet data into visuals that tell you something. Built around your numbers and your questions, not a generic template.</p>
     </div>
 
     <div class="svc-row">
       <div class="svc-row-name">Business Documents</div>
-      <p class="svc-row-body">Handbooks, SOPs, onboarding packets, white papers. Written for the people who actually have to read and use them — clear, structured, and professional.</p>
+      <p class="svc-row-body">Handbooks, SOPs, onboarding packets, white papers. Written for the people who have to read and use them — clear, structured, and professional.</p>
     </div>
 
   </div>
@@ -1089,7 +978,7 @@ const APPS = [
   { s:'Traffic School',   f:'Wildman Traffic School',   cat:'Education',   url:'https://wildmantrafficstop.netlify.app/', g:'🚦', d:"Kentucky traffic stop crash course. What cops can and can't do.", biz:true },
   { s:'Interrupted',      f:'Wildman: Interrupted',     cat:'Education',   url:'https://shevymeeker.github.io/games2/',   g:'🎮', d:'Take a seat, think a thought, play a game.' },
   { s:'Scratchpad',       f:'Wildman Scratchpad',       cat:'Productivity',url:'https://wildmanscratchpad.netlify.app/', g:'📝', d:'Encrypted notes stored on-device. Nothing leaves the device.', biz:true },
-  { s:'Task Tracker',     f:'Wildman Task Tracker',     cat:'Productivity',url:'https://wildmantoday.netlify.app/',       g:'✅', d:'Track tasks, interruptions, and wins. Built for how work actually goes.', biz:true },
+  { s:'Task Tracker',     f:'Wildman Task Tracker',     cat:'Productivity',url:'https://wildmantoday.netlify.app/',       g:'✅', d:'Track tasks, interruptions, and wins. Built for how work goes.', biz:true },
   { s:'Bill Tracker',     f:'Wildman Bill Tracker',     cat:'Productivity',url:'https://wildmanmoney.netlify.app/',       g:'💸', d:'Income vs bills with visuals. Not a budget app.' },
   { s:'Invoice Generator',f:'Invoice Generator',        cat:'Productivity',url:'https://shevymeeker.github.io/invoicepwa/', g:'🧾', d:'Professional invoices with PDF export. Compiled on-device, never uploaded.', biz:true },
   { s:'Focus Damnit',     f:'Wildman Focus Damnit',     cat:'Productivity',url:'https://shevymeeker.github.io/adhder/',  g:'🧠', d:'ADHD workbook and focus framework. Blunt and functional.' },
